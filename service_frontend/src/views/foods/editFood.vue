@@ -1,0 +1,101 @@
+<template>
+    <div v-if="food" class="container">
+        <h4>Sửa Món Ăn</h4>
+        <div class="row">
+            <div class="col-3">
+
+            </div>
+            <div class="col-6">
+                <FoodForm :food="food" @submit:food="updateFood" @delete:food="deleteFood" />
+            </div>
+            <div class="col-3">
+
+            </div>
+        </div>
+
+
+    </div>
+</template>
+<script>
+import FoodForm from "@/components/foods/FoodForm.vue";
+import FoodService from "@/services/food.service";
+import { useToast } from 'vue-toast-notification';
+export default {
+    components: {
+        FoodForm,
+    },
+    props: {
+        id: { type: String, required: true },
+    },
+    data() {
+        return {
+            food: null,
+
+        };
+    },
+    methods: {
+        updateSuccessToast() {
+            const VueToast = useToast();
+            VueToast.open({
+                message: 'Cập nhật thành công!',
+                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+                position: 'top-right', // Vị trí hiển thị toast
+                duration: 5000, // Thời gian hiển thị (milliseconds)
+            });
+        },
+        deleteSuccessToast() {
+            const VueToast = useToast();
+            VueToast.open({
+                message: 'Xóa thành công!',
+                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+                position: 'top-right', // Vị trí hiển thị toast
+                duration: 5000, // Thời gian hiển thị (milliseconds)
+            });
+        },
+        async getFood(id) {
+            try {
+                this.food = await FoodService.get(id);
+                console.log(this.food)
+            } catch (error) {
+                console.log(error);
+                // Chuyển sang trang NotFound đồng thời giữ cho URL không đổi
+                this.$router.push({
+                    name: "notfound",
+                    params: {
+                        pathMatch: this.$route.path.split("/").slice(1)
+                    },
+                    query: this.$route.query,
+                    hash: this.$route.hash,
+                });
+            }
+        },
+        async updateFood(data) {
+            try {
+                await FoodService.update(this.food._id, data);
+                this.updateSuccessToast();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async deleteFood() {
+            if (confirm("Bạn muốn xóa món ăn này?")) {
+                try {
+                    await FoodService.delete(this.food._id);
+                    this.deleteSuccessToast();
+                    this.$router.push({ name: "foods" });
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+
+
+
+    },
+    created() {
+        this.getFood(this.id);
+        this.message = "";
+    },
+
+};
+</script>

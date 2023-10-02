@@ -1,0 +1,98 @@
+<template>
+    <div class="vertical-nav bg-white" id="sidebar" style="overflow-y: auto" v-if="Auth">
+
+        <div class="py-4 px-3 mb-4 bg-title">
+            <div class="d-flex align-items-center">
+                <img src="https://www.lansweeper.com/wp-content/uploads/2018/05/ASSET-USER-ADMIN.png" alt="..."
+                    style="width: 80px; height: 80px;" class="me-3 rounded-circle shadow border">
+                <div class="media-body">
+
+                    <p class="font-weight-normal text-muted mb-0">Xin chào</p>
+                    <h4 class="m-0"> Quản trị viên</h4>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path === '/' }">
+                <router-link to="/" class="nav-link">
+                    <i class="fas fa-chart-area me-3 "></i> Thống kê
+                </router-link>
+            </li>
+        </ul>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/foods/) }">
+                <router-link to="/foods" class="nav-link">
+                    <i class="fa-solid fa-box me-3 "></i> Quản lý món ăn
+                </router-link>
+            </li>
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/menu/) }">
+                <router-link to="/menu" class="nav-link">
+                    <i class="fa-solid fa-box me-3 "></i> Quản lý Menu
+                </router-link>
+            </li>
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/drinks/) }">
+                <router-link to="/drinks" class="nav-link">
+                    <i class="fa-solid fa-list me-3 "></i> Quản lý đồ uống
+                </router-link>
+            </li>
+
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/other/) }">
+                <router-link to="/other" class="nav-link">
+                    <i class="fa-solid fa-box me-3 "></i> Quản lý dịch vụ khác
+                </router-link>
+            </li>
+        </ul>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/orders/) }">
+                <router-link to="/orders" class="nav-link">
+                    <i class="fa-solid fa-file-lines me-3 "></i>
+                    Quản lý đặt hàng
+                </router-link>
+            </li>
+        </ul>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/info/) }">
+                <router-link to="/info" class="nav-link">
+                    <i class="fa-solid fa-user me-3 "></i>
+                    Thông tin dịch vụ
+                </router-link>
+
+            </li>
+        </ul>
+    </div>
+    <span v-else></span>
+</template>
+
+<script>
+import { mapState, mapMutations } from 'vuex';
+import userService from "@/services/user.service";
+
+export default {
+    computed: {
+        ...mapState(['Auth']),
+    },
+
+    methods: {
+        ...mapMutations(['setAuth']),
+        async logOut() {
+            try {
+                const headers = {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                };
+                await userService.logout({ headers });
+                localStorage.removeItem('token');
+                this.setAuth(false);
+                this.$router.push({ name: 'login' });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+    }
+}
+
+</script>
