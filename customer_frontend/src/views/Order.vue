@@ -22,6 +22,7 @@ import OrderForm from '@/components/OrderForm.vue';
 import orderService from "../services/order.service";
 import { mapState, mapMutations, mapActions } from "vuex";
 import { useToast } from 'vue-toast-notification';
+import payment from "../services/payment.service";
 export default {
     components: {
         Menu,
@@ -56,10 +57,38 @@ export default {
 
         async addOrder(data) {
             try {
+
                 const confirmed = confirm("Bạn chắc chắn muốn đặt tiệc?");
                 if (!confirmed) {
                     return;
                 }
+                if (data.payment == 'vnpay') {
+                    const total = parseInt(data.cart.items[0].totalMenu) * parseInt(data.tray_quantity) + parseInt(data.cart.items[1].totalDrink + parseInt(data.cart.items[2].totalOther));
+                    const deposit = total * 0.2;
+                    data.amount = deposit;
+                    data.deposit = deposit;
+                    console.log("total", data);
+
+                    // const dataPayment =
+                    //     this.$router.push({ name: 'payment' });
+                    try {
+
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    // const link = await payment.createPayment(data);
+                    const link = await payment.createPaymentVNPay(data);
+                    // console.log("link1", link)
+                    const linkReal = link.vnpUrl;
+                    if (linkReal) {
+                        window.location.href = linkReal;
+                        console.log("link", linkReal)
+                    }
+
+
+
+                }
+                return;
                 await orderService.addOrder(data);
                 if (!this.Auth) {
                     const newLocalCart = {
@@ -81,15 +110,16 @@ export default {
                     };
                     localStorage.setItem("localCart", JSON.stringify(newLocalCart));
                     this.getLocalCart();
-                    this.$router.push({ name: 'home' });
+                    // this.$router.push({ name: 'home' });
                 } else if (this.Auth) {
                     this.getCart();
                     this.getItemsInDrinkCart();
                     this.getOtherInCart();
-                    this.$router.push({ name: 'history' });
+                    // this.$router.push({ name: 'history' });
                 }
-                this.showSuccessToast();
+                // this.showSuccessToast();
 
+                // this.$router.push({ name: 'payment', params: { orderId: yourOrderIdValue } });
             } catch (error) {
                 console.log(error);
             }
@@ -103,6 +133,7 @@ export default {
         //     this.menu = JSON.parse(menuData);
         // }
     },
+
 };
 </script>
 <style scoped>

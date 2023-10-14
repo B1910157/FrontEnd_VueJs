@@ -85,6 +85,27 @@ const routes = [
     component: () => import("@/views/order/DetailOrder.vue"),
   },
   {
+    path: "/jobs/",
+    name: "jobs",
+    component: () => import("@/views/jobs/Job.vue"),
+  },
+  {
+    path: "/chart/",
+    name: "chart",
+    component: () => import("@/views/Chart.vue"),
+  },
+  {
+    path: "/addJob/",
+    name: "addJob",
+    component: () => import("@/views/jobs/addJob.vue"),
+  },
+  {
+    path: "/detailJob/:jobId",
+    name: "detailJob",
+    component: () => import("@/views/jobs/detailJob.vue"),
+    props: true,
+  },
+  {
     path: "/feedback/",
     name: "feedback",
     component: () => import("@/views/Feedback.vue"),
@@ -99,6 +120,7 @@ const routes = [
     name: "info",
     component: () => import("@/views/Info.vue"),
   },
+ 
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

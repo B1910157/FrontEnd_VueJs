@@ -1,21 +1,24 @@
 <template>
-    <div class="row p-4">
-        <h4 class="col-5">
+    <div class="row ml-3 mb-3">
+        <h4 class="col-5 title-in-page">
             Danh sách đồ uống
             <i class="fa fa-book icon" aria-hidden="true"></i>
         </h4>
-        <div class="col-7">
-            <button class="btn btn-sm btn-primary" @click="goToAddDrink">
-                <i class="fas fa-plus"></i> Thêm mới
-            </button>
+        <div class="col-7 row text-right">
+            <div class="col-12">
+                <button class="btn btn-sm btn-primary" @click="goToAddDrink">
+                    <i class="fas fa-plus"></i> Thêm mới
+                </button>
+            </div>
+
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-11 ml-3">
+    <div class="row container">
+        <div class="col-md-12 ml-3">
             <InputSearch v-model="searchText" />
         </div>
         <div class="col-md-12">
-            <DrinkList v-if="filteredDrinkCount > 0" :drinks="filteredDrink" />
+            <DrinkList v-if="filteredDrinkCount > 0" :drinks="filteredDrink" @delete:drink="deleteDrink" />
             <p v-else>Không có đồ uống nào.</p>
         </div>
     </div>
@@ -24,6 +27,7 @@
 import DrinkList from "@/components/drinks/DrinkList.vue";
 import DrinkService from "@/services/drink.service";
 import InputSearch from "../../components/InputSearch.vue";
+import { useToast } from 'vue-toast-notification';
 
 
 export default {
@@ -75,6 +79,26 @@ export default {
         },
         goToAddDrink() {
             this.$router.push({ name: "addDrink" });
+        },
+        async deleteDrink(drinkId) {
+            if (confirm("Bạn muốn xóa món này?")) {
+                try {
+                    await DrinkService.delete(drinkId);
+                    this.deleteSuccessToast();
+                    this.refreshList();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+        deleteSuccessToast() {
+            const VueToast = useToast();
+            VueToast.open({
+                message: 'Xóa thành công!',
+                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+                position: 'top-right', // Vị trí hiển thị toast
+                duration: 5000, // Thời gian hiển thị (milliseconds)
+            });
         },
 
     },

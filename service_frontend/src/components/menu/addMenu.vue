@@ -1,13 +1,12 @@
 
 <template>
-    <div class="row">
-        <h2 class="text-primary text-center col-12">Thêm menu mới</h2>
-    </div>
-
     <Form @submit="submitAddMenu" :validation-schema="menuNameFormSchema" enctype="multipart/form-data">
 
-        <div class="form-group">
-            <Field name="menu_name" type="text" class="form-control" v-model="this.menuNameLocal.menu_name" />
+
+        <div class="form-group ">
+            <h2 class="text-white text-center col-12 title-in-page">Thêm menu mới</h2>
+            <Field name="menu_name" type="text" class="form-control" v-model="this.menuNameLocal.menu_name"
+                placeholder="Nhập vào tên menu" />
             <ErrorMessage name="menu_name" class="error-feedback" />
         </div>
 

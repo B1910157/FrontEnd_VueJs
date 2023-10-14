@@ -10,13 +10,13 @@
           class="fa fa-bars m-2"></i></button>
       <a class="navbar-brand" href="#">{{ this.info.service_name }}</a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <!-- <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
           <li class="nav-item">
             <button class="btn btn-outline-primary m-1" href="" @click="logOut"><i class="fas fa-right-from-bracket"></i>
               Đăng xuất</button>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </div>
   </nav>
@@ -78,19 +78,19 @@ export default {
       content.classList.toggle('active');
     },
     ...mapMutations(['setAuth']),
-    async logOut() {
-      try {
-        const headers = {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        };
-        await userService.logout({ headers });
-        localStorage.removeItem('token');
-        this.setAuth(false);
-        this.$router.push({ name: 'login' });
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async logOut() {
+    //   try {
+    //     const headers = {
+    //       Authorization: `Bearer ${localStorage.getItem('token')}`
+    //     };
+    //     await userService.logout({ headers });
+    //     localStorage.removeItem('token');
+    //     this.setAuth(false);
+    //     this.$router.push({ name: 'login' });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
 
   },
   created() {

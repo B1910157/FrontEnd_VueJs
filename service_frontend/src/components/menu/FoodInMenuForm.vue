@@ -18,7 +18,7 @@
                         </td>
                         <td>
                             <span v-if="this.isEditing == true" @click="removeFoodInMenu(food._id)"
-                                class="mt-2 badge badge-danger">
+                                class="mt-2 badge badge-danger" style="font-size: 16px;">
                                 <i class="fas fa-trash"></i> </span>
                         </td>
                     </tr>
@@ -32,16 +32,35 @@
         </div>
         <div class="action">
             <v-card-actions>
-                <span v-if="this.isEditing == false" @click="editMenu()" class="mt-2 badge badge-warning">
-                    <i class="fas fa-edit"></i> </span>
+                <div v-if="this.isEditing == false" class="row">
+                    <div class="col-6">
+                        <span @click="editMenu()" class="badge badge-warning" style="font-size: 16px;">
+                            <i class="fas fa-edit"></i> </span>
+                    </div>
+                    <div class="col-6 ">
+                        <div v-if="menu.status == 0">
+                            <span @click="publishMenu1(menu._id)" class=" badge badge-success" style="font-size: 16px;">
+                                <i class="fa fa-power-off" aria-hidden="true"></i> </span>
+                        </div>
+                        <div v-else-if="menu.status == 1">
+                            <span @click="hiddenMenu1(menu._id)" class=" badge badge-danger" style="font-size: 16px;">
+                                <i class="fa fa-power-off" aria-hidden="true"></i> </span>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
                 <div v-else-if="this.isEditing == true">
-                    <span @click="addFoodToMenu()" class="mt-3 badge badge-primary">
+                    <span @click="addFoodToMenu()" class="mt-3 badge badge-primary" style="font-size: 16px;">
                         <i class="fas fa-add"></i> </span>
 
-                    <span @click="delMenu(this.menu._id)" class="mt-3 ml-3 badge badge-danger">
+                    <span @click="delMenu(this.menu._id)" class="mt-3 ml-3 badge badge-danger" style="font-size: 16px;">
                         <i class="fas fa-trash"></i> </span>
 
-                    <span @click="saveMenu()" class="mt-3 ml-3 badge badge-danger">
+                    <span @click="saveMenu()" class="mt-3 ml-3 badge badge-danger" style="font-size: 16px;">
                         <i class="fas fa-close"></i> </span>
                 </div>
             </v-card-actions>
@@ -63,7 +82,7 @@ export default {
         VCardActions,
 
     },
-    emits: ["submit:menuUpdate", "saveAddFood", "removeFoodInMenu", "delMenu"],
+    emits: ["submit:menuUpdate", "saveAddFood", "removeFoodInMenu", "delMenu", "publishMenu", "hiddenMenu"],
     props: {
         menu: []
     },
@@ -94,6 +113,32 @@ export default {
                     console.log(error);
                 }
             }
+
+
+        },
+        publishMenu1(menuId) {
+            if (confirm("Bạn muốn hiển thị menu này trên website?")) {
+                try {
+                    this.$emit("publishMenu", menuId);
+
+                } catch (error) {
+                    console.log(error);
+                }
+
+            }
+
+        },
+        hiddenMenu1(menuId) {
+            if (confirm("Bạn muốn ẩn menu này trên website?")) {
+                try {
+                    this.$emit("hiddenMenu", menuId);
+
+                } catch (error) {
+                    console.log(error);
+                }
+
+            }
+
 
 
         },

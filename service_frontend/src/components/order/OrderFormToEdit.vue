@@ -1,53 +1,53 @@
 <template>
     <div v-if="this.order.cart[0].menu.length > 0">
-        <h5>Thực đơn</h5>
-
-        <table class="table table-bordered text-center">
-            <thead>
-                <th>Tên món</th>
-                <th>Giá</th>
-                <th v-if="this.isEditing == true">Thao tác</th>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in this.order.cart[0].menu" :key="index">
-                    <td>{{ item.food_name }}</td>
-                    <td>{{ item.price }}</td>
-                    <td v-if="this.isEditing == true">
-                        <button class="btn btn-danger" @click="removeFoodInOrder(item._id)"> <i
-                                class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Tổng tiền Menu: {{ formatCurrency(this.order.cart[0].totalMenu) }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div v-if="this.isEditing == true" class="row mr-1">
-            <button @click="addFoodToMenu()" class="mb-4  btn btn-primary offset-md-11">
-                <i class="fas fa-add"></i> </button>
+        <div>
+            <h5 class="text-center">Thực đơn</h5>
+            <table class="table table-bordered ">
+                <thead>
+                    <th>Tên món</th>
+                    <th>Hình ảnh</th>
+                    <th>Giá</th>
+                    <th v-if="this.isEditing == true">Thao tác</th>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in this.order.cart[0].menu" :key="index">
+                        <td>{{ item.food_name }}</td>
+                        <td><v-img :src="getImage(item)" cover height="100px"></v-img></td>
+                        <td>{{ item.price }}</td>
+                        <td v-if="this.isEditing == true">
+                            <button class="btn btn-danger" @click="removeFoodInOrder(item._id)"> <i
+                                    class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Tổng tiền Menu: {{ formatCurrency(this.order.cart[0].totalMenu) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div v-if="this.isEditing == true" class="row text-right">
+                <button @click="addFoodToMenu()" class="mb-4  btn btn-primary offset-md-11">
+                    <i class="fas fa-add"></i> </button>
+            </div>
         </div>
-
-
     </div>
-
+    <hr>
+    <h5 class="text-center">Đồ uống</h5>
     <div v-if="this.order.cart[1].drink.length > 0">
-        <h5>Đồ uống</h5>
+
         <div>
             <table class="table table-bordered text-center">
                 <thead>
-                    <th>Tên món</th>
+                    <th>Tên</th>
                     <th>Số lượng</th>
                     <th>Giá</th>
                     <th v-if="this.isEditing == true">Thao tác</th>
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in   this.order.cart[1].drink  " :key="index">
-
                         <td>{{ item.drink_name }}</td>
                         <td v-if="this.isEditing == true">
-
                             <input type="number" name="quantity" v-model="item.quantity" min="1" class="input-small">
                             /{{ item.unit }}
                         </td>
@@ -57,12 +57,13 @@
                         </td>
                         <td>{{ item.price }}</td>
 
-                        <td v-if="this.isEditing == true"><button class="btn btn-warning"
-                                @click="updateDrink(item._id, item.quantity)">
+                        <td v-if="this.isEditing == true">
+                            <button class="btn btn-warning" @click="updateDrink(item._id, item.quantity)">
                                 <i class="fa fa-pencil"></i>
                             </button>
-                            <button class="btn btn-danger" @click="removeDrinkInOrder(item._id)"> <i
-                                    class="fa fa-trash"></i></button>
+                            <button class="btn btn-danger ml-2" @click="removeDrinkInOrder(item._id)"> <i
+                                    class="fa fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                     <tr>
@@ -73,17 +74,25 @@
                 </tbody>
             </table>
         </div>
-        <div v-if="this.isEditing == true" class="row mr-1">
-            <button @click="addDinkToMenu()" class="mb-4  btn btn-primary offset-md-11">
-                <i class="fas fa-add"></i> </button>
-        </div>
-    </div>
 
+    </div>
+    <div v-else class="text-center">
+        <br>
+        <p> <i>Không có</i></p>
+
+    </div>
+    <div v-if="this.isEditing == true" class="row text-right">
+        <button @click="addDinkToMenu()" class="mb-4  btn btn-primary offset-md-11">
+            <i class="fas fa-add"></i> </button>
+    </div>
+    <hr>
+    <h5 class="text-center">Khác</h5>
     <div v-if="this.order.cart[2].other.length > 0">
-        <h5>Khác</h5>
+
         <table class="table table-bordered text-center">
             <thead>
                 <th>Tên</th>
+                <th>Hình ảnh</th>
                 <th>Giá</th>
                 <th v-if="this.isEditing == true">Thao tác</th>
             </thead>
@@ -91,9 +100,10 @@
                 <tr v-for="(  item, index  ) in   this.order.cart[2].other  " :key="index">
 
                     <td>{{ item.other_name }}</td>
+                    <td><v-img :src="getImage(item)" cover height="100px"></v-img></td>
                     <td>{{ item.price }}</td>
                     <td v-if="this.isEditing == true">
-                        <button class="btn btn-danger" @click="removeOtherInOrder(order._id, order.service_id, item._id)">
+                        <button class="btn btn-danger" @click="removeOtherInOrder(item._id)">
                             <i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -105,13 +115,19 @@
             </tbody>
 
         </table>
-        <div v-if="this.isEditing == true" class="row mr-1">
-            <button @click="addOtherToMenu()" class="mb-4  btn btn-primary offset-md-11">
-                <i class="fas fa-add"></i> </button>
-        </div>
+
+    </div>
+    <div v-else class="text-center">
+        <br>
+        <p> <i>Không có</i></p>
+
+    </div>
+    <div v-if="this.isEditing == true" class="row text-right">
+        <button @click="addOtherToMenu()" class="mb-4 btn btn-primary  offset-md-11">
+            <i class="fas fa-add"></i> </button>
     </div>
     <div class="row">
-        <div class="offset-md-10">
+        <div class="offset-md-11">
             <span v-if="this.isEditing == false && order.status == 0" @click="editOrder()" class="mt-2 btn btn-warning">
                 <i class="fas fa-edit"></i> </span>
             <div v-else-if="this.isEditing == true">
@@ -124,9 +140,13 @@
 </template>
 <script>
 
-import orderService from '../../services/order.service';
-export default {
+import { VImg } from "vuetify/lib/components/index.mjs";
 
+export default {
+    components: {
+        VImg
+
+    },
     props: {
         order: {},
 
@@ -137,14 +157,24 @@ export default {
             isEditing: false
         };
     },
-    emits: ["openListFood", "removeFoodInOrder", "updateDrink"],
+    emits: ["openListFood", "openListOther", "openListDrink", "removeFoodInOrder", "updateDrink"],
     methods: {
+
+        getImage(food) {
+            return `http://localhost:3000/${food.image}`;
+        },
         updateDrink(drinkId, quantity) {
             this.$emit("updateDrink", drinkId, quantity);
         },
         addFoodToMenu() {
             this.$emit("openListFood");
 
+        },
+        addDinkToMenu() {
+            this.$emit("openListDrink");
+        },
+        addOtherToMenu() {
+            this.$emit("openListOther");
         },
         editOrder() {
             this.isEditing = true;
@@ -165,8 +195,8 @@ export default {
             this.$emit("removeDrinkInOrder", drinkId);
 
         },
-        removeOtherInOrder(orderId, service_id, otherId) {
-            console.log("removeOther", service_id, orderId, otherId)
+        removeOtherInOrder(otherId) {
+            this.$emit("removeOtherInOrder", otherId);
 
         },
         formatCurrency(number) {
@@ -195,3 +225,12 @@ export default {
 };
 
 </script>
+<style>
+input {
+    border: solid 1px black;
+    width: 60px;
+    margin-right: 10px;
+    padding-left: 10px;
+    text-align: center;
+}
+</style>

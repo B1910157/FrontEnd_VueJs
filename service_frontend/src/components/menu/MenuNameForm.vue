@@ -1,22 +1,22 @@
 
 <template>
     <Form @submit="submitUpdateNameMenu" :validation-schema="menuNameFormSchema" enctype="multipart/form-data">
+        <div class="form-group d-flex align-items-center">
+            <div class="input-group row text-center">
+                <div class="col-12">
+                    <span v-if="this.isEditNameMenu == false">{{ this.menuName.menu_name }}</span>
+                    <Field v-else-if="this.isEditNameMenu == true" name="menu_name" type="text" class=" form-control"
+                        v-model="this.menuName.menu_name" />
+                </div>
 
-        <div class="form-group">
-
-            <span v-if="this.isEditNameMenu == false">{{ this.menuName.menu_name }}</span>
-            <Field v-else-if="this.isEditNameMenu == true" name="menu_name" type="text" class="form-control"
-                v-model="this.menuName.menu_name" />
-
-            <ErrorMessage name="menu_name" class="error-feedback" />
-        </div>
-        <div class="form-group">
-
-            <button v-if="this.isEditNameMenu == true" type="submit" class="mt-2 badge badge-success"><i
+            </div>
+            <button v-if="this.isEditNameMenu == true" type="submit" class="ml-2 badge badge-success"><i
                     class="fas fa-save"></i></button>
-            <span v-if="this.isEditNameMenu == false" @click="editNameMenu()" class="mt-2 badge badge-warning">
-                <i class="fas fa-edit"></i> </span>
+            <span v-if="this.isEditNameMenu == false" @click="editNameMenu()" class="ml-2 badge badge-warning">
+                <i class="fas fa-edit"></i>
+            </span>
         </div>
+        <ErrorMessage name="menu_name" class="error-feedback" />
     </Form>
 </template>
 <script>
@@ -67,4 +67,9 @@ export default {
 </script>
 <style scoped>
 @import "@/assets/form.css";
+
+.small-input {
+    width: 150px;
+
+}
 </style>

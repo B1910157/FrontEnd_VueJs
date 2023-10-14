@@ -1,12 +1,12 @@
 <template>
     <div v-if="food" class="container">
-        <h4>Sửa Món Ăn</h4>
+        <h4 class="text-center title-in-page">Sửa Món Ăn</h4>
         <div class="row">
             <div class="col-3">
 
             </div>
             <div class="col-6">
-                <FoodForm :food="food" @submit:food="updateFood" @delete:food="deleteFood" />
+                <FoodForm :food="food" @submit:food="updateFood" />
             </div>
             <div class="col-3">
 
@@ -43,15 +43,7 @@ export default {
                 duration: 5000, // Thời gian hiển thị (milliseconds)
             });
         },
-        deleteSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Xóa thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
-            });
-        },
+
         async getFood(id) {
             try {
                 this.food = await FoodService.get(id);
@@ -77,17 +69,17 @@ export default {
                 console.log(error);
             }
         },
-        async deleteFood() {
-            if (confirm("Bạn muốn xóa món ăn này?")) {
-                try {
-                    await FoodService.delete(this.food._id);
-                    this.deleteSuccessToast();
-                    this.$router.push({ name: "foods" });
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        },
+        // async deleteFood() {
+        //     if (confirm("Bạn muốn xóa món ăn này?")) {
+        //         try {
+        //             await FoodService.delete(this.food._id);
+        //             this.deleteSuccessToast();
+        //             this.$router.push({ name: "foods" });
+        //         } catch (error) {
+        //             console.log(error);
+        //         }
+        //     }
+        // },
 
 
 

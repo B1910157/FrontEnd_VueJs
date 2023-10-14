@@ -12,7 +12,10 @@ class OrderService {
     return (await this.api.get("/")).data;
   }
   async cancelOrder(orderId) {
-    return (await this.api.get(`/cancelOrder/${orderId}`)).data;
+    return (await this.api.put(`/cancel/${orderId}`)).data;
+  }
+  async findOneOrder(orderId) {
+    return (await this.api.get(`/${orderId}`)).data;
   }
   // async login(data) {
   //     return (await this.api.post("/login", data)).data;

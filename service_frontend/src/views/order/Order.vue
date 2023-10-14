@@ -1,16 +1,14 @@
 <template>
     <div class="container">
-        <div>
-            <h4 class="text-secondary">
-                Quản lý đơn đặt món
+        <div class="row ml-3 mb-3">
+            <h4 class="col-5 title-in-page">
+                Danh sách đơn đặt tiệc
+                <i class="fa fa-book icon" aria-hidden="true"></i>
             </h4>
-            <!-- <div class="row">
-                <div class="col-12 text-right p-3">
-                    <button @click="showUnconfirmed = false" class="btn btn-secondary m-3">Tất cả đơn hàng </button>
-                    <button @click="showUnconfirmed = true" class="btn btn-warning m-3">Chưa duyệt </button>
-                </div>
 
-            </div> -->
+        </div>
+        <div class="container">
+
             <OrderList v-if="filleredordercount > 0" :orders="filteredorder" @accept="acceptEvent" @cancel="cancelEvent" />
             <p v-else>Bạn chưa có đơn đặt tiệc nào.</p>
         </div>

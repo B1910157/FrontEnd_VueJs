@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <div>
-            <h4>
+            <h3 class="text-center mb-3">
                 Lịch sử
-            </h4>
+            </h3>
             <HistoryOrderList v-if="filleredordercount > 0" :orders="filteredorder" @cancel="cancelEvent" />
             <p v-else>Bạn chưa có đơn nào.</p>
         </div>

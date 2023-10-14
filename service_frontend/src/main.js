@@ -8,7 +8,13 @@ import vuetify from "./plugins/vuetify";
 import router from "./router";
 import "vue-toast-notification/dist/theme-sugar.css";
 import "vue-toast-notification/dist/theme-default.css";
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 import PrimeVue from "primevue/config";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+// import { ref, onMounted } from "vue";
+// import Chart from "chart.js";
+
 // import VueGoodTablePlugin from "vue-good-table";
 // import "vue-good-table/dist/vue-good-table.css";
 //
@@ -24,6 +30,8 @@ createApp(App)
   .use(store)
   .use(vuetify)
   .use(PrimeVue)
+  .use(CKEditor)
+
   // .use(VueGoodTablePlugin)
 
   .mount("#app");

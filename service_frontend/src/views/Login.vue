@@ -46,13 +46,7 @@ export default {
         console.log("respon: ", response)
         console.log("helloo", response.token)
         localStorage.setItem("token", response.token);
-        // console.log("name: ", this.aname)
-        // console.log("auth", this.Auth)
         this.setAuth(true);
-        // this.setName("Xinchao")
-        // console.log("auth", this.Auth)
-        // console.log("name: ", this.aname)
-        // console.log(response.data.token)
         this.$router.push({ name: 'home' });
       } catch (error) {
 

@@ -1,13 +1,14 @@
 <template>
   <div class="cart">
     <div class="cart-icon" @click="toggleCart">
-      <i class="fa fa-book"></i> &nbsp;
-      <!-- <p class="text-danger font-weight-bold" v-if="this.Auth"> {{ this.cartFood.menu.length + this.cartDrink.items.length
+      <i class="fa fa-book text-warning"></i> &nbsp;
+      <p class="text-danger font-weight-bold" v-if="this.Auth"> {{ this.cartFood.menu.length + this.cartDrink.items.length
+        + this.cartOther.otherList.length
       }}</p>
       <p class="text-danger font-weight-bold" v-if="!this.Auth"> {{ this.localCart.items[0].menu.length +
         this.localCart.items[1].drink.length + this.localCart.items[2].other.length
-      }}</p> -->
-
+      }}</p>
+      {{ console.log(this.localCart) }}
     </div>
     <div class="cart-content" v-if="showCart && Auth">
       <div class="text-center row" v-if="this.cartFood.service_id">
@@ -18,7 +19,9 @@
             </span>
           </router-link>
         </div>
-        <div v-if="this.Auth && this.cartFood.menu.length > 0" class="col-6 text-right">
+        <div
+          v-if="this.Auth && (this.cartFood.menu.length > 0 || this.cartDrink.drink.length > 0 || this.cartOther.other.length > 0)"
+          class="col-6 text-right">
           <router-link :to="{ name: 'order' }">
             <v-btn variant="tonal" class="btn btn-primary">Đặt ngay</v-btn>
           </router-link>
@@ -46,6 +49,11 @@
             <th>Tên</th>
             <th>Giá</th>
           </thead>
+          <tr v-if="this.cartFood.menu.length == 0">
+            <td colspan="3" class="text-center">
+              <u><i>Menu trống</i></u>
+            </td>
+          </tr>
           <tr v-for="(item, index) in this.cartFood.menu" :key="index">
             <td>{{ item.food_name }}</td>
             <td>{{ item.price }}</td>
@@ -57,15 +65,19 @@
           Tổng tiền Menu: {{ formatCurrency(this.cartFood.totalMenu) }}
         </table>
       </div>
-      <div v-if="this.cartDrink.drink.length != 0">
+      <div>
         <h6>Đồ uống</h6>
-
-        <table class="table table-bordered">
+        <table class=" table table-bordered">
           <thead>
             <th>Tên</th>
             <th>Số lượng</th>
             <th>Giá</th>
           </thead>
+          <tr v-if="this.cartDrink.items.length == 0">
+            <td colspan="3" class="text-center">
+              <u><i>Trống </i></u>
+            </td>
+          </tr>
           <tr v-for="(item, index) in cartDrink.items" :key="index">
             <td>{{ item.drink_name }}</td>
             <td>
@@ -120,7 +132,12 @@
             </span>
           </router-link>
         </div>
-        <div v-if="!this.Auth && this.localCart.items[0].menu.length > 0" class="col-6 text-right">
+
+
+
+        <div
+          v-if="!this.Auth && (this.localCart.items[0].menu.length > 0 || this.localCart.items[1].drink.length > 0 || this.localCart.items[2].other.length > 0)"
+          class="col-6 text-right">
           <router-link :to="{ name: 'order' }">
             <v-btn variant="tonal" class="btn btn-primary">Đặt ngay</v-btn>
           </router-link>
@@ -139,7 +156,7 @@
             Chọn</span>
         </router-link>
       </h5>
-      <div v-if="this.localCart.items[0].menu">
+      <div v-if="this.localCart">
 
         <h6>THỰC ĐƠN</h6>
         <table class="table table-bordered">
@@ -147,7 +164,12 @@
             <th>Tên</th>
             <th>Giá</th>
           </thead>
+          <tr class="text-center" v-if="this.localCart.items[0].menu.length == 0">
+            <td colspan="4">
+              <u><i>Trống</i></u>
 
+            </td>
+          </tr>
           <tr v-for="(item, index) in this.localCart.items[0].menu" :key="index">
             <td>{{ item.food_name }}</td>
             <td>{{ item.price }}</td>
@@ -161,10 +183,10 @@
 
         </table>
       </div>
-      <div v-else>
+      <!-- <div v-else>
         Trống
-      </div>
-      <div v-if="this.localCart.items[1].drink">
+      </div> -->
+      <div v-if="this.localCart">
 
         <h6>Đồ uống</h6>
         <table class="table table-bordered">
@@ -172,18 +194,23 @@
             <th>Tên</th>
             <th>Giá</th>
           </thead>
+          <!-- <tr class="text-center" v-if="this.localCart.items[1].drink.length == 0">
+            <td colspan="4">
+              <u><i>Trống</i></u>
 
+            </td>
+          </tr> -->
           <tr v-for="(item, index) in this.localCart.items[1].drink" :key="index">
             <td>{{ item.drink_name }}</td>
 
             <td>
               <input type="number" name="quantity" v-model="item.quantity" min="1" max="999">
 
-              <button class="btn btn-warning"
+              <button class="btn btn-warning mr-2"
                 @click="updateDrinkLocalCart(this.localCart.service_id, item, item.quantity)">
                 <i class="fa fa-pencil"></i>
               </button>
-              <button class="btn btn-danger" @click="removeDrinkInLocalCart(item._id)"> <i
+              <button class="btn btn-danger " @click="removeDrinkInLocalCart(item._id)"> <i
                   class="fa fa-trash"></i></button>
             </td>
             <td>{{ item.price }}</td>
@@ -193,8 +220,7 @@
         </table>
       </div>
 
-      <div v-if="this.localCart.items[2].other">
-
+      <div v-if="this.localCart">
         <h6>DỊCH VỤ KHÁC</h6>
         <table class="table table-bordered">
           <thead>

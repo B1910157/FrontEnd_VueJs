@@ -1,8 +1,8 @@
 <template>
-
   <ServiceDetail :service="filteredService" :menuOfService="filteredMenuOfService" :foodOfService="this.foodOfService"
     :cart="this.cart" :chooseService="chooseService" :unChooseService="unChooseService"
-    :drinkOfService="this.drinkOfService" :otherOfService="this.otherOfService" />
+    :chooseWithOtherService="chooseWithOtherService" :drinkOfService="this.drinkOfService"
+    :otherOfService="this.otherOfService" />
 
   <div v-if="this.Auth">
     Hello
@@ -28,7 +28,7 @@ export default {
   components: {
     FoodCard,
     ServiceDetail,
-  
+
   },
   props: {
     service_id: { type: String, required: true },
@@ -122,37 +122,43 @@ export default {
     async unChooseService() {
       try {
         if (!this.Auth) {
-          console.log("voo", this.localCart)
           this.localCart.service_id = null;
-          this.localCart.items[0] = [];
-          this.localCart.items[1] = [];
-          this.localCart.items[2] = [];
+          this.localCart.items[0].menu = [];
+          this.localCart.items[1].drink = [];
+          this.localCart.items[2].other = [];
+
           this.localCart.items[0].totalMenu = 0;
           this.localCart.items[1].totalDrink = 0;
           this.localCart.items[2].totalOther = 0;
-
-
           localStorage.setItem('localCart', JSON.stringify(this.localCart));
-          this.getService(this.service_id);
+          await this.getService(this.service_id);
 
         } else {
           const rs = await Home.unChooseServiceReal();
           if (rs) {
-            console.log("đã bỏ chọn dịch vụ");
             this.getCart();
             this.getOtherInCart();
             this.getItemsInDrinkCart();
             this.retrieveInfo();
-
           }
-
         }
-
       } catch (error) {
         console.log(error);
       }
     },
+    async chooseWithOtherService(service_id) {
+      try {
+        if (window.confirm('Bạn muốn chọn dịch vụ này?\nCác lựa chọn của bạn trên dịch vụ khác sẽ bị xóa!!!')) {
+          await this.unChooseService();
+          await this.chooseService(service_id);
+        }
 
+      } catch (error) {
+
+      }
+
+
+    },
     async getService(service_id) {
       try {
         this.service = await Home.getService(service_id);

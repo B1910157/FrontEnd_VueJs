@@ -37,11 +37,26 @@ class OrderService {
     return (await this.api.get(`/order/findFoodNotInOrder/${orderId}`)).data;
   }
 
+  async getDrinkNotInOrder(orderId) {
+    return (await this.api.get(`/order/findDrinkNotInOrder/${orderId}`)).data;
+  }
   async addOrUpdateDrink(orderId, data) {
     return (await this.api.put(`/${orderId}/addOrUpdateDrink`, data)).data;
   }
   async removeDrinkInOrder(orderId, drinkId) {
     return (await this.api.delete(`/removeDrinkInOrder/${orderId}/${drinkId}`))
+      .data;
+  }
+
+  async addOtherToCartInOrder(orderId, otherId) {
+    return (await this.api.get(`/addOtherToCartInOrder/${orderId}/${otherId}`))
+      .data;
+  }
+  async getOtherNotInOrder(orderId) {
+    return (await this.api.get(`/order/findOtherNotInOrder/${orderId}`)).data;
+  }
+  async removeOtherInOrder(orderId, otherId) {
+    return (await this.api.delete(`/removeOtherInOrder/${orderId}/${otherId}`))
       .data;
   }
 }

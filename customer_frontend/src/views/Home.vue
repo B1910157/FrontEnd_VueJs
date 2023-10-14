@@ -3,10 +3,10 @@
         <ServicesList v-if="filteredFoodCount > 0" :foods="filteredFood" v-model:activeIndex="activeIndex" />
         <p v-else>Không có dịch vụ hỗ trợ nào.</p>
     </div>
-    <!-- <button @click="this.setLocalCart1()">Hello</button> -->
-    <div>
+    <button class="btn btn-primary" @click="setLocalCart1()">Hell123o</button>
+    <!-- <div>
         <button @click="showSuccessToast">Hiển thị Toast</button>
-    </div>
+    </div> -->
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
@@ -33,7 +33,6 @@ export default {
         };
     },
     watch: {
-
         searchText() {
             this.activeIndex = -1;
         },
@@ -83,11 +82,13 @@ export default {
                 message: 'Đặt tiệc thành công!',
                 type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
                 position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
+                duration: 2000, // Thời gian hiển thị (milliseconds)
+
             });
         },
 
         setLocalCart1() {
+            console.log("set lại nè");
             const newLocalCart = {
                 service_id: null,
                 items: [
@@ -106,7 +107,8 @@ export default {
                 ],
             };
             localStorage.setItem("localCart", JSON.stringify(newLocalCart));
-
+            console.log("set lại");
+            console.log(newLocalCart)
         },
         ...mapMutations(["setAuth"]),
         handleOrder() {

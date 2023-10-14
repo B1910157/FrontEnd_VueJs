@@ -32,5 +32,12 @@ class MenuService {
   async delete(id) {
     return (await this.api.delete(`/menu/${id}`)).data;
   }
+  async publishMenu(menuId) {
+    const a = await this.api.put(`/menu/publish/${menuId}`).data;
+    return a;
+  }
+  async hiddenMenu(menuId) {
+    return (await this.api.put(`/menu/hidden/${menuId}`)).data;
+  }
 }
 export default new MenuService();

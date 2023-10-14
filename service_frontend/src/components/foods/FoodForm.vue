@@ -2,14 +2,14 @@
 <template>
     <Form @submit="submitFood" :validation-schema="foodFormSchema" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="food_name">Tên món </label>
+            <label class="font-weight-bold" for="food_name">Tên món </label>
             <Field name="food_name" type="text" class="form-control" v-model="foodLocal.food_name" />
             <ErrorMessage name="food_name" class="error-feedback" />
         </div>
 
         <div class="form-group ">
-            <label for="food_category">Phân loại</label>
-            <Field v-slot="{ value }" name="food_category" as="select" class="form-select"
+            <label class="font-weight-bold" for="category">Phân loại</label>
+            <Field v-slot="{ value }" name="category" as="select" class="form-select custom-select "
                 v-model="foodLocal.food_category">
                 <option value="" disabled>--Chọn--</option>
                 <option v-for="category in categories" :key="category" :value="category._id"
@@ -18,7 +18,7 @@
             <ErrorMessage name="category" class="error-feedback" />
         </div>
         <div class="form-group">
-            <label for="price">Giá </label>
+            <label class="font-weight-bold" for="price">Giá </label>
             <Field name="price" type="text" class="form-control" v-model="foodLocal.price" />
             <ErrorMessage name="price" class="error-feedback" />
         </div>
@@ -27,28 +27,28 @@
         <div>
             <div v-if="this.food.image && !editImage && foodLocal._id">
                 <img :src="getImage(this.food)" alt="" class="w-25 h-25">
-                <button @click="toggleEditImage">Thay đổi ảnh</button>
+                <button class="ml-3 btn btn-primary" @click="toggleEditImage">Thay đổi ảnh</button>
             </div>
             <div class="form-group" v-else-if="this.food.image && editImage">
-                <label for="image">Hình ảnh </label>
+                <label class="font-weight-bold" for="image">Hình ảnh </label>
                 <Field name="image" type="file" class="form-control" v-model="foodLocal.image"
                     @change="handleImageChange" />
                 <ErrorMessage name="image" class="error-feedback" />
-                <button @click="toggleEditImage">Hủy</button>
+                <button class="mt-2 btn btn-danger" @click="toggleEditImage">Hủy</button>
             </div>
 
             <div class="form-group" v-else>
-                <label for="image">Hình ảnh </label>
+                <label class="font-weight-bold" for="image">Hình ảnh </label>
                 <Field name="image" type="file" class="form-control" v-model="foodLocal.image"
                     @change="handleImageChange" />
                 <ErrorMessage name="image" class="error-feedback" />
             </div>
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button v-if="foodLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteFood">
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <!-- <button v-if="foodLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteFood">
                 Xóa
-            </button>
+            </button> -->
         </div>
     </Form>
 </template>
@@ -73,7 +73,7 @@ export default {
                 .required("Tên phải có giá trị.")
                 .min(2, "Tên phải ít nhất 2 ký tự.")
                 .max(50, "Tên có nhiều nhất 50 ký tự."),
-            food_category: yup
+            category: yup
                 .string()
                 .required("Loại món không được rỗng"),
 
@@ -121,9 +121,9 @@ export default {
 
 
         },
-        deleteFood() {
-            this.$emit("delete:food", this.foodLocal.id);
-        },
+        // deleteFood() {
+        //     this.$emit("delete:food", this.foodLocal.id);
+        // },
         handleImageChange(event) {
             this.foodLocal.image = event.target.files[0];
             console.log('Selected image:', this.foodLocal.image);
@@ -141,4 +141,10 @@ export default {
 </script>
 <style scoped>
 @import "@/assets/form.css";
+
+.custom-select {
+    width: 100%;
+    /* Độ rộng mong muốn */
+    /* Thêm các thuộc tính khác tùy theo nhu cầu của bạn */
+}
 </style>

@@ -1,5 +1,17 @@
 <template>
-    <div class="row container  justify-content-start">
+    <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0"
+        aria-valuemax="100">
+        <div class="progress-bar bg-success" style="width: 25%">25%</div>
+    </div>
+    <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="50" aria-valuemin="0"
+        aria-valuemax="100">
+        <div class="progress-bar bg-info text-dark" style="width: 50%">50%</div>
+    </div>
+    
+
+
+
+    <div class="row container justify-content-start">
         <div class="col-4 my-3">
             <v-card class="mx-auto" max-width="300">
                 <v-card-item class="text-primary" title="LƯỢT ĐẶT TIỆC">

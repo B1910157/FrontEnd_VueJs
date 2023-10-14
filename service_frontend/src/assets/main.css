@@ -6,6 +6,21 @@ body {
   /* color: black; */
   background-color: #f6f9ff;
 }
+.title-in-page {
+  color: blue;
+  position: relative;
+}
+
+.title-in-page::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px; /* Điều chỉnh khoảng cách bên dưới tùy ý */
+  width: 100%;
+  height: 2px; /* Điều chỉnh độ dài của hiệu ứng sáng */
+  background-color: yellow; /* Màu của hiệu ứng sáng */
+  opacity: 0.5; /* Điều chỉnh độ trong suốt của hiệu ứng sáng */
+}
 .vertical-nav {
   min-width: 17rem;
   width: 17rem;
@@ -141,6 +156,14 @@ a.active {
 span.required-fill-in {
   color: red;
   font-weight: bold;
+}
+.badge:hover {
+  /* background-color: rgb(80, 170, 176); */
+  /* Màu nền khi hover */
+  color: rgb(0, 0, 0);
+  /* Màu chữ khi hover */
+  cursor: pointer;
+  /* Biểu tượng con trỏ khi hover */
 }
 
 .loading {

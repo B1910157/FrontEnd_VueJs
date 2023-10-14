@@ -6,6 +6,12 @@ const routes = [
     name: "notfound",
     component: () => import("@/views/NotFound.vue"),
   },
+  {
+    path: "/notification/:orderId",
+    name: "notification",
+    component: () => import("@/views/Notification.vue"),
+    props: true,
+  },
 
   {
     path: "/",
@@ -20,6 +26,18 @@ const routes = [
         path: "/login/",
         name: "login",
         component: () => import("@/views/Login.vue"),
+      },
+
+      // {
+      //   path: "/payment/:orderId",
+      //   name: "payment",
+      //   component: () => import("@/views/Payment.vue"),
+      //   props: true,
+      // },
+      {
+        path: "/payment/",
+        name: "payment",
+        component: () => import("@/views/Payment.vue"),
       },
       //Trang chủ
       {
@@ -70,7 +88,14 @@ const router = createRouter({
 //Global guards
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem("token");
-  const allowedRoutes = ["login", "register", "home", "serviceDetail", "order"];
+  const allowedRoutes = [
+    "login",
+    "register",
+    "home",
+    "serviceDetail",
+    "order",
+    "payment",
+  ];
   if (allowedRoutes.includes(to.name) || isAuthenticated) {
     // Nếu route nằm trong danh sách không cần kiểm tra hoặc người dùng đã đăng nhập
     next();

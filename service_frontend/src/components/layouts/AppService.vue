@@ -3,15 +3,35 @@
 
         <div class="py-4 px-3 mb-4 bg-title">
             <div class="d-flex align-items-center">
-                <img src="https://www.lansweeper.com/wp-content/uploads/2018/05/ASSET-USER-ADMIN.png" alt="..."
-                    style="width: 80px; height: 80px;" class="me-3 rounded-circle shadow border">
-                <div class="media-body">
+                <v-img :src="getImage(this.info)" cover style="width: 80px; height: 80px;"
+                    class="me-3 rounded-circle shadow border"></v-img>
 
+                <div class="media-body">
                     <p class="font-weight-normal text-muted mb-0">Xin chào</p>
-                    <h4 class="m-0"> Quản trị viên</h4>
+                    <h4 class="m-0">Quản trị viên</h4>
                 </div>
             </div>
+            <button class="btn btn-primary btn-sm ml-12 mt-2" @click="showImageUploadForm">Đổi ảnh </button>
+            <!-- <i @click="showImageUploadForm" class="fa fa-camera btn btn-secondary mt-2 ml-14" aria-hidden="true"></i> -->
+            <!-- Form thay đổi ảnh -->
+            <div v-if="this.isChange == true">
+                <Form @submit="changeImage" :validation-schema="changeImageFormSchema" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="image">Hình ảnh </label>
+                        <Field name="image" type="file" class="form-control" @change="updateTemporaryImage" />
+                        <ErrorMessage name="image" class="error-feedback" />
+                    </div>
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        <button class="ml-2 btn btn-danger" @click="cancelChange()">Hủy</button>
+                    </div>
+                </Form>
+
+            </div>
+
+
         </div>
+
 
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item " :class="{ 'active': $route.path === '/' }">
@@ -63,36 +83,118 @@
 
             </li>
         </ul>
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/jobs/) }">
+                <router-link to="/jobs" class="nav-link">
+                    <i class="fa-solid fa-user me-3 "></i>
+                    Tuyển dụng
+                </router-link>
+
+            </li>
+        </ul>
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item ">
+                <a class="nav-link" @click="logOut"><i class="fas fa-right-from-bracket me-3"></i>
+                    Đăng xuất
+                </a>
+            </li>
+        </ul>
+
     </div>
     <span v-else></span>
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from "vee-validate";
 import { mapState, mapMutations } from 'vuex';
 import userService from "@/services/user.service";
+import infoService from '../../services/info.service';
+import changeImage from '../../services/changeImage.service';
+import { VImg } from "vuetify/lib/components/index.mjs";
+
+import { object } from "yup";
+import * as yup from "yup";
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+        VImg
+    },
     computed: {
         ...mapState(['Auth']),
     },
 
     methods: {
-        ...mapMutations(['setAuth']),
-        async logOut() {
+        showImageUploadForm() {
+            this.isChange = true;
+        },
+        async changeImage() {
+            if (this.temporaryImage) {
+                // Nếu có ảnh tạm thời, thực hiện tải lên
+                const formData = new FormData();
+                formData.append("image", this.temporaryImage);
+                await changeImage.changeImage(formData);
+                // Cập nhật giá trị this.info.image sau khi tải lên thành công
+                this.info.image = this.temporaryImage;
+                this.retrieveInfo();
+                this.isChange = false;
+            }
+        },
+        cancelChange() {
+            this.isChange = false;
+        },
+        getImage(service) {
+            return `http://localhost:3000/${service.image}`;
+        },
+        updateTemporaryImage(event) {
+            // Update giá trị ảnh tạm thời khi người dùng chọn ảnh mới
+            this.temporaryImage = event.target.files[0];
+        },
+        async retrieveInfo() {
             try {
-                const headers = {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                };
-                await userService.logout({ headers });
-                localStorage.removeItem('token');
-                this.setAuth(false);
-                this.$router.push({ name: 'login' });
+                this.info = await infoService.info();
+
             } catch (error) {
                 console.log(error);
             }
         },
+        ...mapMutations(['setAuth']),
+        async logOut() {
+            if (confirm("Xác nhận đăng xuất?")) {
+                try {
+                    const headers = {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    };
+                    await userService.logout({ headers });
+                    localStorage.removeItem('token');
+                    this.setAuth(false);
+                    this.$router.push({ name: 'login' });
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
 
+    },
+    data() {
+        const changeImageFormSchema = yup.object().shape({
+            image: yup.mixed().required("Hình ảnh là bắt buộc."),
+        });
+        return {
+            info: object,
+            temporaryImage: null,
+            isChange: false,
+            changeImageFormSchema,
+        };
+    },
+    created() {
+        this.retrieveInfo();
     }
 }
 
 </script>
+<style scoped>
+@import "@/assets/form.css";
+</style>

@@ -1,5 +1,11 @@
 
 <template>
+    <div class="row container">
+        <div class="col-12 text-center" v-if="this.foodNotInMenu.length == 0">
+            --- Hết ---
+        </div>
+    </div>
+
     <div class="row justify-content-start container">
         <div v-for="(food, index) in this.foodNotInMenu" :key="food._id" class="col-3 my-3">
             <v-card class="mx-auto" style="height: 100%;">
@@ -11,7 +17,7 @@
                     {{ formatCurrency(food.price) }}
                 </v-card-subtitle>
                 <v-card-actions>
-                    <span @click="addFoodToMenuReal(food._id)" class="mt-3 badge badge-primary">
+                    <span @click="addFoodToMenuReal(food._id)" class="mt-3 badge badge-primary" style="font-size: 16px;">
                         <i class="fas fa-add"></i> </span>
                 </v-card-actions>
             </v-card>
@@ -62,7 +68,7 @@ export default {
             this.$emit("addFoodToMenu", foodId);
         }
         ,
-       
+
 
 
     },

@@ -10,6 +10,12 @@
                     <th>Giá</th>
                     <th>Thao tác</th>
                 </thead>
+                <tbody
+                    v-if="(!this.Auth && localCart.items[0].menu.length == 0) || (this.Auth && this.cartData.items[0].menu.length == 0)">
+                    <tr>
+                        <td colspan="4"><u><i>Trống</i></u></td>
+                    </tr>
+                </tbody>
                 <tbody v-if="this.Auth">
                     <tr v-for="(item, index) in this.cartData.items[0].menu" :key="index">
                         <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
@@ -21,14 +27,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             Tổng tiền Menu: {{ formatCurrency(this.cartData.items[0].totalMenu) }}
                         </td>
                     </tr>
                 </tbody>
                 <tbody v-if="!this.Auth">
                     <tr v-for="(item, index) in this.localCart.items[0].menu" :key="index">
-                        <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
+                        <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
                         <td>{{ item.food_name }}</td>
                         <td>{{ item.price }}</td>
                         <td>
@@ -37,13 +43,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             Tổng tiền Menu: {{ formatCurrency(this.localCart.items[0].totalMenu) }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
 
         <div class="col-6">
             <h2>Đồ uống</h2>
@@ -52,21 +59,30 @@
                     <thead>
                         <th width="15%">Hình ảnh</th>
                         <th>Tên món</th>
-                        <th>Số lượng</th>
+                        <th style="width: 25%;">Số lượng</th>
                         <th>Giá</th>
-                        <th>Thao tác</th>
+                        <th style="width: 20%;">Thao tác</th>
                     </thead>
+                    <tbody
+                        v-if="(!this.Auth && localCart.items[1].drink.length == 0) || (this.Auth && this.cartData.items[1].drink.length == 0)">
+                        <tr>
+                            <td colspan="5">
+                                <u><i>Trống</i></u>
+                            </td>
+                        </tr>
+                    </tbody>
                     <tbody v-if="this.Auth">
                         <tr v-for="(item, index) in this.cartData.items[1].drink" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
+                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
                             <td>{{ item.drink_name }}</td>
                             <td>
                                 <input type="number" name="quantity" v-model="item.quantity" min="1" class="input-small">
-                                {{ item.unit }}
+                                /{{ item.unit }}
                             </td>
                             <td>{{ item.price }}</td>
 
-                            <td><button class="btn btn-warning"
+                            <td>
+                                <button class="btn btn-warning mr-1"
                                     @click="updateDrink(item.service_id, item._id, item.quantity)">
                                     <i class="fa fa-pencil"></i>
                                 </button>
@@ -75,21 +91,21 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="2">
                                 Tổng tiền Đồ uống: {{ formatCurrency(this.cartData.items[1].totalDrink) }}
                             </td>
                         </tr>
                     </tbody>
                     <tbody v-if="!this.Auth && localCart.items[1].drink.length != 0">
                         <tr v-for="(item, index) in this.localCart.items[1].drink" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
+                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
                             <td>{{ item.drink_name }}</td>
                             <td>
                                 <input type="number" name="quantity" v-model="item.quantity" min="1" class="input-small">
-                                {{ item.unit }}
+                                /{{ item.unit }}
                             </td>
                             <td>{{ item.price }}</td>
-                            <td><button class="btn btn-warning"
+                            <td><button class="btn btn-warning mr-1"
                                     @click="updateDrinkLocalCart(this.localCart.service_id, item, item.quantity)">
                                     <i class="fa fa-pencil"></i>
                                 </button>
@@ -98,7 +114,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="2">
                                 Tổng tiền Đồ uống: {{ formatCurrency(this.localCart.items[1].totalDrink) }}
                             </td>
                         </tr>
@@ -106,9 +122,10 @@
                 </table>
             </div>
         </div>
-        <div class="col-12">
-            <div
-                v-if="(!this.Auth && localCart.items[2].other.length != 0) || (this.Auth && this.cartData.items[2].other.length > 0)">
+
+        <div class="mt-2 col-12"
+            v-if="(!this.Auth && localCart.items[2].other.length != 0) || (this.Auth && this.cartData.items[2].other.length > 0)">
+            <div>
                 <h2>Khác</h2>
                 <table class="table table-bordered text-center">
                     <thead>
@@ -119,7 +136,7 @@
                     </thead>
                     <tbody v-if="this.Auth">
                         <tr v-for="(item, index) in this.cartData.items[2].other" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
+                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
                             <td>{{ item.other_name }}</td>
                             <td>{{ item.price }}</td>
                             <td>
@@ -135,7 +152,7 @@
                     </tbody>
                     <tbody v-if="!this.Auth">
                         <tr v-for="(item, index) in this.localCart.items[2].other" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
+                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
                             <td>{{ item.other_name }}</td>
                             <td>{{ item.price }}</td>
                             <td>
@@ -151,25 +168,13 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
-        <!-- <div class="col-12 text-center" v-if="!this.Auth">
-            <router-link :to="{ name: 'serviceDetail', params: { service_id: this.localCart.service_id } }">
-                <span class="mt-2 badge badge-primary">
-                    Đến dịch vụ
-                </span>
-            </router-link>
-        </div>
-        <div class="col-12 text-center" v-if="this.Auth">
-            <router-link :to="{ name: 'serviceDetail', params: { service_id: this.cartFood.service_id } }">
-                <span class="mt-2 badge badge-primary">
-                    Đến dịch vụ
-                </span>
-            </router-link>
-        </div> -->
+
         <br>
         <hr>
     </div>
-    <div class=" container">
+    <div class="container">
         <h2>Thông tin</h2>
         <Form @submit="submitOrder" :validation-schema="orderFormSchema">
             <div class="row">
@@ -196,7 +201,7 @@
                         <label for="province">Tỉnh/Thành phố</label>
                         <select name="province" class="form-control" v-model="areaLocal.province">
                             <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
-                            <option v-for="province in provinces" :value="province">{{ province.name_with_type }}</option>
+                            <option v-for="province in provinces" :value="province">{{ province.name }}</option>
                         </select>
                     </div>
 
@@ -204,14 +209,14 @@
                         <label for="district">Quận/Huyện</label>
                         <select name="district" class="form-control" v-model="areaLocal.district">
                             <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
-                            <option v-for="district in districts" :value="district">{{ district.name_with_type }}</option>
+                            <option v-for="district in districts" :value="district">{{ district.name }}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="ward">Xã/Phường/Thị Trấn</label>
                         <select name="ward" class="form-control" v-model="areaLocal.ward">
                             <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
-                            <option v-for="ward in wards" :value="ward">{{ ward.name_with_type }}</option>
+                            <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -237,7 +242,6 @@
                         <Field name="event_time" type="time" class="form-control" v-model="orderLocal.event_time" />
                         <ErrorMessage name="event_time" class="error-feedback" />
                     </div>
-
                 </div>
                 <div class="form-group col-12">
                     <label for="note" class="font-weight-bold"> Ghi chú </label>
@@ -245,13 +249,23 @@
                         v-model="orderLocal.note"></textarea>
                     <ErrorMessage name="note" class="error-feedback" />
                 </div>
-                {{ this.orderLocal }}
+                <div class="form-group col-12">
+                    <label class="font-weight-bold"> Phương thức thanh toán </label>
+                    <div>
+                        <input type="radio" id="paymentVnPay" name="payment" value="vnpay" v-model="orderLocal.payment" />
+                        <label for="paymentVnPay">Thanh toán qua VN Pay</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="paymentPayLater" name="payment" value="paylater"
+                            v-model="orderLocal.payment" />
+                        <label for="paymentPayLater">Thanh toán trực tiếp</label>
+                    </div>
+                </div>
+                {{ console.log(orderLocal.payment) }}
 
             </div>
-
-
             <div class="form-group col-12">
-                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                <button type="submit" class="btn btn-primary">Thanh toán</button>
             </div>
         </Form>
     </div>
@@ -263,9 +277,11 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { mapState, mapMutations, mapActions } from "vuex";
 import MenuService from "../services/menu.service";
 import ProvinceService from "../services/getProvinces";
+import getProvincesOpenAPI from "../services/getProvincesOpenAPI";
 import infoService from "../services/info.service";
 import { object } from "yup";
 import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
+import { useToast } from 'vue-toast-notification';
 
 
 import moment from 'moment';
@@ -289,13 +305,13 @@ export default {
             fullname: yup.string()
                 .required("Vui lòng điền họ và tên của bạn")
             ,
-            // address_book: yup.string()
 
-            //     .required("Vui lòng nhập địa chỉ")
-            // ,
             email: yup.string()
                 .email("Email không hợp lệ")
                 .required("Vui lòng nhập email"),
+            // address_book: yup.string()
+            //     .required("Vui lòng cung cấp địa chỉ")
+            // ,
             phone: yup.string()
                 .matches(/^\d{10}$/, "Số điện thoại không hợp lệ")
                 .required("Vui lòng nhập số điện thoại"),
@@ -319,6 +335,9 @@ export default {
                 .typeError("Vui lòng  chọn giờ diễn ra")
                 .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Giờ diễn ra không hợp lệ")
                 .required("Vui lòng chọn giờ diễn ra"),
+            // address_book: yup.string()
+            //     .typeError("Vui lòng cung cấp địa chỉ")
+            //     .required("Vui lòng cung cấp địa chỉ"),
         });
         return {
             cartOrder: {},
@@ -347,6 +366,7 @@ export default {
                 districtName: "",
                 wardName: "",
                 address_book: "",
+                payment: "vnpay"
             },
             areaLocal: {
                 province: "",
@@ -400,9 +420,21 @@ export default {
 
     methods: {
 
+        checkMenuInOrderToast() {
+            const VueToast = useToast();
+            VueToast.open({
+                message: 'Vui lòng chọn món trước khi đặt',
+                type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+                position: 'top-right', // Vị trí hiển thị toast
+                duration: 3000, // Thời gian hiển thị (milliseconds)
+            });
+        },
+
+
         async getProvince() {
             try {
-                this.provinces = await ProvinceService.getProvinces(this.provinceName);
+                // this.provinces = await ProvinceService.getProvinces(this.provinceName);
+                this.provinces = await getProvincesOpenAPI.getAllProvinces();
 
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -410,9 +442,13 @@ export default {
         },
         async getDistrict() {
             try {
+
                 this.areaLocal.district = "";
-                this.districts = await ProvinceService.getDistricts(this.areaLocal.province.code, this.districtName);
-                this.orderLocal.provinceName = await this.areaLocal.province.name_with_type;
+                // this.districts = await ProvinceService.getDistricts(this.areaLocal.province.code, this.districtName);
+
+                const rs = await getProvincesOpenAPI.getProvince(this.areaLocal.province.code);
+                this.districts = rs.districts;
+                this.orderLocal.provinceName = await this.areaLocal.province.name;
 
 
             } catch (error) {
@@ -422,8 +458,10 @@ export default {
         async getWard() {
             try {
                 this.areaLocal.ward = "";
-                this.wards = await ProvinceService.getWards(this.areaLocal.district.code, this.wardName);
-                this.orderLocal.districtName = await this.areaLocal.district.name_with_type;
+                // this.wards = await ProvinceService.getWards(this.areaLocal.district.code, this.wardName);
+                const rs = await getProvincesOpenAPI.getDistrict(this.areaLocal.district.code);
+                this.wards = rs.wards;
+                this.orderLocal.districtName = await this.areaLocal.district.name;
 
 
             } catch (error) {
@@ -432,7 +470,7 @@ export default {
         },
         async getWardName() {
             try {
-                this.orderLocal.wardName = await this.areaLocal.ward.name_with_type;
+                this.orderLocal.wardName = await this.areaLocal.ward.name;
 
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -476,7 +514,12 @@ export default {
         },
 
         submitOrder() {
-            this.$emit("submit:order", this.orderLocal);
+            if ((!this.Auth && this.localCart.items[0].menu.length > 0) || (this.Auth && this.cartData.items[0].menu.length > 0)) {
+                this.$emit("submit:order", this.orderLocal);
+            } else {
+                this.checkMenuInOrderToast();
+            }
+
 
         },
         getImage(item) {
@@ -571,7 +614,8 @@ export default {
 @import "@/assets/form.css";
 
 .input-small {
-    width: 60px;
-
+    width: 55px;
+    text-align: center;
+    border: solid 1px black;
 }
 </style>

@@ -1,22 +1,25 @@
 <template>
-    <div class="row p-4">
-        <h4 class="col-5">
-            Danh sách dịch vụ khác
+    <div class="row ml-3 mb-3">
+        <h5 class="col-5 title-in-page">
+            Danh sách dịch vụ khác (Thuê vật tư)
             <i class="fa fa-book icon" aria-hidden="true"></i>
-        </h4>
-        <div class="col-7">
-            <button class="btn btn-sm btn-primary" @click="goToAddOther">
-                <i class="fas fa-plus"></i> Thêm mới
-            </button>
+        </h5>
+        <div class="col-7 row text-right">
+            <div class="col-12">
+                <button class="btn btn-sm btn-primary" @click="goToAddOther">
+                    <i class="fas fa-plus"></i> Thêm mới
+                </button>
+            </div>
+
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-11 ml-3">
+    <div class="row container">
+        <div class="col-md-12 ml-3">
             <InputSearch v-model="searchText" />
         </div>
 
         <div class="col-md-12">
-            <OtherList v-if="filteredOtherCount > 0" :other="filteredOther" />
+            <OtherList v-if="filteredOtherCount > 0" :other="filteredOther" @delete:other="deleteOther" />
             <p v-else>Không có dịch vụ khác nào.</p>
         </div>
     </div>
@@ -25,6 +28,7 @@
 import OtherList from "@/components/other/OtherList.vue";
 import OtherService from "@/services/other.service";
 import InputSearch from "../../components/InputSearch.vue";
+import { useToast } from 'vue-toast-notification';
 
 
 export default {
@@ -76,6 +80,26 @@ export default {
         },
         goToAddOther() {
             this.$router.push({ name: "addOther" });
+        },
+        async deleteOther(otherId) {
+            if (confirm("Xác nhận xóa?")) {
+                try {
+                    await OtherService.delete(otherId);
+                    this.deleteSuccessToast();
+                    this.refreshList();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+        deleteSuccessToast() {
+            const VueToast = useToast();
+            VueToast.open({
+                message: 'Xóa thành công!',
+                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+                position: 'top-right', // Vị trí hiển thị toast
+                duration: 5000, // Thời gian hiển thị (milliseconds)
+            });
         },
 
     },

@@ -2,17 +2,17 @@
 <template>
     <Form @submit="submitDrink" :validation-schema="drinkFormSchema" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="drink_name">Tên món </label>
+            <label class="font-weight-bold" for="drink_name">Tên món </label>
             <Field name="drink_name" type="text" class="form-control" v-model="drinkLocal.drink_name" />
             <ErrorMessage name="drink_name" class="error-feedback" />
         </div>
         <div class="form-group">
-            <label for="price">Giá </label>
+            <label class="font-weight-bold" for="price">Giá </label>
             <Field name="price" type="text" class="form-control" v-model="drinkLocal.price" />
             <ErrorMessage name="price" class="error-feedback" />
         </div>
         <div class="form-group">
-            <label for="unit">Đơn vị tính </label>
+            <label class="font-weight-bold" for="unit">Đơn vị tính </label>
             <Field name="unit" type="text" class="form-control" v-model="drinkLocal.unit" />
             <ErrorMessage name="unit" class="error-feedback" />
         </div>
@@ -21,34 +21,27 @@
         <div>
             <div v-if="this.drink.image && !editImage && drinkLocal._id">
                 <img :src="getImage(this.drink)" alt="" class="w-25 h-25">
-                <button @click="toggleEditImage">Thay đổi ảnh</button>
+                <button class="ml-3 btn btn-primary" @click="toggleEditImage">Thay đổi ảnh</button>
             </div>
             <div class="form-group" v-else-if="this.drink.image && editImage">
-                <label for="image">Hình ảnh </label>
+                <label class="font-weight-bold" for="image">Hình ảnh </label>
                 <Field name="image" type="file" class="form-control" v-model="drinkLocal.image"
                     @change="handleImageChange" />
                 <ErrorMessage name="image" class="error-feedback" />
-                <button @click="toggleEditImage">Hủy</button>
+                <button class="mt-2 btn btn-danger" @click="toggleEditImage">Hủy</button>
             </div>
 
             <div class="form-group" v-else>
-                <label for="image">Hình ảnh </label>
+                <label class="font-weight-bold" for="image">Hình ảnh </label>
                 <Field name="image" type="file" class="form-control" v-model="drinkLocal.image"
                     @change="handleImageChange" />
                 <ErrorMessage name="image" class="error-feedback" />
             </div>
-
         </div>
+        <div class="form-group mt-3">
 
+            <button type="submit" class="btn btn-primary">Lưu</button>
 
-
-
-        <div class="form-group">
-            <!-- <button class="btn btn-primary">Lưu</button> -->
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button v-if="drinkLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteDrink">
-                Xóa
-            </button>
         </div>
     </Form>
 </template>
@@ -112,9 +105,9 @@ export default {
 
 
         },
-        deleteDrink() {
-            this.$emit("delete:drink", this.drinkLocal.id);
-        },
+        // deleteDrink() {
+        //     this.$emit("delete:drink", this.drinkLocal.id);
+        // },
         handleImageChange(event) {
             this.drinkLocal.image = event.target.files[0];
             console.log('Selected image:', this.drinkLocal.image);

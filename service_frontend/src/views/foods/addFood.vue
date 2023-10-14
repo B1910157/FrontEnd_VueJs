@@ -1,6 +1,6 @@
 <template>
     <div class="container p-2">
-        <h4>Thêm Món Ăn</h4>
+        <h4 class="text-center title-in-page">Thêm Món Ăn</h4>
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">

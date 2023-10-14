@@ -2,12 +2,12 @@
 <template>
     <Form @submit="submitOther" :validation-schema="otherFormSchema" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="other_name">Tên </label>
+            <label class="font-weight-bold" for="other_name">Tên </label>
             <Field name="other_name" type="text" class="form-control" v-model="otherLocal.other_name" />
             <ErrorMessage name="other_name" class="error-feedback" />
         </div>
         <div class="form-group">
-            <label for="price">Giá </label>
+            <label class="font-weight-bold" for="price">Giá </label>
             <Field name="price" type="text" class="form-control" v-model="otherLocal.price" />
             <ErrorMessage name="price" class="error-feedback" />
         </div>
@@ -22,18 +22,18 @@
         <div>
             <div v-if="this.other.image && !editImage && otherLocal._id">
                 <img :src="getImage(this.other)" alt="" class="w-25 h-25">
-                <button @click="toggleEditImage">Thay đổi ảnh</button>
+                <button class="btn btn-primary ml-3" @click="toggleEditImage">Thay đổi ảnh</button>
             </div>
             <div class="form-group" v-else-if="this.other.image && editImage">
-                <label for="image">Hình ảnh </label>
+                <label class="font-weight-bold" for="image">Hình ảnh </label>
                 <Field name="image" type="file" class="form-control" v-model="otherLocal.image"
                     @change="handleImageChange" />
                 <ErrorMessage name="image" class="error-feedback" />
-                <button @click="toggleEditImage">Hủy</button>
+                <button class="btn btn-danger mt-3" @click="toggleEditImage">Hủy</button>
             </div>
 
             <div class="form-group" v-else>
-                <label for="image">Hình ảnh </label>
+                <label class="font-weight-bold" for="image">Hình ảnh </label>
                 <Field name="image" type="file" class="form-control" v-model="otherLocal.image"
                     @change="handleImageChange" />
                 <ErrorMessage name="image" class="error-feedback" />
@@ -44,12 +44,12 @@
 
 
 
-        <div class="form-group">
+        <div class="form-group mt-3">
             <!-- <button class="btn btn-primary">Lưu</button> -->
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button v-if="otherLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteOther">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <!-- <button v-if="otherLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteOther">
                 Xóa
-            </button>
+            </button> -->
         </div>
     </Form>
 </template>
@@ -114,9 +114,7 @@ export default {
 
 
         },
-        deleteOther() {
-            this.$emit("delete:other", this.otherLocal.id);
-        },
+
         handleImageChange(event) {
             this.otherLocal.image = event.target.files[0];
             console.log('Selected image:', this.otherLocal.image);

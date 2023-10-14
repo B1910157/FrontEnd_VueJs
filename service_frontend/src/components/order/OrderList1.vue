@@ -2,11 +2,12 @@
 
 import orderService from '../../services/order.service';
 import { VDataTable } from "vuetify/labs/VDataTable";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn, VIcon } from "vuetify/lib/components/index.mjs";
 export default {
     components: {
         VDataTable,
-        VBtn
+        VBtn,
+        VIcon
     },
     props: {
         orders: { type: Array, default: [] },
@@ -60,6 +61,7 @@ export default {
                 };
             });
         },
+
     },
 
     data: () => ({
@@ -97,6 +99,8 @@ export default {
 
 
         ],
+        itemsPerPage: 5,
+
     }),
     methods: {
 
@@ -157,15 +161,13 @@ export default {
             const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
             return formattedDate;
         }
-
-
-
     }
 };
 
 </script>
 <template>
-    <v-data-table :headers="headers" :items="formattedOrders" class="elevation-1" density="compact" item-key="_id">
+    <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="formattedOrders" class="elevation-1"
+        item-key="_id">
         <template v-slot:item.actions="{ item }">
             <div v-for="(action, index) in item.selectable.actions" :key="index" @click="action.action" class="m-2">
                 <v-btn :class="{
@@ -175,6 +177,7 @@ export default {
 }}</v-btn>
                 <p class="text-success" v-else-if="action.text == 'Đơn đã duyệt'">{{ action.text }}</p>
                 <p class="text-danger" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
+                <p class="text-danger" v-else-if="action.text == 'Khách hàng đã hủy đơn'">{{ action.text }}</p>
 
             </div>
         </template>
@@ -185,6 +188,7 @@ export default {
         </template>
 
     </v-data-table>
+    <br><br>
 </template>
 <style>
 .btn-green {

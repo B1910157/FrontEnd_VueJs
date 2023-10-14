@@ -1,12 +1,12 @@
 <template>
     <div v-if="drink" class="container">
-        <h4>Sửa Đồ uống</h4>
+        <h4 class="text-center title-in-page">Sửa Đồ uống</h4>
         <div class="row">
             <div class="col-3">
 
             </div>
             <div class="col-6">
-                <DrinkForm :drink="drink" @submit:drink="updateDrink" @delete:drink="deleteDrink" />
+                <DrinkForm :drink="drink" @submit:drink="updateDrink"  />
 
             </div>
 
@@ -60,16 +60,7 @@ export default {
                 console.log(error);
             }
         },
-        async deleteDrink() {
-            if (confirm("Bạn muốn xóa món này?")) {
-                try {
-                    await DrinkService.delete(this.drink._id);
-                    this.$router.push({ name: "drinks" });
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        },
+        
 
 
 

@@ -1,12 +1,12 @@
 <template>
     <div v-if="other" class="container">
-        <h4>Chỉnh sửa</h4>
+        <h4 class="text-center title-in-page">Chỉnh sửa</h4>
         <div class="row">
             <div class="col-3">
 
             </div>
             <div class="col-6">
-                <OtherForm :other="other" @submit:other="updateOther" @delete:other="deleteOther" />
+                <OtherForm :other="other" @submit:other="updateOther" />
 
             </div>
 
@@ -60,16 +60,7 @@ export default {
                 console.log(error);
             }
         },
-        async deleteOther() {
-            if (confirm("Bạn muốn xóa?")) {
-                try {
-                    await OtherService.delete(this.other._id);
-                    this.$router.push({ name: "other" });
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        },
+
 
 
 

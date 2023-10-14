@@ -1,37 +1,41 @@
 <template>
-    <div class="row p-4">
-        <h4 class="col-5">
+    <div class="row ml-3 mb-3">
+        <h4 class="col-5 title-in-page">
             Danh sách menu
             <i class="fa fa-book icon" aria-hidden="true"></i>
         </h4>
+        <div class="col-7 row text-right">
+            <div class="col-12">
+                <button class="btn btn-sm btn-primary" @click="addMenu">
+                    <i class="fas fa-plus"></i> Thêm mới
+                </button>
+            </div>
 
-        <div class="col-7">
-            <button class="btn btn-sm btn-primary" @click="addMenu">
-                <i class="fas fa-plus"></i> Thêm mới
-            </button>
         </div>
     </div>
     <div>
 
         <v-dialog v-model="this.addNewMenu" max-width="800px">
-            <v-btn color="danger" @click="addNewMenu = false" icon="fa fa-close" class="ml-auto"></v-btn>
+            <v-btn color="danger" @click="addNewMenu = false" icon="fa fa-close" class="ml-auto"><i
+                    class="fa fa-close"></i></v-btn>
 
             <addMenu @submit:addNewMenu="addNewMenuReal" />
 
         </v-dialog>
 
     </div>
-    <div class="row">
-        <div class="col-md-11 ml-3">
+    <div class="row container">
+        <div class="col-md-12 ml-3">
             <InputSearch v-model="searchText" />
         </div>
         <div class="col-md-12">
             <MenuList v-if="filteredMenuCount > 0" :menus="filteredMenu" @addFoodSuccess="addFoodSuccess"
-                @removeFoodInMenu="removeFoodInMenu" @delMenu="delMenu" />
+                @removeFoodInMenu="removeFoodInMenu" @delMenu="delMenu" @publishMenu="publishMenu"
+                @hiddenMenu="hiddenMenu" />
             <p v-else class="ml-3">Không có menu nào.</p>
 
         </div>
-        {{ console.log("MENU", filteredMenu) }}
+
     </div>
 </template>
 <script>
@@ -82,6 +86,7 @@ export default {
 
 
     },
+
     methods: {
 
         removeSuccessToast() {
@@ -104,11 +109,12 @@ export default {
         },
         async retrieveMenus() {
             try {
-                // this.menus = await MenuService.getAll();
-                this.menus = (await MenuService.getAll()).map((menu, index) => {
-                    menu.key = index;
-                    return menu;
-                });
+                this.menus = await MenuService.getAll();
+
+                // this.menus = (await MenuService.getAll()).map((menu, index) => {
+                //     menu.key = index;
+                //     return menu;
+                // });
 
             } catch (error) {
                 console.log(error);
@@ -116,6 +122,21 @@ export default {
         },
         refreshList() {
             this.retrieveMenus();
+
+        },
+        async publishMenu(menuId) {
+            console.log("id 3", menuId)
+            console.log("menus", this.menus)
+
+            await MenuService.publishMenu(menuId);
+
+            this.retrieveMenus();
+
+        },
+        async hiddenMenu(menuId) {
+            console.log("menus", this.menus)
+            await MenuService.hiddenMenu(menuId);
+            await this.retrieveMenus();
 
         },
         async delMenu(menuId) {

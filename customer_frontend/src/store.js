@@ -125,10 +125,10 @@ const store = createStore({
           (food) => food._id === foodObject._id
         );
         if (existingFood) {
-          alert(`Món ăn ${existingFood.food_name} đã có trong menu`);
+          // alert(`Món ăn ${existingFood.food_name} đã có trong menu`);
         } else {
           this.state.localCart.items[0].menu.push(foodObject);
-          alert(`Món ăn đã được thêm vào menu của bạn!!!`);
+          // alert(`Món ăn đã được thêm vào menu của bạn!!!`);
         }
         this.state.localCart.items[0].totalMenu = calculateTotal(
           this.state.localCart
@@ -154,7 +154,6 @@ const store = createStore({
             this.state.cartDrink.totalDrink;
         }
         if (this.state.cartOther) {
-          console.log("cart Othẻ", this.state.cartOther);
           this.state.cartData.items[2].other = this.state.cartOther.otherList;
           this.state.cartData.items[2].totalOther =
             this.state.cartOther.totalOther;
@@ -283,10 +282,10 @@ const store = createStore({
           (other) => other._id === otherObject._id
         );
         if (existingOther) {
-          alert(`Dịch vụ ${existingOther.other_name} đã có trong note`);
+          // alert(`Dịch vụ ${existingOther.other_name} đã có trong note`);
         } else {
           this.state.localCart.items[2].other.push(otherObject);
-          alert(`Dịch vụ đã được thêm!!!`);
+          // alert(`Dịch vụ đã được thêm!!!`);
         }
         this.state.localCart.items[2].totalOther = calculateOtherTotal(
           this.state.localCart
@@ -304,7 +303,7 @@ const store = createStore({
         const cartLocal = localStorage.getItem("localCart");
         if (cartLocal) {
           const cartLocalParse = JSON.parse(cartLocal);
-          console.log("GET LOCAL CART123", cartLocalParse);
+
           commit("setLocalCart", cartLocalParse);
           return cartLocalParse;
         }

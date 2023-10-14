@@ -1,7 +1,6 @@
 
 <template>
-    ALOOO
-    <div class="row justify-content-start container">
+    <div class="row justify-content-start container ">
         <div v-for="(food, index) in this.foodNotInMenu" :key="food._id" class="col-3 my-3">
             <v-card class="mx-auto" style="height: 100%;">
                 <v-img :src="getImage(food)" cover height="100px"></v-img>
