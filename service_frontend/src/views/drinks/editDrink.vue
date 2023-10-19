@@ -6,7 +6,7 @@
 
             </div>
             <div class="col-6">
-                <DrinkForm :drink="drink" @submit:drink="updateDrink"  />
+                <DrinkForm :drink="drink" @submit:drink="updateDrink" />
 
             </div>
 
@@ -15,12 +15,13 @@
             </div>
         </div>
 
-        <p class="text-success">{{ message }}</p>
+        <!-- <p class="text-success">{{ message }}</p> -->
     </div>
 </template>
 <script>
 import DrinkForm from "@/components/drinks/DrinkForm.vue";
 import DrinkService from "@/services/drink.service";
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         DrinkForm,
@@ -55,12 +56,16 @@ export default {
         async updateDrink(data) {
             try {
                 await DrinkService.update(this.drink._id, data);
-                this.message = "Đồ uống được cập nhật thành công.";
+                // this.message = "Đồ uống được cập nhật thành công.";
+                this.editSuccessToast()
             } catch (error) {
                 console.log(error);
             }
         },
-        
+        editSuccessToast() {
+            toast.success('Cập nhật thành công', { autoClose: 1000 });
+        },
+
 
 
 

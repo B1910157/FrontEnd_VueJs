@@ -4,11 +4,14 @@
             Danh sách menu
             <i class="fa fa-book icon" aria-hidden="true"></i>
         </h4>
-        <div class="col-7 row text-right">
-            <div class="col-12">
+        <div class="col-7 row text-left">
+            <!-- <div class="col-12">
                 <button class="btn btn-sm btn-primary" @click="addMenu">
                     <i class="fas fa-plus"></i> Thêm mới
                 </button>
+            </div> -->
+            <div class="ml-5 p-2 rounded-lg btn btn-success" @click="addMenu">
+                <i class="fas fa-plus "></i> Thêm mới
             </div>
 
         </div>
@@ -45,6 +48,8 @@ import MenuList from "@/components/menu/MenuList.vue";
 import addMenu from "@/components/menu/addMenu.vue";
 import MenuService from "@/services/menu.service";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
+
 import InputSearch from "../../components/InputSearch.vue";
 
 export default {
@@ -88,25 +93,30 @@ export default {
     },
 
     methods: {
-
         removeSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Xóa thành công!',
-                type: 'success',
-                position: 'top-right',
-                duration: 3000,
-            });
+            toast.success('Xóa thành công', { autoClose: 1000 });
         },
+        // removeSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Xóa thành công!',
+        //         type: 'success',
+        //         position: 'top-right',
+        //         duration: 3000,
+        //     });
+        // },
         addSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Thêm thành công!',
-                type: 'success',
-                position: 'top-right',
-                duration: 3000,
-            });
+            toast.success('Thêm thành công', { autoClose: 1000 });
         },
+        // addSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Thêm thành công!',
+        //         type: 'success',
+        //         position: 'top-right',
+        //         duration: 3000,
+        //     });
+        // },
         async retrieveMenus() {
             try {
                 this.menus = await MenuService.getAll();

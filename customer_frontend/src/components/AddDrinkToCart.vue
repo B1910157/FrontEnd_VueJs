@@ -12,6 +12,7 @@
 import { mapActions, mapState } from 'vuex';
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         VBtn
@@ -33,23 +34,30 @@ export default {
     emits: ['drinkAdded'],
     methods: {
         checkQuantity() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Số lượng không hợp lệ',
-                type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 3000, // Thời gian hiển thị (milliseconds)
-            });
+            toast.error('Số lượng không hợp lệ', { autoClose: 1000 });
         },
+
+        // checkQuantity() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Số lượng không hợp lệ',
+        //         type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 3000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
         addSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Thêm thành công',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 3000, // Thời gian hiển thị (milliseconds)
-            });
+            toast.success('Thêm thành công', { autoClose: 1000 });
         },
+        // addSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Thêm thành công',
+        //         type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 3000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
 
         async addDrinkToCart(service_id, drinkId, quantity) {
             if (quantity < 1) {

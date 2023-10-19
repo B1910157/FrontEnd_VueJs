@@ -1,7 +1,7 @@
 
 <template>
     <div class="row container">
-        <div class="col-6">
+        <div class="col-md-6 col-12">
             <h2>Menu</h2>
             <table class="table tbale-bordered text-center">
                 <thead>
@@ -52,7 +52,7 @@
         </div>
 
 
-        <div class="col-6">
+        <div class="col-md-6 col-12">
             <h2>Đồ uống</h2>
             <div>
                 <table class="table table-bordered text-center">
@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <div class="mt-2 col-12"
+        <div class="mt-2 col-md-12"
             v-if="(!this.Auth && localCart.items[2].other.length != 0) || (this.Auth && this.cartData.items[2].other.length > 0)">
             <div>
                 <h2>Khác</h2>
@@ -174,6 +174,7 @@
         <br>
         <hr>
     </div>
+
     <div class="container">
         <h2>Thông tin</h2>
         <Form @submit="submitOrder" :validation-schema="orderFormSchema">
@@ -242,6 +243,35 @@
                         <Field name="event_time" type="time" class="form-control" v-model="orderLocal.event_time" />
                         <ErrorMessage name="event_time" class="error-feedback" />
                     </div>
+                    <div class="form-group">
+                        <label for="total_temp" class=""> </label>
+
+                        <div>Tổng tiền tạm tính: <i class="font-weight-bold">{{
+                            formatCurrency(((this.orderLocal.cart.items[0].totalMenu) *
+                                (this.orderLocal.tray_quantity)) +
+                                (this.orderLocal.cart.items[1].totalDrink + (this.orderLocal.cart.items[2].totalOther))) }}
+                            </i>
+                        </div>
+                        <hr>
+
+                    </div>
+                    <!-- <div class="form-group">
+                        <label class="font-weight-bold"> Thanh toán </label>
+                        <div class="row">
+                            <div class="col-6 row">
+                                <div class="col-6 ">
+                                    <input class="" type="radio" name="percentPayment" value="0.2"
+                                        v-model="orderLocal.percentPayment" />
+                                    <label class=""> 20%</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="percentPayment" value="1"
+                                        v-model="orderLocal.percentPayment" />
+                                    <label> 100%</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
                 <div class="form-group col-12">
                     <label for="note" class="font-weight-bold"> Ghi chú </label>
@@ -249,7 +279,8 @@
                         v-model="orderLocal.note"></textarea>
                     <ErrorMessage name="note" class="error-feedback" />
                 </div>
-                <div class="form-group col-12">
+
+                <!-- <div class="form-group col-12">
                     <label class="font-weight-bold"> Phương thức thanh toán </label>
                     <div>
                         <input type="radio" id="paymentVnPay" name="payment" value="vnpay" v-model="orderLocal.payment" />
@@ -260,12 +291,12 @@
                             v-model="orderLocal.payment" />
                         <label for="paymentPayLater">Thanh toán trực tiếp</label>
                     </div>
-                </div>
-                {{ console.log(orderLocal.payment) }}
+                </div> -->
+                <!-- {{ console.log(orderLocal.payment) }} -->
 
             </div>
             <div class="form-group col-12">
-                <button type="submit" class="btn btn-primary">Thanh toán</button>
+                <button type="submit" class="btn btn-primary">Đặt tiệc</button>
             </div>
         </Form>
     </div>
@@ -282,6 +313,7 @@ import infoService from "../services/info.service";
 import { object } from "yup";
 import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
 
 
 import moment from 'moment';
@@ -328,7 +360,7 @@ export default {
             ,
             tray_quantity: yup.number()
                 .typeError("Vui lòng nhập số lượng bàn")
-                .min(11, "Số lượng bàn phải lớn hơn 10")
+                .min(10, "Chỉ phục vụ từ 10 bàn")
                 .required("Vui lòng nhập số lượng bàn"),
 
             event_time: yup.string()
@@ -355,7 +387,7 @@ export default {
             orderLocal: {
                 event_date: "",
                 event_time: "",
-                tray_quantity: "",
+                tray_quantity: 10,
                 cart: this.cartOrder,
                 note: "",
                 fullname: "",
@@ -366,7 +398,8 @@ export default {
                 districtName: "",
                 wardName: "",
                 address_book: "",
-                payment: "vnpay"
+                // percentPayment: 0.2
+                // payment: "vnpay"
             },
             areaLocal: {
                 province: "",
@@ -419,16 +452,18 @@ export default {
     },
 
     methods: {
-
         checkMenuInOrderToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Vui lòng chọn món trước khi đặt',
-                type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 3000, // Thời gian hiển thị (milliseconds)
-            });
+            toast.error('Vui lòng chọn món trước khi đặt', { autoClose: 1000 });
         },
+        // checkMenuInOrderToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Vui lòng chọn món trước khi đặt',
+        //         type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 3000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
 
 
         async getProvince() {

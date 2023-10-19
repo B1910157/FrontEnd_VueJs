@@ -31,7 +31,7 @@ export default {
             pageSize: 12, // Kích thước trang
         };
     },
-
+    emits: ["edit:other", "delete:other", "openForm"],
     methods: {
         setPage(page) {
             this.currentPage = page;
@@ -49,12 +49,32 @@ export default {
         deleteOther(otherId) {
             this.$emit("delete:other", otherId);
         },
+        editOther(otherId) {
+
+            this.$emit("edit:other", otherId);
+        },
+        openForm() {
+            this.$emit("openForm");
+        },
     }
 };
 
 </script>
 <template>
     <div class="row justify-content-start px-3">
+        <div class="col-3 my-3">
+            <v-card class="mx-auto" style="height: 100%;">
+                <v-card-title class="text-center text-primary">
+                    THÊM
+                </v-card-title>
+                <v-card-text class="pt-5 text-center ">
+                    <div class="border p-4 m-2 rounded-lg" style="background-color: #f0f0f0;">
+                        <i class="fas fa-plus btn btn-success" @click="openForm" style="font-size: 24px;"></i>
+                    </div>
+                </v-card-text>
+
+            </v-card>
+        </div>
         <div v-for="(other1, index) in paginatedOther" :key="other1._id" class="col-3 my-3">
             <v-card class="mx-auto" style="height: 100%;">
                 <v-img :src="getImage(other1)" cover height="100px"></v-img>
@@ -66,13 +86,15 @@ export default {
                     {{ other1.description }}
                 </v-card-subtitle>
                 <v-card-actions>
-                    <router-link :to="{
+                    <!-- <router-link :to="{
                         name: 'editOther',
                         params: { id: other1._id },
                     }">
                         <span class="mt-2 badge badge-warning">
                             <i class="fas fa-edit"></i> </span>
-                    </router-link>
+                    </router-link> -->
+                    <span @click="editOther(other1._id)" class=" mt-2 ml-2 badge badge-warning">
+                        <i class="fas fa-edit"></i> </span>
 
                     <span @click="deleteOther(other1._id)" class=" mt-2 ml-2 badge badge-danger">
                         <i class="fas fa-trash"></i> </span>

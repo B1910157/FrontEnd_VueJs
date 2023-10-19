@@ -11,6 +11,12 @@ class PaymentService {
   async createPaymentVNPay(data) {
     return (await this.api.post("/create_payment_url", data)).data;
   }
+  async vnPay_ipn() {
+    return (await this.api.get("/vnpay_ipn")).data;
+  }
+  async vnPay_return() {
+    return (await this.api.get("/vnpay_return")).data;
+  }
 }
 
 export default new PaymentService();

@@ -20,6 +20,7 @@
 import FoodForm from "@/components/foods/FoodForm.vue";
 import FoodService from "@/services/food.service";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         FoodForm,
@@ -35,14 +36,17 @@ export default {
     },
     methods: {
         updateSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Cập nhật thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
-            });
+            toast.success('Cập nhật thành công', { autoClose: 1000 });
         },
+        // updateSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Cập nhật thành công!',
+        //         type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 5000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
 
         async getFood(id) {
             try {

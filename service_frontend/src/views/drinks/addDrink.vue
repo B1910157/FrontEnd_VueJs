@@ -16,6 +16,7 @@
 import DrinkForm from "@/components/drinks/DrinkForm.vue";
 import DrinkService from "@/services/drink.service";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         DrinkForm,
@@ -38,14 +39,17 @@ export default {
             }
         },
         addSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Thêm thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
-            });
+            toast.success('Thêm thành công', { autoClose: 1000 });
         },
+        // addSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Thêm thành công!',
+        //         type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 5000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
 
     },
 

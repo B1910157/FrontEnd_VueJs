@@ -21,8 +21,8 @@ class OrderService {
   async accept(orderId) {
     return (await this.api.put(`/accept/${orderId}`)).data;
   }
-  async cancel(orderId) {
-    return (await this.api.put(`/cancel/${orderId}`)).data;
+  async cancel(orderId, reason) {
+    return (await this.api.put(`/cancel/${orderId}`, reason)).data;
   }
 
   async removeFoodInOrder(orderId, foodId) {

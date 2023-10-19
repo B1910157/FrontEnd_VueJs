@@ -1,11 +1,14 @@
 <template>
     <div class="">
         <ServicesList v-if="filteredFoodCount > 0" :foods="filteredFood" v-model:activeIndex="activeIndex" />
-        <p v-else>Không có dịch vụ hỗ trợ nào.</p>
+        <p class="text-center" v-else>Không có dịch vụ hỗ trợ nào.</p>
     </div>
-    <button class="btn btn-primary" @click="setLocalCart1()">Hell123o</button>
+    <!-- <button class="btn btn-primary" @click="setLocalCart1()">Hell123o</button> -->
     <!-- <div>
         <button @click="showSuccessToast">Hiển thị Toast</button>
+    </div> -->
+    <!-- <div>
+        <button @click="notify">Notify !</button>
     </div> -->
 </template>
 <script>
@@ -16,6 +19,7 @@ import ServicesList from "@/components/ServicesList.vue";
 import homeService from "@/services/home.service";
 import Menu from "@/components/Menu.vue";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
 // const VueToast = useToast();
 export default {
     components: {
@@ -65,8 +69,6 @@ export default {
         menuCount() {
             return this.menu.length;
         },
-
-
         menuTotalPrice() {
             let total = 0;
             this.menu.forEach((food) => {
@@ -76,16 +78,24 @@ export default {
         },
     },
     methods: {
-        showSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Đặt tiệc thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 2000, // Thời gian hiển thị (milliseconds)
-
-            });
+        notify() {
+            toast("Wow so easy !", {
+                autoClose: 1000,
+            }); // ToastOptions
         },
+        showSuccessToast() {
+            toast.success('Đặt tiệc thành công', { autoClose: 1000 });
+        },
+        // showSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Đặt tiệc thành công!',
+        //         type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 2000, // Thời gian hiển thị (milliseconds)
+
+        //     });
+        // },
 
         setLocalCart1() {
             console.log("set lại nè");

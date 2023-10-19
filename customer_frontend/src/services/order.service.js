@@ -17,6 +17,9 @@ class OrderService {
   async findOneOrder(orderId) {
     return (await this.api.get(`/${orderId}`)).data;
   }
+  async choosePayment(data) {
+    return (await this.api.post("/choosePayment", data)).data;
+  }
   // async login(data) {
   //     return (await this.api.post("/login", data)).data;
   // }

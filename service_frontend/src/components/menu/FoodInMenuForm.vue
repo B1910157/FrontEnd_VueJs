@@ -22,11 +22,11 @@
                                 <i class="fas fa-trash"></i> </span>
                         </td>
                     </tr>
-                    <tr class="text-right">
+                    <!-- <tr class="text-right">
                         <td colspan="4">
                             Tổng: {{ formatCurrency(this.menu.total) }}
                         </td>
-                    </tr>
+                    </tr> -->
                 </table>
             </v-card-text>
         </div>

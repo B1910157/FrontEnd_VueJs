@@ -6,6 +6,7 @@ import FoodService from "../../services/food.service";
 import FoodInMenuForm from "./FoodInMenuForm.vue";
 import ListFoodToAdd from "./ListFoodToAdd.vue";
 import { useToast } from 'vue-toast-notification';
+import { toast } from 'vue3-toastify';
 
 
 
@@ -61,23 +62,29 @@ export default {
             return Math.ceil(this.menus.length / this.pageSize);
         },
     },
-    created(){
+    created() {
 
     },
 
     methods: {
+        updateSuccessToast() {
+            // toast("Cập nhật thành công !", {
+            //     autoClose: 1000,
+            // }); // ToastOptions
+            toast.success('Cập nhật thành công', { autoClose: 1000 },);
+        },
         setPage(page) {
             this.currentPage = page;
         },
-        updateSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Cập nhật thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
-            });
-        },
+        // updateSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Cập nhật thành công!',
+        //         type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 5000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
 
 
         async updateNameMenu1(menu_id, data) {
@@ -151,7 +158,7 @@ export default {
 </script>
 <template>
     <div class="row justify-content-start px-3">
-        <div v-for="(menu, index1) in paginatedMenus" :key="menu._id" class="col-6 mt-3">
+        <div v-for="(menu, index1) in paginatedMenus" :key="menu._id" class="col-md-6 col-12 mt-3">
             <v-card class="mx-auto" style="height: 500px;">
                 <v-card-title class="text-center">
                     <div>

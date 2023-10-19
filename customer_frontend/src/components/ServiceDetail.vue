@@ -1,5 +1,8 @@
 <template>
-    <div class="col-12 row text-left p-3 bg-light">
+    <div class="col-12 row text-left pt-3 pl-12 bg-light">
+        <div class="col-6">
+            <v-img :src="getImage(service)" cover height="215px"></v-img>
+        </div>
         <div class="col-6">
             <v-card variant="tonal">
                 <v-card-title>
@@ -234,6 +237,7 @@ import { VBtn, VCard, VImg, VSelect, VCardTitle, VCardSubtitle, VCardActions, VC
 import InputSearch from './InputSearch.vue';
 import { useToast } from 'vue-toast-notification';
 import foodCategory from "../services/food_category.service";
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         AddDrinkToCart,
@@ -380,14 +384,18 @@ export default {
             return description.slice(0, limit) + '...';
         },
         addSuccessToast() {
-            const VueToast = useToast();
-            VueToast.open({
-                message: 'Thêm thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 3000, // Thời gian hiển thị (milliseconds)
-            });
+            toast.success('Thêm thành công', { autoClose: 1000 });
         },
+
+        // addSuccessToast() {
+        //     const VueToast = useToast();
+        //     VueToast.open({
+        //         message: 'Thêm thành công!',
+        //         type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
+        //         position: 'top-right', // Vị trí hiển thị toast
+        //         duration: 3000, // Thời gian hiển thị (milliseconds)
+        //     });
+        // },
 
         formatCurrency(number) {
             const formatter = new Intl.NumberFormat('vi-VN', {

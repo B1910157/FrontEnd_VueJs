@@ -65,7 +65,7 @@ export default {
     },
     emits: ["submit:other", "delete:other"],
     props: {
-        other: { type: Object, required: true }
+        other: {}
     },
     data() {
         const otherFormSchema = yup.object().shape({
@@ -87,6 +87,15 @@ export default {
             otherFormSchema,
 
         };
+    },
+    watch: {
+        other: {
+            handler(newFood) {
+                // Cập nhật foodLocal mỗi khi prop food thay đổi
+                this.otherLocal = { ...newFood };
+            },
+            deep: true
+        }
     },
     methods: {
         toggleEditImage() {
@@ -122,6 +131,7 @@ export default {
         getImage(other) {
             return `http://localhost:3000/${other.image}`;
         },
+
 
     },
     mounted() {

@@ -5,7 +5,8 @@ import OrderFormToEdit from "@/components/order/OrderFormToEdit.vue";
 import { VBtn, VIcon, VTextField, VDialog, VCard, VImg, VCardTitle, VCardSubtitle, VCardActions, VCardText } from "vuetify/lib/components/index.mjs";
 import ListFood from "@/components/order/ListFood.vue"
 import ListDrink from "@/components/order/ListDrink.vue"
-import ListOther from "@/components/order/ListOther.vue"
+import ListOther from "@/components/order/ListOther.vue";
+import ReasonCancelForm from '../../components/order/ReasonCancelForm.vue';
 export default {
     components: {
         OrderFormToEdit,
@@ -14,7 +15,8 @@ export default {
         VTextField,
         ListFood,
         ListDrink,
-        ListOther
+        ListOther,
+        ReasonCancelForm
 
     },
     data() {
@@ -27,7 +29,8 @@ export default {
             isEditing: false,
             isOpenFoods: false,
             isOpenOther: false,
-            isOpenDrinks: false
+            isOpenDrinks: false,
+            isOpenDialogReasonCancel: false
         };
     },
     computed: {
@@ -202,18 +205,22 @@ export default {
                 const rs = await orderService.accept(orderId);
                 if (rs) {
                     this.$emit('accept', this.orders)
-
+                    this.findOne(this.$route.params.orderId);
                 }
             } catch (error) {
                 console.log(error);
             }
         },
-        async cancel(orderId) {
+        async cancel(orderId, reason) {
+            const reasonReal = {
+                reason
+            };
 
             try {
-                const rs = await orderService.cancel(orderId);
+                const rs = await orderService.cancel(orderId, reasonReal);
                 if (rs) {
-                    this.$emit('cancel', this.orders)
+                    this.$emit('cancel', this.orders);
+                    this.findOne(this.$route.params.orderId);
                 }
             } catch (error) {
                 console.log(error);
@@ -226,11 +233,16 @@ export default {
 
             }
         },
-
+        submitReasonCancel(reason) {
+            this.isOpenDialogReasonCancel = false;
+            // console.log("Reason", reason, this.order._id)
+            this.cancel(this.order._id, reason);
+        },
         showConfirmCancel(orderId) {
             if (confirm("Bạn có chắc chắn muốn hủy đơn này?")) {
-                this.cancel(orderId);
-                this.findOne(this.$route.params.orderId);
+                this.isOpenDialogReasonCancel = true;
+                // this.cancel(orderId);
+                // this.findOne(this.$route.params.orderId);
             }
         },
 
@@ -244,7 +256,14 @@ export default {
             const seconds = date.getSeconds();
             const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
             return formattedDate;
-        }
+        },
+        formatCurrency(number) {
+            const formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            });
+            return formatter.format(number);
+        },
 
     }
 };
@@ -272,10 +291,10 @@ export default {
         <div class="col-md-12">
             <div style="display: flex; justify-content: space-between;">
                 <div style="flex: 1;">
-                    <table class="table">
-                        <thead class="text-center">
+                    <table class="table custom-height-table">
+                        <!-- <thead class="text-center">
                             <th colspan="2">Thông tin</th>
-                        </thead>
+                        </thead> -->
                         <tbody>
                             <tr>
                                 <th>Họ tên: &nbsp;</th>
@@ -289,11 +308,32 @@ export default {
                                 <th>Số điện thoại: &nbsp;</th>
                                 <td>{{ order.phone }}</td>
                             </tr>
+                            <tr>
+                                <th>Tổng tiền: &nbsp;</th>
+                                <td>{{ formatCurrency(order.total) }}</td>
+                            </tr>
+                            <tr v-if="order.status == 1">
+                                <th>Trạng thái thanh toán &nbsp;</th>
+                                <td class="text-success" v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                                    Đã thanh toán
+                                </td>
+                                <td class="text-success"
+                                    v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
+                                    Thanh toán trực tiếp
+                                </td>
+                                <td class="text-danger" v-else-if="order.statusPayment == 0">
+                                    Chưa thanh toán
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Ghi chú: &nbsp;</th>
+                                <td style="max-height: 50px; overflow-y: auto;">{{ order.note }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div style="flex: 1;">
-                    <table class="table">
+                    <table class="table custom-height-table">
 
                         <tbody>
                             <tr>
@@ -308,8 +348,21 @@ export default {
                                 <th>Ngày thực hiện: &nbsp;</th>
                                 <td>{{ formatDate(order.createAt) }}</td>
                             </tr>
+                            <tr>
+                                <th>Số lượng bàn: &nbsp;</th>
+                                <td>{{ order.tray_quantity }}</td>
+                            </tr>
+                            <tr>
+                                <th v-if="order.paymentMethod == 'vnpay'">Số tiền đã thanh toán: &nbsp;</th>
+                                <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                                    {{ formatCurrency(order.deposit) }}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                    <!-- <div>Tổng tiền: {{ order.total }}</div>
+                    <div>Cọc: {{ order.deposit }}</div>
+                    <div>Hình thức: {{ order.paymentMethod }}</div> -->
                 </div>
             </div>
         </div>
@@ -325,6 +378,16 @@ export default {
         </div>
 
     </div>
+    <v-dialog v-model="this.isOpenDialogReasonCancel" max-width="800px">
+
+        <v-btn color="danger" @click="isOpenDialogReasonCancel = false" icon="fa fa-close" class="ml-auto mb-3"><i
+                class="fa fa-close"></i></v-btn>
+
+        <div>
+            <ReasonCancelForm @submit:reason="submitReasonCancel" />
+        </div>
+        <!-- <ListFoodToAdd :foodNotInMenu="this.listFood" @addFoodToMenu="addFoodToMenu" /> -->
+    </v-dialog>
     <v-dialog v-model="this.isOpenFoods" max-width="800px">
         <v-btn color="danger" @click="this.isOpenFoods = false" icon="fa fa-close" class="ml-auto mb-2"><i
                 class="fa fa-close"></i></v-btn>
@@ -356,5 +419,14 @@ export default {
     /* Thiết lập chiều cao cố định */
     overflow-y: auto;
     /* Cho phép thanh cuộn nếu nội dung vượt quá chiều cao */
+}
+
+.custom-height-table tbody tr th,
+.custom-height-table tbody tr td {
+    height: 73px;
+}
+
+.custom-height-table tbody tr th {
+    width: 150px;
 }
 </style>

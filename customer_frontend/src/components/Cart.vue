@@ -8,7 +8,7 @@
       <p class="text-danger font-weight-bold" v-if="!this.Auth"> {{ this.localCart.items[0].menu.length +
         this.localCart.items[1].drink.length + this.localCart.items[2].other.length
       }}</p>
-      {{ console.log(this.localCart) }}
+     
     </div>
     <div class="cart-content" v-if="showCart && Auth">
       <div class="text-center row" v-if="this.cartFood.service_id">
@@ -83,7 +83,7 @@
             <td>
               <input type="number" name="quantity" v-model="item.quantity" min="1" max="999">
 
-              <button class="btn btn-warning" @click="updateDrink(item.service_id, item._id, item.quantity)">
+              <button class="btn btn-warning mr-2" @click="updateDrink(item.service_id, item._id, item.quantity)">
                 <i class="fa fa-pencil"></i>
               </button>
               <button class="btn btn-danger" @click="deleteDrinkReal(item.service_id, item._id)"> <i

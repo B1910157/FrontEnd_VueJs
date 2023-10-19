@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             currentPage: 1, // Trang hiện tại
-            pageSize: 12, // Kích thước trang
+            pageSize: 11, // Kích thước trang
         };
     },
     computed: {
@@ -32,7 +32,7 @@ export default {
         foods: { type: Array, default: [] },
         activeIndex: { type: Number, default: -1 },
     },
-    emits: ["update:activeIndex"],
+    emits: ["update:activeIndex", "edit:food", "delete:food", "openForm"],
     methods: {
         updateActiveIndex(index) {
             this.$emit("update:activeIndex", index);
@@ -42,6 +42,13 @@ export default {
         },
         deleteFood(foodId) {
             this.$emit("delete:food", foodId);
+        },
+        editFood(foodId) {
+            console.log("hihi")
+            this.$emit("edit:food", foodId);
+        },
+        openForm() {
+            this.$emit("openForm");
         },
         formatCurrency(number) {
             const formatter = new Intl.NumberFormat('vi-VN', {
@@ -59,6 +66,19 @@ export default {
 </script>
 <template>
     <div class="row justify-content-start px-3">
+        <div class="col-3 my-3">
+            <v-card class="mx-auto" style="height: 100%;">
+                <v-card-title class="text-center text-primary">
+                    THÊM
+                </v-card-title>
+                <v-card-text class="pt-5 text-center ">
+                    <div class="border p-4 m-2 rounded-lg" style="background-color: #f0f0f0;">
+                        <i class="fas fa-plus btn btn-success" @click="openForm" style="font-size: 24px;"></i>
+                    </div>
+                </v-card-text>
+
+            </v-card>
+        </div>
         <div v-for="(food, index) in paginatedFoods" :key="food._id" :class="{ active: index === activeIndex }"
             @click="updateActiveIndex(index)" class="col-3 my-3">
             <v-card class="mx-auto" style="height: 100%;">
@@ -70,13 +90,15 @@ export default {
                     {{ formatCurrency(food.price) }}
                 </v-card-subtitle>
                 <v-card-actions>
-                    <router-link :to="{
+                    <!-- <router-link :to="{
                         name: 'editFood',
                         params: { id: food._id },
                     }">
                         <span class="mt-2 badge badge-warning">
                             <i class="fas fa-edit"></i> </span>
-                    </router-link>
+                    </router-link> -->
+                    <span @click="editFood(food._id)" class=" mt-2 ml-2 badge badge-warning">
+                        <i class="fas fa-edit"></i> </span>
 
                     <span @click="deleteFood(food._id)" class=" mt-2 ml-2 badge badge-danger">
                         <i class="fas fa-trash"></i> </span>
@@ -101,6 +123,4 @@ export default {
     color: #fff;
     /* Đặt màu chữ cho trang hiện tại, ở đây là màu trắng */
 }
-
-
 </style>

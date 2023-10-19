@@ -11,6 +11,11 @@ const routes = [
     name: "notfound",
     component: () => import("@/views/NotFound.vue"),
   },
+  {
+    path: "/services",
+    name: "services",
+    component: () => import("@/views/Services/Services.vue"),
+  },
 
   {
     path: "/login/",

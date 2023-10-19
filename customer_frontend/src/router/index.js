@@ -35,9 +35,15 @@ const routes = [
       //   props: true,
       // },
       {
-        path: "/payment/",
+        path: "/payment/:orderId",
         name: "payment",
         component: () => import("@/views/Payment.vue"),
+        props: true,
+      },
+      {
+        path: "/payment-success",
+        name: "paymentSuccess",
+        component: () => import("@/views/paymentSuccess.vue"),
       },
       //Trang chủ
       {
@@ -95,6 +101,8 @@ router.beforeEach((to, from, next) => {
     "serviceDetail",
     "order",
     "payment",
+    "payment-success",
+    "notification",
   ];
   if (allowedRoutes.includes(to.name) || isAuthenticated) {
     // Nếu route nằm trong danh sách không cần kiểm tra hoặc người dùng đã đăng nhập

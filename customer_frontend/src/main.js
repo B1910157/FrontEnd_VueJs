@@ -7,6 +7,7 @@ import "vuetify/dist/vuetify.min.css";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import "./assets/main.css";
+import "vue3-toastify/dist/index.css";
 // import ToastPlugin from "vue-toast-notification";
 // import VueToast from "./plugins/toast";
 import "vue-toast-notification/dist/theme-sugar.css";

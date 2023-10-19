@@ -22,8 +22,8 @@
         </ul>
 
         <ul class="nav flex-column bg-white mb-0">
-            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/foods/) }">
-                <router-link to="/foods" class="nav-link">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/services/) }">
+                <router-link to="/services" class="nav-link">
                     <i class="fa-solid fa-box me-3 "></i> Quản Lý Dịch Vụ
                 </router-link>
             </li>

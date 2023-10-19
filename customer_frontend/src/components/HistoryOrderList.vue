@@ -1,7 +1,8 @@
 <script>
 import orderService from "@/services/order.service";
 import { VImg, VExpansionPanels, VExpansionPanel, VExpansionPanelTitle, VExpansionPanelText } from "vuetify/lib/components/index.mjs";
-
+import payment from "../services/payment.service";
+import { isAfter, parseISO } from 'date-fns';
 export default {
   components: {
     VExpansionPanels,
@@ -25,6 +26,13 @@ export default {
     // updateActiveIndex(index) {
     //     this.$emit("update:activeIndex", index);
     // }
+    isFutureEvent(eventDate) {
+      const parsedEventDate = parseISO(eventDate);
+      const currentDate = new Date();
+      // console.log("123", isAfter(parsedEventDate, currentDate));
+      // So sánh ngày event_date với ngày hiện tại
+      return isAfter(parsedEventDate, currentDate);
+    },
     getImage(food) {
       return `http://localhost:3000/${food.image}`;
     },
@@ -53,6 +61,28 @@ export default {
       if (confirm("Bạn có chắc chắn muốn hủy đơn này?")) {
         this.cancel(orderId);
       }
+    },
+    async payment(orderId) {
+      this.$router.push({ name: 'payment', params: { orderId: orderId } });
+      // const data = {
+      //   orderId: orderId,
+      //   amount: 100000
+      // };
+      // console.log("data", data)
+      // const link = await payment.createPaymentVNPay(data);
+      // const linkReal = link.vnpUrl;
+      // if (linkReal) {
+      //   try {
+      //     window.location.href = linkReal;
+      //     // await orderService.addOrder(data);
+      //     // this.showSuccessToast();
+
+      //   } catch (error) {
+      //     console.log(error)
+      //   }}
+
+
+
     },
     async cancel(orderId) {
       console.log(orderId)
@@ -131,6 +161,23 @@ export default {
                       <th>Số điện thoại: &nbsp;</th>
                       <td>{{ order.phone }}</td>
                     </tr>
+                    <tr>
+                      <th>Số lượng bàn: &nbsp;</th>
+                      <td>{{ order.tray_quantity }}</td>
+                    </tr>
+                    <tr v-if="order.status == 1">
+                      <th>Trạng thái thanh toán &nbsp;</th>
+                      <td class="text-success" v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                        Đã thanh toán
+                      </td>
+                      <td class="text-success" v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
+                        Thanh toán trực tiếp
+                      </td>
+                      <td class="text-danger" v-else-if="order.statusPayment == 0">
+                        Chưa thanh toán
+                      </td>
+                    </tr>
+
                   </tbody>
                 </table>
               </div>
@@ -149,9 +196,26 @@ export default {
                       <th>Ngày thực hiện: &nbsp;</th>
                       <td>{{ formatDate(order.createAt) }}</td>
                     </tr>
+                    <tr>
+                      <th>Tổng tiền: &nbsp;</th>
+                      <td>{{ formatCurrency(order.total) }}</td>
+                    </tr>
+                    <tr v-if="order.deposit !== 0">
+                      <th v-if="order.paymentMethod == 'vnpay'">Số tiền đã thanh toán: &nbsp;</th>
+                      <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                        {{ formatCurrency(order.deposit) }}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
+
               </div>
+            </div>
+            <div v-if="order.statusPayment == 0 && isFutureEvent(order.event_date) && order.status == 1">
+              <button class="btn btn-success" @click="payment(order._id)">Thanh toán</button>
+            </div>
+            <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status !== 1">
+              Đơn hàng chưa duyệt hoặc quá hạn
             </div>
           </div>
         </div>

@@ -56,7 +56,16 @@ export default {
     },
     emits: ["submit:drink", "delete:drink"],
     props: {
-        drink: { type: Object, required: true }
+        drink: {}
+    },
+    watch: {
+        drink: {
+            handler(newFood) {
+                // Cập nhật foodLocal mỗi khi prop food thay đổi
+                this.drinkLocal = { ...newFood };
+            },
+            deep: true
+        }
     },
     data() {
         const drinkFormSchema = yup.object().shape({

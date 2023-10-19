@@ -11,6 +11,7 @@ export default {
         VCardText
 
     },
+    emits: ["edit:drink", "delete:drink", "openForm"],
     computed: {
         paginatedDrinks() {
             const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -49,12 +50,32 @@ export default {
         deleteDrink(drinkId) {
             this.$emit("delete:drink", drinkId);
         },
+        editDrink(drinkId) {
+           
+            this.$emit("edit:drink", drinkId);
+        },
+        openForm() {
+            this.$emit("openForm");
+        },
     }
 };
 
 </script>
 <template>
     <div class="row justify-content-start px-3">
+        <div class="col-3 my-3">
+            <v-card class="mx-auto" style="height: 100%;">
+                <v-card-title class="text-center text-primary">
+                    THÊM
+                </v-card-title>
+                <v-card-text class="pt-5 text-center ">
+                    <div class="border p-4 m-2 rounded-lg" style="background-color: #f0f0f0;">
+                        <i class="fas fa-plus btn btn-success" @click="openForm" style="font-size: 24px;"></i>
+                    </div>
+                </v-card-text>
+
+            </v-card>
+        </div>
         <div v-for="(drink, index) in paginatedDrinks" :key="drink._id" class="col-3 my-3">
             <v-card class="mx-auto" style="height: 100%;">
                 <v-img :src="getImage(drink)" cover height="100px"></v-img>
@@ -65,13 +86,15 @@ export default {
                     {{ formatCurrency(drink.price) }}/{{ drink.unit }}
                 </v-card-subtitle>
                 <v-card-actions>
-                    <router-link :to="{
+                    <!-- <router-link :to="{
                         name: 'editDrink',
                         params: { id: drink._id },
                     }">
                         <span class="mt-2 badge badge-warning">
                             <i class="fas fa-edit"></i> </span>
-                    </router-link>
+                    </router-link> -->
+                    <span @click="editDrink(drink._id)" class=" mt-2 ml-2 badge badge-warning">
+                        <i class="fas fa-edit"></i> </span>
 
                     <span @click="deleteDrink(drink._id)" class="mt-2 ml-2 badge badge-danger">
                         <i class="fas fa-trash"></i> </span>
@@ -96,5 +119,4 @@ export default {
     color: #fff;
     /* Đặt màu chữ cho trang hiện tại, ở đây là màu trắng */
 }
-
 </style>

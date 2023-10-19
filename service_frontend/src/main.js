@@ -9,6 +9,7 @@ import router from "./router";
 import "vue-toast-notification/dist/theme-sugar.css";
 import "vue-toast-notification/dist/theme-default.css";
 import "@mdi/font/css/materialdesignicons.css";
+import "vue3-toastify/dist/index.css";
 import "vuetify/styles";
 import PrimeVue from "primevue/config";
 import CKEditor from "@ckeditor/ckeditor5-vue";

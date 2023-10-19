@@ -44,11 +44,9 @@
                 <ErrorMessage name="image" class="error-feedback" />
             </div>
         </div>
-        <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary">Lưu</button>
-            <!-- <button v-if="foodLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteFood">
-                Xóa
-            </button> -->
+        <div class="form-group mt-3 text-center">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Lưu</button>
+
         </div>
     </Form>
 </template>
@@ -62,9 +60,18 @@ export default {
         Field,
         ErrorMessage,
     },
-    emits: ["submit:food", "delete:food"],
+    emits: ["submit:food"],
     props: {
-        food: { type: Object, required: true }
+        food: {}
+    },
+    watch: {
+        food: {
+            handler(newFood) {
+                // Cập nhật foodLocal mỗi khi prop food thay đổi
+                this.foodLocal = { ...newFood };
+            },
+            deep: true
+        }
     },
     data() {
         const foodFormSchema = yup.object().shape({
@@ -86,7 +93,7 @@ export default {
         });
         return {
             editImage: false,
-            foodLocal: this.food,
+            foodLocal: this.food || {},
             foodFormSchema,
             categories: [],
         };
@@ -98,7 +105,7 @@ export default {
         async getCategory() {
             try {
                 this.categories = await FoodCategory.getAll();
-                console.log(this.categories)
+                // console.log(this.categories)
             } catch (error) {
                 console.log(error);
             }
@@ -116,6 +123,7 @@ export default {
             if (this.foodLocal.image) {
                 formData.append("image", this.foodLocal.image);
             }
+            console.log("999", this.foodLocal)
             this.$emit("submit:food", formData);
 
 

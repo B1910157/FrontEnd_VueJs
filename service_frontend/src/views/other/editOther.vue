@@ -15,12 +15,13 @@
             </div>
         </div>
 
-        <p class="text-success">{{ message }}</p>
+        <!-- <p class="text-success">{{ message }}</p> -->
     </div>
 </template>
 <script>
 import OtherForm from "@/components/other/OtherForm.vue";
 import OtherService from "@/services/other.service";
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         OtherForm,
@@ -35,6 +36,9 @@ export default {
         };
     },
     methods: {
+        editSuccessToast() {
+            toast.success('Cập nhật thành công', { autoClose: 1000 });
+        },
         async getOther(id) {
             try {
                 this.other = await OtherService.get(id);
@@ -55,7 +59,8 @@ export default {
         async updateOther(data) {
             try {
                 await OtherService.update(this.other._id, data);
-                this.message = "Cập nhật thành công.";
+                this.editSuccessToast()
+                // this.message = "Cập nhật thành công.";
             } catch (error) {
                 console.log(error);
             }
