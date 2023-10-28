@@ -35,22 +35,22 @@
 
         </ul>
 
-        <ul class="nav flex-column bg-white mb-0">
-            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/orders/) }">
+        <!-- <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\//) }">
                 <router-link to="/" class="nav-link">
                     <i class="fa-solid fa-file-lines me-3 "></i>
                     Quản lý Loại Món
                 </router-link>
             </li>
-        </ul>
-        <ul class="nav flex-column bg-white mb-0">
-            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/orders/) }">
+        </ul> -->
+        <!-- <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\//) }">
                 <router-link to="/" class="nav-link">
                     <i class="fa-solid fa-file-lines me-3 "></i>
                     Góp Ý
                 </router-link>
             </li>
-        </ul>
+        </ul> -->
 
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/info/) }">

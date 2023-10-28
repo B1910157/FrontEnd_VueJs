@@ -20,8 +20,8 @@
         <!-- Todo nhé -->
         <div>
             <div v-if="this.drink.image && !editImage && drinkLocal._id">
-                <img :src="getImage(this.drink)" alt="" class="w-25 h-25">
-                <button class="ml-3 btn btn-primary" @click="toggleEditImage">Thay đổi ảnh</button>
+                <img :src="getImage(this.drink)" alt="" style="width: 100px; height: 100px;">
+                <button class="ml-3 btn btn-primary" @click="toggleEditImage"><i class="fa-solid fa-rotate"></i></button>
             </div>
             <div class="form-group" v-else-if="this.drink.image && editImage">
                 <label class="font-weight-bold" for="image">Hình ảnh </label>
@@ -38,9 +38,9 @@
                 <ErrorMessage name="image" class="error-feedback" />
             </div>
         </div>
-        <div class="form-group mt-3">
+        <div class="form-group mt-3 text-center">
 
-            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
 
         </div>
     </Form>

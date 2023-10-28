@@ -1,8 +1,11 @@
 <script>
 import InputSearch from './InputSearch.vue';
+import { VImg } from "vuetify/lib/components/index.mjs";
+
 export default {
   components: {
-    InputSearch
+    InputSearch,
+    VImg
 
   },
   data() {
@@ -43,6 +46,9 @@ export default {
     updateActiveIndex(index) {
       this.$emit("update:activeIndex", index);
     },
+    getImage(item) {
+      return `http://localhost:3000/${item.image}`;
+    },
 
   },
 };
@@ -74,8 +80,9 @@ export default {
           params: { service_id: food._id },
         }">
           <div class="card-image">
-            <img
-              src="https://images.unsplash.com/photo-1604135307399-86c6ce0aba8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1374&q=80">
+            <!-- <img
+              src="https://images.unsplash.com/photo-1604135307399-86c6ce0aba8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1374&q=80"> -->
+            <v-img :src="getImage(food)" cover height="215px"></v-img>
           </div>
         </router-link>
         <div class="card-text">
@@ -92,14 +99,20 @@ export default {
             <span class="mt-2 badge badge-warning">
               Xem</span>
           </router-link>
+
+        </div>
+        <div class="pl-3 border">
+          <div class="row">
+            <p class="col-md-4 font-weight-bold">Đánh giá</p>
+            <div class="col-md-8 text-left rating">
+
+              <span :class="{ 'selected-star': index <= 4 }" v-for="index in 5" :key="index">&#9733;</span>
+            </div>
+          </div>
+
+
         </div>
       </div>
-
-
-
-
-
-
     </div>
 
   </div>
@@ -124,6 +137,12 @@ export default {
 </template>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&display=swap');
+
+.selected-star {
+  color: gold;
+  /* hoặc màu vàng khác tùy ý bạn chọn */
+}
+
 
 * {
   margin: 0;

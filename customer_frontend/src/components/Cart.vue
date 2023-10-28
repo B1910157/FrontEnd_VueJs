@@ -8,7 +8,7 @@
       <p class="text-danger font-weight-bold" v-if="!this.Auth"> {{ this.localCart.items[0].menu.length +
         this.localCart.items[1].drink.length + this.localCart.items[2].other.length
       }}</p>
-     
+
     </div>
     <div class="cart-content" v-if="showCart && Auth">
       <div class="text-center row" v-if="this.cartFood.service_id">
@@ -56,7 +56,7 @@
           </tr>
           <tr v-for="(item, index) in this.cartFood.menu" :key="index">
             <td>{{ item.food_name }}</td>
-            <td>{{ item.price }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
             <td><button class="btn btn-danger" @click="removeFoodInCartReal(item.service_id, item._id)"> <i
                   class="fa fa-trash"></i></button>
             </td>
@@ -90,7 +90,7 @@
                   class="fa fa-trash"></i>
               </button>
             </td>
-            <td>{{ item.price }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
 
           </tr>
           <td>Tổng tiền đồ uống: {{ formatCurrency(this.cartDrink.totalDrink) }}</td>
@@ -107,7 +107,7 @@
           </thead>
           <tr v-for="(item, index) in this.cartOther.otherList" :key="index">
             <td>{{ item.other_name }}</td>
-            <td>{{ item.price }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
             <td><button class="btn btn-danger" @click="removeOtherInCartReal(item.service_id, item._id)"> <i
                   class="fa fa-trash"></i></button>
             </td>
@@ -172,7 +172,7 @@
           </tr>
           <tr v-for="(item, index) in this.localCart.items[0].menu" :key="index">
             <td>{{ item.food_name }}</td>
-            <td>{{ item.price }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
 
             <td><button class="btn btn-danger" @click="removeFoodInLocalCart(item._id)"> <i
                   class="fa fa-trash"></i></button>
@@ -213,7 +213,7 @@
               <button class="btn btn-danger " @click="removeDrinkInLocalCart(item._id)"> <i
                   class="fa fa-trash"></i></button>
             </td>
-            <td>{{ item.price }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
           </tr>
           Tổng tiền đồ uống: {{ formatCurrency(this.localCart.items[1].totalDrink) }}
 
@@ -230,7 +230,7 @@
 
           <tr v-for="(item, index) in this.localCart.items[2].other" :key="index">
             <td>{{ item.other_name }}</td>
-            <td>{{ item.price }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
             <td><button class="btn btn-danger" @click="removeOtherInLocalCart(item._id)"> <i
                   class="fa fa-trash"></i></button>
             </td>
@@ -254,6 +254,7 @@ import homeService from "@/services/home.service";
 import { object } from "yup";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 
+import { toast } from 'vue3-toastify';
 
 export default {
   components: {
@@ -282,6 +283,12 @@ export default {
   },
 
   methods: {
+    removeSuccessToast() {
+      toast.success('Xóa thành công', { autoClose: 1000 });
+    },
+    updateSuccessToast() {
+      toast.success('Cập nhật thành công', { autoClose: 1000 });
+    },
     formatCurrency(number) {
       const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -295,6 +302,7 @@ export default {
 
     async updateDrink(service_id, drinkId, quantity) {
       await this.addDrinkToCartReal({ service_id, drinkId, quantity });
+      this.updateSuccessToast();
 
     },
     async deleteDrinkReal(service_id, drinkId) {
@@ -302,6 +310,7 @@ export default {
         if (confirm("Xác nhận xóa?")) {
           await MenuService.deleteDrink(service_id, drinkId);
           this.getItemsInDrinkCart();
+          this.updateSuccessToast();
         }
 
       } catch (error) {
@@ -351,10 +360,18 @@ export default {
       }
     },
     async removeFoodInCartReal(service_id, foodId) {
-      await this.removeFoodInCart({ service_id, foodId });
+      if (window.confirm('Bạn có chắc chắn muốn xóa món này khỏi menu?')) {
+        await this.removeFoodInCart({ service_id, foodId });
+        this.removeSuccessToast();
+      }
+
     },
     async removeOtherInCartReal(service_id, otherId) {
-      await this.removeOtherInCart({ service_id, otherId });
+      if (window.confirm('Bạn có chắc chắn muốn xóa món này khỏi menu?')) {
+        await this.removeOtherInCart({ service_id, otherId });
+        this.removeSuccessToast();
+      }
+
     },
     calculateTotal(localCart) {
       let totalMenu = 0;
@@ -384,6 +401,7 @@ export default {
         this.localCart.items[0].menu = updatedMenu;
         this.localCart.items[0].totalMenu = this.calculateTotal(this.localCart);
         localStorage.setItem('localCart', JSON.stringify(this.localCart));
+        this.removeSuccessToast();
       }
     },
     removeOtherInLocalCart(otherId) {
@@ -392,6 +410,7 @@ export default {
         this.localCart.items[2].other = updatedMenu;
         this.localCart.items[2].totalOther = this.calculateOtherTotal(this.localCart);
         localStorage.setItem('localCart', JSON.stringify(this.localCart));
+        this.removeSuccessToast();
       }
     },
     removeDrinkInLocalCart(drinkId) {
@@ -400,13 +419,16 @@ export default {
         this.localCart.items[1].drink = updatedMenu;
         this.localCart.items[1].totalDrink = this.calculateDrinkTotal(this.localCart);
         localStorage.setItem('localCart', JSON.stringify(this.localCart));
+        this.removeSuccessToast();
       }
     },
 
     async updateDrinkLocalCart(service_id, drinkObject, quantity) {
 
       await this.addDrinkToLocalCart({ service_id, drinkObject, quantity });
+      this.updateSuccessToast();
     },
+
   },
 
   created() {
@@ -482,7 +504,7 @@ input {
   width: 60px;
   margin-right: 10px;
   padding-left: 10px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 @media (max-width: 768px) {

@@ -16,6 +16,16 @@ const routes = [
     name: "services",
     component: () => import("@/views/Services/Services.vue"),
   },
+  {
+    path: "/updateInfo/",
+    name: "updateInfo",
+    component: () => import("@/views/InfoEdit.vue"),
+  },
+  {
+    path: "/info/",
+    name: "info",
+    component: () => import("@/views/Info.vue"),
+  },
 
   {
     path: "/login/",

@@ -14,6 +14,9 @@ class UserService {
   async logout() {
     return (await this.api.post("/logout")).data;
   }
+  async adminCreateService(data) {
+    return (await this.api.post("/adminCreateService", data)).data;
+  }
 }
 
 export default new UserService();

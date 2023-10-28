@@ -24,35 +24,42 @@ export default {
                     text: 'Chi tiết',
                     action: () => this.showDetails(service._id),
                 };
+                const statusText = [];
+                if (service.status === 0) {
+                    statusText.push({
+                        text: 'Chưa hoạt động',
+                    });
+                }
+                else if (service.status === 1) {
+                    statusText.push({
+                        text: 'Đang hoạt động',
+                    });
+                }
 
                 // Thêm các hành động dựa trên trạng thái
                 if (service.status === 0) {
                     actions.push({
-                        text: 'Duyệt',
-
-                        action: () => this.showConfirm(service._id),
+                        text: 'Hiển thị',
+                        action: () => this.showConfirm(service._id, service.status),
                     });
-                    actions.push({
-                        text: 'Hủy',
 
-                        action: () => this.showConfirmCancel(service._id),
-                    });
                 }
                 else if (service.status === 1) {
                     actions.push({
-                        text: 'Đơn đã duyệt',
+                        text: 'Ẩn',
 
+                        action: () => this.showConfirmCancel(service._id, service.status),
                     });
 
                 }
-                else if (service.status === 2) {
-                    actions.push({
-                        text: 'Bạn đã hủy đơn',
-                    });
-                }
+                // else if (service.status === 2) {
+                //     actions.push({
+                //         text: 'Đã ẩn',
+                //     });
+                // }
                 // else if (order.status === 3) {
                 //     actions.push({
-                //         text: 'Khách hàng đã hủy đơn',
+                //         text: 'Khách hàng đã Hiển thị đơn',
                 //     });
                 // }
 
@@ -60,6 +67,7 @@ export default {
                     ...service,
                     actions,
                     details,
+                    statusText,
                     createAt: this.formatDate(service.updateAt),
                 };
             });
@@ -78,7 +86,7 @@ export default {
             },
             // { title: 'Email', align: 'end', key: 'email', },
             { title: 'Số điện thoại', align: 'end', key: 'phone', },
-            { title: 'Địa chỉ', align: 'end', key: 'address', },
+            // { title: 'Địa chỉ', align: 'end', key: 'address', },
             { title: 'Email', align: 'end', key: 'email', },
             {
                 title: 'Ngày tạo',
@@ -94,6 +102,12 @@ export default {
             },
 
             {
+                title: 'Trạng thái',
+                align: 'end',
+                key: 'statusText',
+
+            },
+            {
                 title: 'Chi tiết',
                 align: 'end',
                 key: 'details',
@@ -104,54 +118,49 @@ export default {
         ],
         itemsPerPage: 5,
         // isOpenDialogReasonCancel: false,
-        isOrderId: '',
+        isServiceId: '',
 
     }),
+    emits: ["hiddenService", "showService"],
     methods: {
 
-        toggleMenu(index) {
-            this.services[index].showMenu = !this.services[index].showMenu;
-        },
-        async accept(orderId) {
-            // try {
-            //     const rs = await orderService.accept(orderId);
-            //     if (rs) {
-            //         this.$emit('accept', this.orders)
 
-            //     }
-            // } catch (error) {
-            //     console.log(error);
-            // }
-        },
-        async cancel(orderId, reason) {
-            // const reasonReal = {
-            //     reason
-            // };
-            // try {
-            //     const rs = await orderService.cancel(orderId, reasonReal);
-            //     if (rs) {
-            //         this.$emit('cancel', this.orders)
-            //     }
-            // } catch (error) {
-            //     console.log(error);
-            // }
-        },
-        // submitReasonCancel(reason) {
-        //     this.isOpenDialogReasonCancel = false;
-        //     // console.log("Reason", reason, this.isOrderId)
-        //     this.cancel(this.isOrderId, reason);
-        // },
-        showConfirm(orderId) {
-            if (confirm("Bạn có chắc chắn muốn duyệt đơn này?")) {
-                // this.accept(orderId);
+        async accept(serviceId, status) {
+            try {
+                // const rs = await orderService.accept(orderId);
+
+                this.$emit("showService", serviceId, status);
+                // if (rs) {
+                //     this.$emit('accept', this.services)
+
+                // }
+            } catch (error) {
+                console.log(error);
             }
         },
-        showConfirmCancel(orderId) {
-            if (confirm("Bạn có chắc chắn muốn hủy đơn này?")) {
-                // this.isOpenDialogReasonCancel = true;
-                // this.isOrderId = orderId;
-                // console.log("orderId", this.isOrderId)
-                // this.cancel(orderId);
+        async cancel(serviceId, status) {
+
+            try {
+                // const rs = await orderService.cancel(orderId);
+
+                this.$emit("hiddenService", serviceId, status);
+                // if (rs) {
+                //     this.$emit('cancel', this.orders)
+                // }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        showConfirm(serviceId, status) {
+            if (confirm("Bạn có chắc chắn muốn hiện dịch vụ này?")) {
+                this.accept(serviceId, status);
+            }
+        },
+        showConfirmCancel(serviceId, status) {
+            if (confirm("Bạn có chắc chắn muốn ẩn dịch vụ này?")) {
+
+                this.cancel(serviceId, status);
             }
         },
         showDetails(serviceId) {
@@ -184,18 +193,15 @@ export default {
     <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="formattedServices" class="elevation-1"
         item-key="_id">
         <template v-slot:item.actions="{ item }">
-            <!-- {{ item }} -->
-            <div v-for="(action, index) in item.actions" :key="index" @click="action.action" class="m-2">
-                <v-btn :class="{
-                    'btn-green': action.text === 'Duyệt', 'btn-red':
-                        action.text === 'Hủy',
-                }" class="" style="width: 50px;" v-if="action.text == 'Duyệt' || action.text == 'Hủy'">{{ action.text
-}}</v-btn>
-                <p class="text-success" v-else-if="action.text == 'Đơn đã duyệt'">{{ action.text }}</p>
-                <p class="text-danger" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
-                <p class="text-danger" v-else-if="action.text == 'Khách hàng đã hủy đơn'">{{ action.text }}</p>
 
-            </div>
+            <v-btn :class="item.status === 1 ? 'btn-green' : 'btn-red'" @click="item.actions[0].action">
+                {{ item.actions[0].text }}
+            </v-btn>
+        </template>
+        <template v-slot:item.statusText="{ item }">
+            <span :class="item.status === 1 ? 'text-success' : 'text-danger'">
+                {{ item.statusText[0].text }}
+            </span>
         </template>
         <template v-slot:item.details="{ item }">
             <v-btn @click="item.details.action">

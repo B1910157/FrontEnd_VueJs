@@ -16,6 +16,7 @@
 import JobFormToEdit from "@/components/jobs/JobFormToEdit.vue";
 import JobService from "@/services/job.service";
 import { useToast } from 'vue-toast-notification';
+import jobService from "../../services/job.service";
 export default {
     components: {
         JobFormToEdit,
@@ -60,6 +61,7 @@ export default {
         async updateJob(data) {
             try {
                 // await FoodService.update(this.food._id, data);
+                await jobService.updateOnePostJob(this.job._id, data);
                 this.updateSuccessToast();
             } catch (error) {
                 console.log(error);

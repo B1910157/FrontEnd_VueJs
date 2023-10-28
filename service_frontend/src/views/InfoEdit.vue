@@ -1,17 +1,13 @@
 <template>
-    <div class="container">
+    <div class="container ml-3">
         <div>
-            <h4 class="text-secondary">
-                Thông tin cá nhân
+            <h4 class="title-in-page">
+                Thông tin dịch vụ
             </h4>
             <InfoForm :info="filteredinfo" @updateInfo="updateInfo" />
-
             <p class="text-success">{{ message }}</p>
-
             <div class="mt-3 row justify-content-around align-items-center">
-
             </div>
-
         </div>
 
     </div>

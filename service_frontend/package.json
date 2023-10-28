@@ -18,6 +18,7 @@
     "font-awesome": "^4.7.0",
     "formdata": "^0.10.4",
     "jquery": "^3.7.0",
+    "moment": "^2.29.4",
     "popper.js": "^1.16.1",
     "primevue": "^3.34.1",
     "vee-validate": "^4.9.5",

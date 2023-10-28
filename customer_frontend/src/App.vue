@@ -19,4 +19,8 @@ export default {
   max-width: 400px;
   margin: auto;
 }
+* {
+  font-family: math;
+}
+
 </style>

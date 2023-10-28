@@ -12,7 +12,20 @@
                         v-model="jobLocal.title" />
                     <ErrorMessage name="title" class="error-feedback" />
                 </div>
-
+                <div class="form-group ">
+                    <label class="font-weight-bold" for="type_job">Loại hình</label>
+                    <div class="border p-2" :style="{ display: !isEditing ? 'block' : 'none' }" style="width: 100%;">
+                        <div v-if="jobLocal.type_job == '1'">Part-time</div>
+                        <div v-if="jobLocal.type_job == '2'">Full-time</div>
+                    </div>
+                    <Field :style="{ display: isEditing ? 'block' : 'none' }" v-slot="{ value }" name="type_job" as="select"
+                        class="form-select  custom-select " v-model="jobLocal.type_job">
+                        <option value="" disabled>--Chọn--</option>
+                        <option v-for="type_job1 in type_jobs" :key="type_job1" :value="type_job1._id"
+                            :selected="value && value.includes(type_job1)">{{ type_job1.name }}</option>
+                    </Field>
+                    <ErrorMessage name="type_job" class="error-feedback" />
+                </div>
                 <div class="form-group">
                     <label class="font-weight-bold" for="wage">Lương </label>
                     <div class="border p-2" :style="{ display: !isEditing ? 'block' : 'none' }" style="width: 100%;">
@@ -125,7 +138,8 @@ export default {
             wage: yup
                 .string()
                 .required("Lương không được rỗng"),
-
+            type_job: yup.string()
+                .required("Vui lòng chọn loại hình việc làm"),
             slot: yup.string()
                 .required("Vui lòng nhập số lượng"),
 
@@ -142,7 +156,14 @@ export default {
 
             jobLocal: this.job,
             jobFormSchema,
-
+            type_jobs: [{
+                _id: "1",
+                name: "Part-time"
+            },
+            {
+                _id: "2",
+                name: "Full-time"
+            }],
             editor: ClassicEditor,
             editorData: this.value,
             isEditing: false

@@ -3,8 +3,8 @@
         <div class="container">
             <div class="navbar-logo">
                 <router-link :to="{ name: 'home' }" class="navbar-brand">
-                    <img src="https://bizweb.dktcdn.net/100/292/646/themes/634888/assets/logo.png?1691158694070"
-                        class="logo" />
+                    <img :src="`http://localhost:3000/img2.jpg`" class="logo" />
+
                 </router-link>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -134,7 +134,7 @@ export default {
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: #052649;
+    background-color: #9e5f17;
 }
 
 .navbar-logo {

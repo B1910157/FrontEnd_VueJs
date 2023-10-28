@@ -36,7 +36,7 @@
   
 <style>
 footer {
-    background-color: #052649;
+    background-color: #9e5f17;
     color: #fff;
     padding: 50px 0;
 }
@@ -78,7 +78,7 @@ footer p {
 }
 
 .footer-bottom {
-    background-color: #052649;
+    background-color: #9e5f17;
     padding: 20px 0;
     text-align: center;
     position: relative;

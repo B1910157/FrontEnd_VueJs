@@ -26,8 +26,8 @@
         <!-- Todo nhé -->
         <div>
             <div v-if="this.food.image && !editImage && foodLocal._id">
-                <img :src="getImage(this.food)" alt="" class="w-25 h-25">
-                <button class="ml-3 btn btn-primary" @click="toggleEditImage">Thay đổi ảnh</button>
+                <img :src="getImage(this.food)" alt="" style="width: 100px; height: 100px;">
+                <button class="ml-3 btn btn-primary" @click="toggleEditImage"><i class="fa-solid fa-rotate"></i></button>
             </div>
             <div class="form-group" v-else-if="this.food.image && editImage">
                 <label class="font-weight-bold" for="image">Hình ảnh </label>

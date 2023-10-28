@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row ml-3 mb-3">
             <h4 class="col-5 title-in-page">
-                Danh sách các dịch vụ
+                Danh sách các dịch vụ {{ }}
                 <i class="fa fa-book icon" aria-hidden="true"></i>
             </h4>
             <div>
@@ -11,15 +11,17 @@
         </div>
         <div class="container">
 
-            <ServiceList v-if="filleredservicecount > 0" :services="filteredservice" />
+            <ServiceList v-if="filleredservicecount > 0" :services="filteredservice" @hiddenService="hiddenService"
+                @showService="showService" />
             <p v-else>Không có dịch vụ nào.</p>
         </div>
-        <v-dialog v-model="this.isAdd" max-width="800px">
+        <v-dialog v-model="this.isAdd" max-width="1000px">
 
             <v-btn color="danger" @click="this.isAdd = false" icon="fa fa-close" class="ml-auto mb-2"><i
                     class="fa fa-close"></i></v-btn>
             <div class="p-3 bg-white rounded-lg">
-                <AddServiceForm class="scrollable-list ml-3 bg-white" @submit:register="addService" />
+                <AddServiceForm class="scrollable-list ml-3 bg-white" @submit:register="addService"
+                    :message="this.message" />
             </div>
 
         </v-dialog>
@@ -29,8 +31,9 @@
 <script>
 import ServiceList from "@/components/services/ServiceList.vue";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
-import serviceService from "../../services/service.service";
+import serviceService from "../../services/managerService.service";
 import AddServiceForm from "../../components/services/AddServiceForm.vue";
+import adminService from "../../services/user.service";
 // import OrderGetItemService from "../services/orderGetItem.service"
 
 // import { EventBus } from './event-bus';
@@ -45,7 +48,8 @@ export default {
     data() {
         return {
             services: [],
-            isAdd: false
+            isAdd: false,
+            message: ""
             // ordersUnconfirm: [],
             // showUnconfirmed: false,
         };
@@ -76,8 +80,31 @@ export default {
 
     },
     methods: {
-        addService() {
-            console.log("SUBMIT")
+        async hiddenService(serviceId, status) {
+            const data = {
+                serviceId: serviceId,
+                status: status
+            };
+            const rs = await serviceService.updateStatus(data);
+            this.refreshList();
+            // console.log("hidden", rs);
+        },
+        async showService(serviceId, status) {
+            const data = {
+                serviceId: serviceId,
+                status: status
+            };
+            const rs = await serviceService.updateStatus(data);
+            this.refreshList();
+            // console.log("show", rs);
+        },
+        async addService(data) {
+            const rs = await adminService.adminCreateService(data);
+            if (rs.status == 400) {
+                this.message = rs.message;
+            } else {
+                this.message = '';
+            }
         },
         async retrieveServices() {
             try {

@@ -129,22 +129,124 @@ export default {
 
 </script>
 <template>
-  <div class="row container">
+  <div class="row">
+
     <v-expansion-panels>
       <v-expansion-panel class="mb-3" v-for="(order, index) in  displayedOrders" :key="order._id">
-        <div class="row container">
+        <div class="row">
           <div class="col-md-12 mb-3">
-            <b>Trạng thái:</b> &nbsp;
-            <span class="text-warning" v-if="order.status == 0">Chưa duyệt <button class="btn btn-danger"
-                @click="showConfirmCancel(order._id)">Hủy</button></span>
-            <span class="text-success" v-if="order.status == 1">Đã duyệt <i class="fa fa-check"
-                aria-hidden="true"></i></span>
-            <span class="text-danger" v-if="order.status == 2">Đã bị hủy <i class="fa fa-times"
-                aria-hidden="true"></i></span>
-            <span class="text-danger" v-if="order.status == 3">Bạn đã hủy <i class="fa fa-times"
-                aria-hidden="true"></i></span>
+            <p class="ms-2"><b>Trạng thái:</b> &nbsp;
+              <span class="text-warning" v-if="order.status == 0">Chưa duyệt <button class="btn btn-danger"
+                  @click="showConfirmCancel(order._id)">Hủy</button></span>
+              <span class="text-success" v-if="order.status == 1">Đã duyệt <i class="fa fa-check"
+                  aria-hidden="true"></i></span>
+              <span class="text-danger" v-if="order.status == 2">Đã bị hủy <i class="fa fa-times"
+                  aria-hidden="true"></i></span>
+              <span class="text-danger" v-if="order.status == 3">Bạn đã hủy <i class="fa fa-times"
+                  aria-hidden="true"></i></span>
+            </p>
           </div>
+
+
+
           <div class="col-md-12">
+            <div class="row">
+
+              <div class="custom-column col-6">
+                <div class="info-row">
+                  <span class="label"><i class="fa-solid fa-user"></i> Họ tên: &nbsp;</span>
+                  <span class="value">{{ order.fullname }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label"><i class="fa-solid fa-envelope"></i> Email: &nbsp;</span>
+                  <span class="value">{{ order.email }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label"><i class="fa-solid fa-phone"></i> Số điện thoại: &nbsp;</span>
+                  <span class="value">{{ order.phone }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label"><i class="fa-solid fa-tablet"></i> Số lượng bàn: &nbsp;</span>
+                  <span class="value">{{ order.tray_quantity }}</span>
+                </div>
+                <div class="info-row" v-if="order.note">
+                  <span class="label"><i class="fa-solid fa-note-sticky"></i> Ghi chú: &nbsp;</span>
+                  <span class="value">{{ order.note }}</span>
+                </div>
+                <div class="info-row" v-if="order.status == 1">
+                  <span class="label"><i class="fa-solid fa-credit-card"></i> Trạng thái thanh toán &nbsp;</span>
+                  <span class="badge badge-success d-flex align-items-center"
+                    v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                    Đã thanh toán
+                  </span>
+                  <span class="badge badge-success d-flex align-items-center"
+                    v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
+                    Thanh toán trực tiếp
+                  </span>
+                  <span class="badge badge-danger d-flex align-items-center" v-else-if="order.statusPayment == 0">
+                    Chưa thanh toán
+                  </span>
+                </div>
+              </div>
+
+              <div class="custom-column col-6">
+                <div class="info-row">
+                  <span class="label"><i class="fa-regular fa-calendar-days"></i> Ngày thực hiện: &nbsp;</span>
+                  <span class="value">{{ formatDate(order.createAt) }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label"><i class="fa-regular fa-calendar-check"></i> Ngày diễn ra: &nbsp;</span>
+                  <span class="value">{{ order.event_date + " Vào lúc: " + order.event_time }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label"><i class="fa-solid fa-location-dot"></i> Địa chỉ tiệc: &nbsp;</span>
+                  <span class="value">{{ order.address }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label"><i class="fa-solid fa-dollar-sign"></i> Tổng tiền: &nbsp;</span>
+                  <span class="value">{{ formatCurrency(order.total) }}</span>
+                </div>
+                <div v-if="order.surcharges && order.surcharges.length > 0" class="info-row">
+                  <table class="table">
+                    <tr>
+                      <th>Phụ thu: </th>
+                      <td>
+                        <ul>
+                          <li v-for="(surcharge, index) in order.surcharges" :key="index">
+                            {{ surcharge.key }}: {{ surcharge.value }}
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </table>
+
+                </div>
+                <div class="info-row" v-if="order.deposit !== 0">
+                  <span class="label" v-if="order.paymentMethod == 'vnpay'"><i class="fa-solid fa-dollar-sign"></i> Số
+                    tiền đã thanh toán: &nbsp;</span>
+                  <span class="value" v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                    {{ formatCurrency(order.deposit) }}
+                  </span>
+                </div>
+              </div>
+
+
+            </div>
+            <div v-if="order.statusPayment == 0 && isFutureEvent(order.event_date) && order.status == 1">
+              <button class="btn btn-success ml-3" @click="payment(order._id)"><i class="fa-solid fa-dollar-sign"></i>
+                Thanh toán</button>
+            </div>
+            <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status !== 1">
+              Đơn hàng chưa duyệt hoặc quá hạn
+            </div>
+          </div>
+
+
+
+
+
+
+          <!-- <div class="col-md-12">
             <div style="display: flex; justify-content: space-between;">
               <div style="flex: 1;">
                 <table class="table custom-height-table">
@@ -217,7 +319,7 @@ export default {
             <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status !== 1">
               Đơn hàng chưa duyệt hoặc quá hạn
             </div>
-          </div>
+          </div> -->
         </div>
         <v-expansion-panel-title>
           <div class="col-md-12 text-center">
@@ -229,7 +331,7 @@ export default {
             <div v-if="order.cart[0].menu.length > 0">
               <div>
                 <h5 class="text-center">Thực đơn</h5>
-                <table class="table table-bordered ">
+                <table class="table table-bordered text-center ">
                   <thead>
                     <th>Tên món</th>
                     <th>Hình ảnh</th>
@@ -306,7 +408,7 @@ export default {
       </v-expansion-panel>
     </v-expansion-panels>
     <!-- Nút điều hướng trang -->
-    <div class="col-md-12 text-center mt-3">
+    <div class="col-md-12 text-center my-3">
       <button class="btn btn-primary" @click="prevPage" :disabled="currentPage === 1"><i class="fa fa-angle-double-left"
           aria-hidden="true"></i>
       </button>
@@ -322,8 +424,37 @@ export default {
   align-items: center;
 }
 
+.custom-column {
+  padding: 40px;
+  /* width: 150px; */
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  /* margin-top: 5px; */
+  padding-bottom: 10px;
+}
+
+.label {
+  flex: 1;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* .value {
+  flex: 2;
+  white-space: nowrap;
+} */
+
+
 .custom-height-table tbody tr th,
 .custom-height-table tbody tr td {
-  height: 73px;
+  height: 97px;
 }
 </style>

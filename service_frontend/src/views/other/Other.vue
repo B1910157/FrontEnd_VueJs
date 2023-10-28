@@ -19,9 +19,9 @@
         </div>
 
         <div class="col-md-12">
-            <OtherList v-if="filteredOtherCount > 0" @openForm="this.isAdd = true" @edit:other="editOther"
-                :other="filteredOther" @delete:other="deleteOther" />
-            <p v-else>Không có dịch vụ khác nào.</p>
+            <OtherList @openForm="this.isAdd = true" @edit:other="editOther" :other="filteredOther"
+                @delete:other="deleteOther" />
+            <p v-if="filteredOtherCount == 0">Không có dịch vụ khác nào.</p>
         </div>
     </div>
 

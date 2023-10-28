@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <div>
-            <h3 class="text-center mb-3">
-                Lịch sử
+            <h3 class="text-center my-3">
+                <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử
             </h3>
             <HistoryOrderList v-if="filleredordercount > 0" :orders="filteredorder" @cancel="cancelEvent" />
             <p v-else>Bạn chưa có đơn nào.</p>

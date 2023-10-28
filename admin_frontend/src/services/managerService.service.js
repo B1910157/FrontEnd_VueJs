@@ -1,7 +1,7 @@
 import createApiClient from "./api.service";
 //Gửi yêu cầu đến backend trả về dữ liệu phản hồi từ server
-class UserService {
-  constructor(baseUrl = "/api/home") {
+class ManagerService {
+  constructor(baseUrl = "/api/managerService") {
     this.api = createApiClient(baseUrl);
   }
   //Gọi đến endpoint trong routes
@@ -11,9 +11,9 @@ class UserService {
   async findAll() {
     return (await this.api.get("/")).data;
   }
-  // async updateStatus(data) {
-  //   return (await this.api.put(`/updateStatus`, data)).data;
-  // }
+  async updateStatus(data) {
+    return (await this.api.put(`/updateStatus`, data)).data;
+  }
 }
 
-export default new UserService();
+export default new ManagerService();

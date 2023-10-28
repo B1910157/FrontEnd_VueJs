@@ -185,14 +185,16 @@ export default {
         item-key="_id">
         <template v-slot:item.actions="{ item }">
             <div v-for="(action, index) in item.selectable.actions" :key="index" @click="action.action" class="m-2">
-                <v-btn :class="{
-                    'btn-green': action.text === 'Duyệt', 'btn-red':
+                <span :class="{
+                    'badge badge-success': action.text === 'Duyệt', 'badge badge-danger':
                         action.text === 'Hủy',
-                }" class="" style="width: 50px;" v-if="action.text == 'Duyệt' || action.text == 'Hủy'">{{ action.text
-}}</v-btn>
-                <p class="text-success" v-else-if="action.text == 'Đơn đã duyệt'">{{ action.text }}</p>
-                <p class="text-danger" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
-                <p class="text-danger" v-else-if="action.text == 'Khách hàng đã hủy đơn'">{{ action.text }}</p>
+                }" class="" style="width: 50px;" v-if="action.text == 'Duyệt' || action.text == 'Hủy'">{{
+    action.text
+}}</span>
+                <p class="badge badge-success " v-else-if="action.text == 'Đơn đã duyệt'">{{
+                    action.text }}</p>
+                <p class="badge badge-danger" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
+                <p class="badge badge-danger" v-else-if="action.text == 'Khách hàng đã hủy đơn'">{{ action.text }}</p>
 
             </div>
         </template>
@@ -209,7 +211,7 @@ export default {
         <v-btn color="danger" @click="isOpenDialogReasonCancel = false" icon="fa fa-close" class="ml-auto mb-3"><i
                 class="fa fa-close"></i></v-btn>
 
-        <div>
+        <div class="rounded-lg">
             <ReasonCancelForm @submit:reason="submitReasonCancel" />
         </div>
         <!-- <ListFoodToAdd :foodNotInMenu="this.listFood" @addFoodToMenu="addFoodToMenu" /> -->

@@ -8,9 +8,21 @@
 
         </div>
         <div class="container">
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label class="font-weight-bold" for="filterDate">Ngày diễn ra: &nbsp;</label>
+                    <input class="border rounded-lg p-1" type="date" id="filterDate" v-model="filterDate"
+                        @input="filterOrders" />
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary" @click="retrieveOrders()">Tất cả <i
+                            class="fa-solid fa-list"></i></button>
+                </div>
 
-            <OrderList v-if="filleredordercount > 0" :orders="filteredorder" @accept="acceptEvent" @cancel="cancelEvent" />
-            <p v-else>Bạn chưa có đơn đặt tiệc nào.</p>
+            </div>
+
+            <OrderList :orders="this.orders" @accept="acceptEvent" @cancel="cancelEvent" />
+            <!-- <p v-else class="text-center">Không có đơn đặt tiệc nào.</p> -->
         </div>
 
     </div>
@@ -31,6 +43,8 @@ export default {
             orders: [],
             ordersUnconfirm: [],
             showUnconfirmed: false,
+            filterDate: "",
+
         };
     },
 
@@ -41,13 +55,25 @@ export default {
         //     return this.orders;
 
         // },
-        filteredorder() {
-            // if (this.showUnconfirmed) {
-            //     return this.ordersUnconfirm;
-            // } else {
+        // filteredorder() {
+        //     // if (this.showUnconfirmed) {
+        //     //     return this.ordersUnconfirm;
+        //     // } else {
 
-            // }
-            return this.orders;
+        //     // }
+        //     return this.orders;
+        // },
+        filteredorder() {
+            if (this.filterDate) {
+                return this.orders.filter((order) => {
+                    // Chỉ hiển thị các đơn đặt tiệc có ngày trùng với filterDate
+                    return order.event_date === this.filterDate; // Điều này cần điều chỉnh tùy vào cấu trúc dữ liệu của bạn
+                });
+            } else {
+                // this.orders = await orderService.findAll();
+                return this.orders; // Nếu không có ngày được chọn, hiển thị tất cả đơn đặt tiệc
+
+            }
         },
         // filteredorderUnconfirm() {
         //     return this.ordersUnconfirm;
@@ -61,11 +87,30 @@ export default {
     methods: {
         async retrieveOrders() {
             try {
+
                 this.orders = await orderService.findAll();
+                this.filterDate = ""
 
             } catch (error) {
                 console.log(error);
             }
+        },
+        async filterOrders() {
+
+            const date = {
+                date: this.filterDate
+            };
+            console.log("date nè", this.filterDate)
+            if (this.filterDate) {
+                console.log("CÓ DATE")
+                this.isFiltering = true;
+                this.orders = await orderService.findOrdersByDate(date);
+            } else {
+                if (this.isFiltering) { // Kiểm tra xem bạn đang trong chế độ lọc không
+                    this.retrieveAllOrders(); // Nếu có, lấy tất cả các đơn hàng
+                }
+            }
+
         },
         refreshList() {
             this.retrieveOrders();

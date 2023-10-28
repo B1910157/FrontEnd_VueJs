@@ -16,7 +16,9 @@ class InfoService {
   async getInfoUser(service_id) {
     return (await this.api.get(`/${service_id}`)).data;
   }
- 
+  async changePass(data) {
+    return (await this.api.post("/changePass", data)).data;
+  }
 }
 
 export default new InfoService();

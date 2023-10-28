@@ -7,6 +7,9 @@ import ListFood from "@/components/order/ListFood.vue"
 import ListDrink from "@/components/order/ListDrink.vue"
 import ListOther from "@/components/order/ListOther.vue";
 import ReasonCancelForm from '../../components/order/ReasonCancelForm.vue';
+import EditInfoParty from '../../components/order/EditInfoParty.vue';
+import Surcharges from '../../components/order/Surcharges.vue';
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         OrderFormToEdit,
@@ -16,7 +19,9 @@ export default {
         ListFood,
         ListDrink,
         ListOther,
-        ReasonCancelForm
+        ReasonCancelForm,
+        EditInfoParty,
+        Surcharges
 
     },
     data() {
@@ -27,10 +32,13 @@ export default {
             searchText: "",
             order: {},
             isEditing: false,
+            isEditInfo: false,
             isOpenFoods: false,
             isOpenOther: false,
             isOpenDrinks: false,
-            isOpenDialogReasonCancel: false
+            isAddSurcharges: false,
+            isOpenDialogReasonCancel: false,
+
         };
     },
     computed: {
@@ -67,6 +75,28 @@ export default {
         this.findOne(this.$route.params.orderId);
     },
     methods: {
+        addSurcharges() {
+            console.log("addd");
+            this.isAddSurcharges = true;
+        },
+        cancelSuccessToast() {
+            toast.success('Hủy thành công', { autoClose: 1000 });
+        },
+        acceptSuccessToast() {
+            toast.success('Xác nhận thành công', { autoClose: 1000 });
+        },
+        updateSuccessToast() {
+            toast.success('Cập nhật thành công', { autoClose: 1000 });
+        },
+        reSendSuccessToast() {
+            toast.success('Xác nhận lại đơn hàng thành công', { autoClose: 1000 });
+        },
+        addSuccessToast() {
+            toast.success('Thêm thành công', { autoClose: 1000 });
+        },
+        removeSuccessToast() {
+            toast.success('Xóa thành công', { autoClose: 1000 });
+        },
         //FOOD
         async getFoodNotInOrder() {
             try {
@@ -93,6 +123,7 @@ export default {
                 try {
 
                     await orderService.removeFoodInOrder(this.order._id, foodId);
+                    this.removeSuccessToast();
                     this.findOne(this.$route.params.orderId);
                 } catch (error) {
                     console.log(error);
@@ -125,6 +156,7 @@ export default {
                 try {
 
                     await orderService.removeDrinkInOrder(this.order._id, drinkId);
+                    this.removeSuccessToast();
                     this.findOne(this.$route.params.orderId);
                 } catch (error) {
                     console.log(error);
@@ -138,16 +170,19 @@ export default {
                 quantity,
             };
             await orderService.addOrUpdateDrink(this.order._id, data);
+            this.updateSuccessToast();
             this.findOne(this.$route.params.orderId);
 
         },
         async addFoodToMenuReal(foodId) {
             await orderService.addFoodToCartInOrder(this.order._id, foodId);
+            this.addSuccessToast();
             this.getFoodNotInOrder();
             this.findOne(this.$route.params.orderId);
         },
         async addOtherToMenuReal(otherId) {
             await orderService.addOtherToCartInOrder(this.order._id, otherId);
+            this.addSuccessToast();
             this.getOtherNotInOrder();
             this.findOne(this.$route.params.orderId);
         },
@@ -159,6 +194,7 @@ export default {
             };
 
             await orderService.addOrUpdateDrink(this.order._id, data);
+            this.addSuccessToast();
             this.getDrinkNotInOrder();
             this.findOne(this.$route.params.orderId);
         },
@@ -185,6 +221,7 @@ export default {
             if (confirm("Bạn muốn xóa món này khỏi menu?")) {
                 try {
                     await orderService.removeOtherInOrder(this.order._id, otherId);
+                    this.removeSuccessToast();
                     this.findOne(this.$route.params.orderId);
                 } catch (error) {
                     console.log(error);
@@ -204,7 +241,8 @@ export default {
             try {
                 const rs = await orderService.accept(orderId);
                 if (rs) {
-                    this.$emit('accept', this.orders)
+                    this.$emit('accept', this.orders);
+                    this.acceptSuccessToast()
                     this.findOne(this.$route.params.orderId);
                 }
             } catch (error) {
@@ -220,6 +258,7 @@ export default {
                 const rs = await orderService.cancel(orderId, reasonReal);
                 if (rs) {
                     this.$emit('cancel', this.orders);
+                    this.cancelSuccessToast();
                     this.findOne(this.$route.params.orderId);
                 }
             } catch (error) {
@@ -264,6 +303,80 @@ export default {
             });
             return formatter.format(number);
         },
+        editInfoParty() {
+            console.log("EDIT INFO PARTY");
+            this.isEditInfo = true;
+        },
+        saveInfoParty() {
+            console.log("SAVE INFO PARTY");
+        },
+        async updateInfoParty(data) {
+            const dataUpdate = {
+                fullname: data.fullname,
+                address: data.address,
+                email: data.email,
+                event_date: data.event_date,
+                event_time: data.event_time,
+                phone: data.phone,
+                tray_quantity: data.tray_quantity,
+                total: ((data.cart[0].totalMenu) *
+                    (data.tray_quantity)) +
+                    (data.cart[1].totalDrink + (data.cart[2].totalOther)),
+                surcharges: data.surcharges
+            }
+
+            const rs = await orderService.updateInfoParty(this.order._id, dataUpdate);
+            this.updateSuccessToast();
+            this.findOne(this.$route.params.orderId);
+            this.isEditInfo = false;
+        },
+        isCurrentDateGreaterThanEventDate() {
+            // Lấy ngày hiện tại
+
+            const eventDate = this.order.event_date;
+
+            const currentDate = new Date();
+
+            // Chuyển định dạng ngày từ YYYY-MM-DD sang MM/DD/YYYY
+            const eventDateParts = eventDate.split("-");
+            const formattedEventDate = `${eventDateParts[1]}/${eventDateParts[2]}/${eventDateParts[0]}`;
+
+            // Tạo một đối tượng ngày từ eventDate
+            const eventDateObj = new Date(formattedEventDate);
+
+            // Tính toán ngày trong tương lai (ngày eventDate + 2 ngày)
+            const futureDate = new Date(eventDateObj);
+            futureDate.setDate(futureDate.getDate() - 2);
+            // console.log("1234 check time", currentDate + "aloooo " + futureDate)
+            // So sánh ngày hiện tại với ngày trong tương lai
+            // if (currentDate < futureDate) {
+            //     console.log("TRUE");
+            // }
+            return currentDate < futureDate;
+        },
+        async submitSurcharges(data) {
+
+            const surcharges = {
+                surcharges: data.surcharges,
+                orderId: data._id
+            };
+            // console.log("DATA", surcharges);
+            const rs = await orderService.addSurcharges(surcharges);
+            this.updateSuccessToast();
+            this.isAddSurcharges = false;
+        },
+        async reSendMail(orderId) {
+            try {
+                if (confirm("Xác nhận lại đơn đặt tiệc này?")) {
+                    await orderService.reSendMail(orderId);
+                    this.reSendSuccessToast();
+                    this.findOne(this.$route.params.orderId);
+                }
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
 
     }
 };
@@ -274,27 +387,28 @@ export default {
     <div class="row container ml-4">
         <div class="col-12 mb-3 mt-3">
             <div class="" v-if="order.status == 0">
-                <button class="btn btn-success" @click="showConfirm(order._id)">Duyệt</button>
-                <button class="btn btn-danger  ml-2" @click="showConfirmCancel(order._id)">Hủy</button>
+                <button class="badge badge-success" @click="showConfirm(order._id)">Duyệt</button>
+                <button class="badge badge-danger  ml-2" @click="showConfirmCancel(order._id)">Hủy</button>
             </div>
-            <div class="text-success " v-if="order.status == 1">
-                Đã duyệt
+            <div class="badge badge-success" v-if="order.status == 1">
+                Đã duyệt <i class="fa-solid fa-check"></i>
             </div>
-            <div class="text-danger" v-if="order.status == 2">
-                Bạn đã hủy
+            <div class="badge badge-danger" v-if="order.status == 2">
+                Bạn đã hủy <i class="fa-solid fa-xmark"></i>
             </div>
-            <div class="text-danger" v-if="order.status == 3">
-                Khách hàng đã hủy
+            <div class="badge badge-danger" v-if="order.status == 3">
+                Khách hàng đã hủy <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div @click="reSendMail(order._id)" class="ml-2 badge badge-success"
+                v-if="order.status == 1 && order.statusUpdate == 1">
+                Gửi xác nhận lại <i class="fa-solid fa-repeat"></i>
             </div>
 
         </div>
         <div class="col-md-12">
-            <div style="display: flex; justify-content: space-between;">
+            <div v-if="this.isEditInfo == false" style="display: flex; justify-content: space-between;">
                 <div style="flex: 1;">
                     <table class="table custom-height-table">
-                        <!-- <thead class="text-center">
-                            <th colspan="2">Thông tin</th>
-                        </thead> -->
                         <tbody>
                             <tr>
                                 <th>Họ tên: &nbsp;</th>
@@ -312,22 +426,20 @@ export default {
                                 <th>Tổng tiền: &nbsp;</th>
                                 <td>{{ formatCurrency(order.total) }}</td>
                             </tr>
-                            <tr v-if="order.status == 1">
-                                <th>Trạng thái thanh toán &nbsp;</th>
-                                <td class="text-success" v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
-                                    Đã thanh toán
-                                </td>
-                                <td class="text-success"
-                                    v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
-                                    Thanh toán trực tiếp
-                                </td>
-                                <td class="text-danger" v-else-if="order.statusPayment == 0">
-                                    Chưa thanh toán
-                                </td>
-                            </tr>
+
                             <tr>
                                 <th>Ghi chú: &nbsp;</th>
                                 <td style="max-height: 50px; overflow-y: auto;">{{ order.note }}</td>
+                            </tr>
+                            <tr v-if="order.surcharges && order.surcharges.length > 0">
+                                <th>Phụ thu:</th>
+                                <td>
+                                    <ul>
+                                        <li v-for="(surcharge, index) in order.surcharges" :key="index">
+                                            {{ surcharge.key }}: {{ surcharge.value }}
+                                        </li>
+                                    </ul>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -352,6 +464,19 @@ export default {
                                 <th>Số lượng bàn: &nbsp;</th>
                                 <td>{{ order.tray_quantity }}</td>
                             </tr>
+                            <tr v-if="order.status == 1">
+                                <th>Trạng thái thanh toán &nbsp;</th>
+                                <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                                    <div class="badge badge-success">Đã thanh toán</div>
+                                </td>
+                                <td v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
+                                    <div class="badge badge-success">Thanh toán trực tiếp</div>
+                                </td>
+                                <td v-else-if="order.statusPayment == 0">
+                                    <div class="badge badge-danger"> Chưa thanh toán</div>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <th v-if="order.paymentMethod == 'vnpay'">Số tiền đã thanh toán: &nbsp;</th>
                                 <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
@@ -363,6 +488,45 @@ export default {
                     <!-- <div>Tổng tiền: {{ order.total }}</div>
                     <div>Cọc: {{ order.deposit }}</div>
                     <div>Hình thức: {{ order.paymentMethod }}</div> -->
+                </div>
+            </div>
+
+            <div v-if="this.isEditInfo == true" class="text-left">
+                <EditInfoParty :order="this.order" @submit:order="updateInfoParty" />
+            </div>
+
+
+
+            <div v-if="this.isAddSurcharges == true" class="text-left">
+                <Surcharges :order="this.order" @submit:surcharges="submitSurcharges" />
+            </div>
+
+
+
+
+            <div class="row">
+                <!-- <div class="col-md-6 p-5">
+                    <span v-if="this.isAddSurcharges == false && isCurrentDateGreaterThanEventDate()"
+                        @click="addSurcharges()" class="mt-2 btn btn-primary">
+                        <i class="fas fa-edit"></i> Thêm phụ thu </span>
+                </div> -->
+                <div class="col-md-6"></div>
+                <div class="col-md-6 text-right p-5">
+
+                    <!-- thay vì check trạng thái đơn thì Check ngày -->
+                    <span v-if="this.isEditInfo == false && isCurrentDateGreaterThanEventDate()" @click="editInfoParty()"
+                        class="mt-2 btn btn-warning">
+                        <i class="fas fa-edit"></i> </span>
+                    <!-- <div v-else-if="this.isEditInfo == true">
+                        <span @click="saveInfoParty()" class="mt-2 btn btn-primary">
+                            <i class="fas fa-save"></i> </span>
+                    </div> -->
+
+                </div>
+                <div class="col-12">
+                    <div class="text-danger" v-if="!isCurrentDateGreaterThanEventDate()">
+                        Hết thời gian chỉnh sửa (Chỉnh sửa trước ngày diễn ra 2 ngày )
+                    </div>
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@
         <div class="container">
             <div class="congratulation-wrapper">
                 <div class="congratulation-contents center-text">
-                    <div class="congratulation-contents-icon">
+                    <div class="congratulation-contents-icon" style="background-color: red;">
                         <i class="fas fa-close"></i>
                     </div>
                     <h4 class="congratulation-contents-title"> HỦY ĐƠN KHÔNG THÀNH CÔNG </h4>
@@ -86,7 +86,7 @@ export default {
             const oneDayInMillis = 24 * 60 * 60 * 1000;
 
             if ((this.order.status == 1) && (timeDifference <= oneDayInMillis)) {
-                
+
                 await orderService.cancelOrder(this.orderId);
                 this.check = 1;
             } else if (this.order.status == 3) {

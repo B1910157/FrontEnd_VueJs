@@ -124,6 +124,7 @@ export default {
             const formData = new FormData();
             formData.append("title", this.jobLocal.title);
             formData.append("wage", this.jobLocal.wage);
+            formData.append("type_job", this.jobLocal.type_job);
             formData.append("description", this.jobLocal.description);
             formData.append("requirement", this.jobLocal.requirement);
             formData.append("deadline", this.jobLocal.deadline);

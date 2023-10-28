@@ -1,7 +1,7 @@
 
 <template>
-    <Form class="bg-white" @submit="submitReasonCancel" :validation-schema="reasonFormSchema">
-        <h4 class="text-primary text-center mb-5">HỦY ĐƠN ĐẶT TIỆC</h4>
+    <Form class="bg-white rounded-lg pb-3" @submit="submitReasonCancel" :validation-schema="reasonFormSchema">
+        <h4 class="text-primary text-center mb-5 pt-3">HỦY ĐƠN ĐẶT TIỆC</h4>
         <div class="form-group d-flex align-items-center">
             <div class="ml-1 input-group row">
                 <div class="col-12">

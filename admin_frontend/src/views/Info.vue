@@ -1,11 +1,12 @@
 <template>
     <div class="container">
-        <div >
+        <div>
             <h4 class="text-secondary ml-4">
                 Thông tin cá nhân
             </h4>
-            <Info :info="filteredinfo"  />
-            
+
+            <Info :info="filteredinfo" />
+
             <div class="mt-3 row justify-content-around align-items-center">
                 <router-link :to="{
                     name: 'updateInfo',
@@ -15,9 +16,9 @@
                         <i class="fas fa-edit"></i> Cập nhật thông tin</span>
                 </router-link>
             </div>
-           
+
         </div>
-       
+
     </div>
 </template>
 <script>
@@ -32,31 +33,31 @@ export default {
     data() {
         return {
             info: object,
-      
-          
+
+
 
         };
     },
     watch: {
         // Giám sát các thay đổi của biến searchText.
         // Bỏ chọn phần tử đang được chọn trong danh sách.
-       
+
     },
     // props:{
     //     info: this.info
 
     // },
     computed: {
-      
-        
+
+
         // Trả về các food có chứa thông tin cần tìm kiếm.
         filteredinfo() {
-             return this.info;
-           
+            return this.info;
+
         },
 
-      
-       
+
+
     },
     methods: {
         async retrieveInfo() {
@@ -71,12 +72,12 @@ export default {
             this.retrieveInfo();
             this.activeIndex = -1;
         },
-        
+
 
     },
     mounted() {
         this.refreshList();
-        
+
     },
 
 };

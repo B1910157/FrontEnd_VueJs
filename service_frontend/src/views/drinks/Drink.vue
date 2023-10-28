@@ -18,9 +18,9 @@
             <InputSearch v-model="searchText" />
         </div>
         <div class="col-md-12">
-            <DrinkList v-if="filteredDrinkCount > 0" @openForm="this.isAdd = true" @edit:drink="editDrink"
-                :drinks="filteredDrink" @delete:drink="deleteDrink" />
-            <p v-else>Không có đồ uống nào.</p>
+            <DrinkList @openForm="this.isAdd = true" @edit:drink="editDrink" :drinks="filteredDrink"
+                @delete:drink="deleteDrink" />
+            <p v-if="filteredDrinkCount == 0">Không có đồ uống nào.</p>
         </div>
     </div>
 

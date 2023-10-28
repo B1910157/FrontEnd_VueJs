@@ -1,5 +1,7 @@
 <template>
-    <div class="input-group input-group-sm mb-3 me-3" style="width: 150px;">
+
+
+    <div class="input-group input-group-sm mb-3 me-3">
         <input type="number" class="form-control" v-model="quantity" min="1" style="height: 30px; margin-right: 2px;">
         <v-btn color="blue" @click="this.Auth ? addDrinkToCart(service._id, drink._id, quantity)
             : addDrinkToLocalCartReal(service._id, drink, quantity)" variant="tonal" style="height: 30px;">

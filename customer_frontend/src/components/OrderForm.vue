@@ -1,261 +1,324 @@
 
 <template>
-    <div class="row container">
+    <div class="row container text-center">
         <div class="col-md-6 col-12">
-            <h2>Menu</h2>
-            <table class="table tbale-bordered text-center">
-                <thead>
-                    <th width="20%">Hình ảnh</th>
-                    <th>Tên món</th>
-                    <th>Giá</th>
-                    <th>Thao tác</th>
-                </thead>
-                <tbody
-                    v-if="(!this.Auth && localCart.items[0].menu.length == 0) || (this.Auth && this.cartData.items[0].menu.length == 0)">
-                    <tr>
-                        <td colspan="4"><u><i>Trống</i></u></td>
-                    </tr>
-                </tbody>
-                <tbody v-if="this.Auth">
-                    <tr v-for="(item, index) in this.cartData.items[0].menu" :key="index">
-                        <td> <img :src="getImage(item)" alt="" class="w-50 h-50"></td>
-                        <td>{{ item.food_name }}</td>
-                        <td>{{ item.price }}</td>
-                        <td>
-                            <button class="btn btn-danger" @click="removeFoodInCartReal(item.service_id, item._id)"> <i
-                                    class="fa fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            Tổng tiền Menu: {{ formatCurrency(this.cartData.items[0].totalMenu) }}
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-if="!this.Auth">
-                    <tr v-for="(item, index) in this.localCart.items[0].menu" :key="index">
-                        <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
-                        <td>{{ item.food_name }}</td>
-                        <td>{{ item.price }}</td>
-                        <td>
-                            <button class="btn btn-danger" @click="removeFoodInLocalCart(item._id)"> <i
-                                    class="fa fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            Tổng tiền Menu: {{ formatCurrency(this.localCart.items[0].totalMenu) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2>Menu</h2>
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <th width="20%">Hình ảnh</th>
+                            <th>Tên món</th>
+                            <th>Giá</th>
+                            <th>Thao tác</th>
+                        </thead>
+                        <tbody
+                            v-if="(!this.Auth && localCart.items[0].menu.length == 0) || (this.Auth && this.cartData.items[0].menu.length == 0)">
+                            <tr>
+                                <td colspan="4"><u><i>Trống</i></u></td>
+                            </tr>
+                        </tbody>
+                        <tbody v-if="this.Auth">
+                            <tr v-for="(item, index) in this.cartData.items[0].menu" :key="index">
+                                <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
+                                <td>{{ item.food_name }}</td>
+                                <td>{{ formatCurrency(item.price) }}</td>
+                                <td>
+                                    <button class="btn btn-danger" @click="removeFoodInCartReal(item.service_id, item._id)">
+                                        <i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    Tổng tiền Menu: {{ formatCurrency(this.cartData.items[0].totalMenu) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-if="!this.Auth">
+                            <tr v-for="(item, index) in this.localCart.items[0].menu" :key="index">
+                                <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
+                                <td>{{ item.food_name }}</td>
+                                <td>{{ item.price }}</td>
+                                <td>
+                                    <button class="btn btn-danger" @click="removeFoodInLocalCart(item._id)"> <i
+                                            class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    Tổng tiền Menu: {{ formatCurrency(this.localCart.items[0].totalMenu) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6 form-group">
+                    <label for="tray_quantity" class="text-left"><i class="fa-solid fa-tablet"></i> Số lượng bàn</label>
+                    <Field name="tray_quantity" type="number" class="form-control" v-model="orderLocal.tray_quantity" />
+                    <ErrorMessage name="tray_quantity" class="error-feedback" />
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="total_temp" class="text-left"><i class="fa-solid fa-dollar-sign"></i> Tổng tiền tạm tính
+                        </label>
+
+                        <div class="font-weight-bold text-left pt-2">
+                            <i class="font-weight-bold ">{{
+                                formatCurrency(((this.orderLocal.cart.items[0].totalMenu) *
+                                    (this.orderLocal.tray_quantity)) +
+                                    (this.orderLocal.cart.items[1].totalDrink + (this.orderLocal.cart.items[2].totalOther)))
+                            }}
+                            </i>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
         <div class="col-md-6 col-12">
-            <h2>Đồ uống</h2>
-            <div>
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <th width="15%">Hình ảnh</th>
-                        <th>Tên món</th>
-                        <th style="width: 25%;">Số lượng</th>
-                        <th>Giá</th>
-                        <th style="width: 20%;">Thao tác</th>
-                    </thead>
-                    <tbody
-                        v-if="(!this.Auth && localCart.items[1].drink.length == 0) || (this.Auth && this.cartData.items[1].drink.length == 0)">
-                        <tr>
-                            <td colspan="5">
-                                <u><i>Trống</i></u>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody v-if="this.Auth">
-                        <tr v-for="(item, index) in this.cartData.items[1].drink" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
-                            <td>{{ item.drink_name }}</td>
-                            <td>
-                                <input type="number" name="quantity" v-model="item.quantity" min="1" class="input-small">
-                                /{{ item.unit }}
-                            </td>
-                            <td>{{ item.price }}</td>
+            <div class="card shadow-lg">
+                <div class="card-body" style="font-size: 14px;">
+                    <h2>Đồ uống</h2>
+                    <div>
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <th width="20%">Hình ảnh</th>
+                                <th>Tên món</th>
+                                <th style="width: 25%;">Số lượng</th>
+                                <th>Giá</th>
+                                <th style="width: 20%;">Thao tác</th>
+                            </thead>
+                            <tbody
+                                v-if="(!this.Auth && localCart.items[1].drink.length == 0) || (this.Auth && this.cartData.items[1].drink.length == 0)">
+                                <tr>
+                                    <td colspan="5">
+                                        <u><i>Trống</i></u>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="this.Auth">
+                                <tr v-for="(item, index) in this.cartData.items[1].drink" :key="index">
+                                    <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
+                                    <td>{{ item.drink_name }}</td>
+                                    <td>
+                                        <input type="number" name="quantity" v-model="item.quantity" min="1"
+                                            class="input-small">
+                                        /{{ item.unit }}
+                                    </td>
+                                    <td>{{ formatCurrency(item.price) }}</td>
 
-                            <td>
-                                <button class="btn btn-warning mr-1"
-                                    @click="updateDrink(item.service_id, item._id, item.quantity)">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger" @click="deleteDrinkReal(item.service_id, item._id)"> <i
-                                        class="fa fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Tổng tiền Đồ uống: {{ formatCurrency(this.cartData.items[1].totalDrink) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody v-if="!this.Auth && localCart.items[1].drink.length != 0">
-                        <tr v-for="(item, index) in this.localCart.items[1].drink" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
-                            <td>{{ item.drink_name }}</td>
-                            <td>
-                                <input type="number" name="quantity" v-model="item.quantity" min="1" class="input-small">
-                                /{{ item.unit }}
-                            </td>
-                            <td>{{ item.price }}</td>
-                            <td><button class="btn btn-warning mr-1"
-                                    @click="updateDrinkLocalCart(this.localCart.service_id, item, item.quantity)">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger" @click="removeDrinkInLocalCart(item._id)"> <i
-                                        class="fa fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Tổng tiền Đồ uống: {{ formatCurrency(this.localCart.items[1].totalDrink) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <td>
+                                        <button class="btn btn-warning"
+                                            @click="updateDrink(item.service_id, item._id, item.quantity)">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-danger mt-2"
+                                            @click="deleteDrinkReal(item.service_id, item._id)">
+                                            <i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        Tổng tiền Đồ uống: {{ formatCurrency(this.cartData.items[1].totalDrink) }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="!this.Auth && localCart.items[1].drink.length != 0">
+                                <tr v-for="(item, index) in this.localCart.items[1].drink" :key="index">
+                                    <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
+                                    <td>{{ item.drink_name }}</td>
+                                    <td>
+                                        <input type="number" name="quantity" v-model="item.quantity" min="1"
+                                            class="input-small">
+                                        /{{ item.unit }}
+                                    </td>
+                                    <td>{{ item.price }}</td>
+                                    <td><button class="btn btn-warning mr-1"
+                                            @click="updateDrinkLocalCart(this.localCart.service_id, item, item.quantity)">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-danger" @click="removeDrinkInLocalCart(item._id)"> <i
+                                                class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        Tổng tiền Đồ uống: {{ formatCurrency(this.localCart.items[1].totalDrink) }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
+
+
         </div>
 
         <div class="mt-2 col-md-12"
             v-if="(!this.Auth && localCart.items[2].other.length != 0) || (this.Auth && this.cartData.items[2].other.length > 0)">
             <div>
-                <h2>Khác</h2>
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <th width="20%">Hình ảnh</th>
-                        <th>Tên</th>
-                        <th>Giá</th>
-                        <th>Thao tác</th>
-                    </thead>
-                    <tbody v-if="this.Auth">
-                        <tr v-for="(item, index) in this.cartData.items[2].other" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
-                            <td>{{ item.other_name }}</td>
-                            <td>{{ item.price }}</td>
-                            <td>
-                                <button class="btn btn-danger" @click="removeOtherInLocalCart(item._id)"> <i
-                                        class="fa fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Tổng tiền Khác: {{ formatCurrency(this.cartData.items[2].totalOther) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody v-if="!this.Auth">
-                        <tr v-for="(item, index) in this.localCart.items[2].other" :key="index">
-                            <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
-                            <td>{{ item.other_name }}</td>
-                            <td>{{ item.price }}</td>
-                            <td>
-                                <button class="btn btn-danger" @click="removeOtherInLocalCart(item._id)"> <i
-                                        class="fa fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Tổng tiền Khác: {{ formatCurrency(this.localCart.items[2].totalOther) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Khác</h2>
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <th width="20%">Hình ảnh</th>
+                                <th>Tên</th>
+                                <th>Giá</th>
+                                <th>Mô tả</th>
+                                <th>Thao tác</th>
+                            </thead>
+                            <tbody v-if="this.Auth">
+                                <tr v-for="(item, index) in this.cartData.items[2].other" :key="index">
+                                    <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
+                                    <td>{{ item.other_name }}</td>
+                                    <td>{{ formatCurrency(item.price) }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>
+                                        <button class="btn btn-danger" @click="removeOtherInLocalCart(item._id)"> <i
+                                                class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        Tổng tiền Khác: {{ formatCurrency(this.cartData.items[2].totalOther) }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="!this.Auth">
+                                <tr v-for="(item, index) in this.localCart.items[2].other" :key="index">
+                                    <td> <img :src="getImage(item)" alt="" class="w-100 h-100"></td>
+                                    <td>{{ item.other_name }}</td>
+                                    <td>{{ formatCurrency(item.price) }}</td>
+                                    <td>
+                                        <button class="btn btn-danger" @click="removeOtherInLocalCart(item._id)"> <i
+                                                class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        Tổng tiền Khác: {{ formatCurrency(this.localCart.items[2].totalOther) }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
         <br>
         <hr>
-    </div>
 
-    <div class="container">
-        <h2>Thông tin</h2>
-        <Form @submit="submitOrder" :validation-schema="orderFormSchema">
-            <div class="row">
-                <div class=" col-6">
-                    <Field name="cart" type="hidden" class="form-control" v-model="orderLocal.cart" />
+        <div class="container text-start">
+            <h2 class=" text-center">Thông tin</h2>
+            <Form @submit="submitOrder" :validation-schema="orderFormSchema">
+                <div class="row">
+                    <div class=" col-6">
+                        <Field name="cart" type="hidden" class="form-control" v-model="orderLocal.cart" />
 
-                    <div class="form-group">
-                        <label for="fullname"> Họ tên</label>
-                        <Field name="fullname" type="text" class="form-control" v-model="orderLocal.fullname" />
-                        <ErrorMessage name="fullname" class="error-feedback" />
-                    </div>
-                    <div class="form-group">
-                        <label for="phone"> Số điện thoại</label>
-                        <Field name="phone" type="text" class="form-control" v-model="orderLocal.phone" />
-                        <ErrorMessage name="phone" class="error-feedback" />
-                    </div>
-                    <div class="form-group">
-                        <label for="email"> Email</label>
-                        <Field name="email" type="text" class="form-control" v-model="orderLocal.email" />
-                        <ErrorMessage name="email" class="error-feedback" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="province">Tỉnh/Thành phố</label>
-                        <select name="province" class="form-control" v-model="areaLocal.province">
-                            <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
-                            <option v-for="province in provinces" :value="province">{{ province.name }}</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="district">Quận/Huyện</label>
-                        <select name="district" class="form-control" v-model="areaLocal.district">
-                            <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
-                            <option v-for="district in districts" :value="district">{{ district.name }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ward">Xã/Phường/Thị Trấn</label>
-                        <select name="ward" class="form-control" v-model="areaLocal.ward">
-                            <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
-                            <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="address_book" class="font-weight-bold">Địa chỉ </label>
-                        <textarea name="address_book" class="form-control" placeholder="Địa chỉ..."
-                            v-model="orderLocal.address_book"></textarea>
-                        <ErrorMessage name="address_book" class="error-feedback" />
-                    </div>
-                </div>
-                <div class=" col-6">
-                    <div class="form-group">
-                        <label for="tray_quantity">Số lượng bàn</label>
-                        <Field name="tray_quantity" type="number" class="form-control" v-model="orderLocal.tray_quantity" />
-                        <ErrorMessage name="tray_quantity" class="error-feedback" />
-                    </div>
-                    <div class="form-group">
-                        <label for="event_date"> Ngày diễn ra</label>
-                        <Field name="event_date" type="date" class="form-control" v-model="orderLocal.event_date" />
-                        <ErrorMessage name="event_date" class="error-feedback" />
-                    </div>
-                    <div class="form-group">
-                        <label for="event_time"> Giờ diễn ra</label>
-                        <Field name="event_time" type="time" class="form-control" v-model="orderLocal.event_time" />
-                        <ErrorMessage name="event_time" class="error-feedback" />
-                    </div>
-                    <div class="form-group">
-                        <label for="total_temp" class=""> </label>
-
-                        <div>Tổng tiền tạm tính: <i class="font-weight-bold">{{
-                            formatCurrency(((this.orderLocal.cart.items[0].totalMenu) *
-                                (this.orderLocal.tray_quantity)) +
-                                (this.orderLocal.cart.items[1].totalDrink + (this.orderLocal.cart.items[2].totalOther))) }}
-                            </i>
+                        <div class="form-group">
+                            <label for="fullname"><i class="fa-solid fa-user"></i> Họ tên</label>
+                            <Field name="fullname" type="text" class="form-control" v-model="orderLocal.fullname" />
+                            <ErrorMessage name="fullname" class="error-feedback" />
                         </div>
-                        <hr>
+                        <div class="form-group">
+                            <label for="phone"><i class="fa-solid fa-phone"></i> Số điện thoại</label>
+                            <Field name="phone" type="text" class="form-control" v-model="orderLocal.phone" />
+                            <ErrorMessage name="phone" class="error-feedback" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+                            <Field name="email" type="text" class="form-control" v-model="orderLocal.email" />
+                            <ErrorMessage name="email" class="error-feedback" />
+                        </div>
+                        <div class="form-group" hidden>
+                            <label for="tray_quantity"><i class="fa-solid fa-tablet"></i> Số lượng bàn</label>
+                            <Field name="tray_quantity" type="number" class="form-control"
+                                v-model="orderLocal.tray_quantity" />
+                            <ErrorMessage name="tray_quantity" class="error-feedback" />
+                        </div>
+                        <div class="form-group">
+                            <label for="event_date"><i class="fa-solid fa-calendar-check"></i> Ngày diễn ra</label>
+                            <Field name="event_date" type="date" class="form-control" v-model="orderLocal.event_date" />
+                            <ErrorMessage name="event_date" class="error-feedback" />
+                        </div>
+                        <div class="form-group">
+                            <label for="event_time"><i class="fa-solid fa-clock"></i> Giờ diễn ra</label>
+                            <Field name="event_time" type="time" class="form-control" v-model="orderLocal.event_time" />
+                            <ErrorMessage name="event_time" class="error-feedback" />
+                        </div>
+                        <div class="form-group" hidden>
+                            <label for="total_temp" class=""> </label>
+
+                            <div class="font-weight-bold"><i class="fa-solid fa-dollar-sign"></i> Tổng tiền tạm tính: <i
+                                    class="font-weight-bold">{{
+                                        formatCurrency(((this.orderLocal.cart.items[0].totalMenu) *
+                                            (this.orderLocal.tray_quantity)) +
+                                            (this.orderLocal.cart.items[1].totalDrink + (this.orderLocal.cart.items[2].totalOther)))
+                                    }}
+                                </i>
+                            </div>
+                            <hr>
+
+                        </div>
+
 
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="province" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i>
+                                Tỉnh/Thành phố</label>
+                            <select name="province" class="form-control" v-model="areaLocal.province">
+                                <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
+                                <option v-for="province in provinces" :value="province">{{ province.name }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="district" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i>
+                                Quận/Huyện</label>
+                            <select name="district" class="form-control" v-model="areaLocal.district">
+                                <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
+                                <option v-for="district in districts" :value="district">{{ district.name }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ward" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i>
+                                Xã/Phường/Thị Trấn</label>
+                            <select name="ward" class="form-control" v-model="areaLocal.ward">
+                                <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
+                                <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address_book" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i> Địa
+                                chỉ </label>
+                            <textarea name="address_book" class="form-control" placeholder="Địa chỉ..."
+                                v-model="orderLocal.address_book"></textarea>
+                            <ErrorMessage name="address_book" class="error-feedback" />
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="font-weight-bold"><i class="fa-solid fa-bookmark"></i> Ghi chú </label>
+                            <textarea name="note" class="form-control" placeholder="Ghi chú..."
+                                v-model="orderLocal.note"></textarea>
+                            <ErrorMessage name="note" class="error-feedback" />
+                        </div>
+
+
+                        <!-- <div class="form-group">
                         <label class="font-weight-bold"> Thanh toán </label>
                         <div class="row">
                             <div class="col-6 row">
@@ -272,15 +335,9 @@
                             </div>
                         </div>
                     </div> -->
-                </div>
-                <div class="form-group col-12">
-                    <label for="note" class="font-weight-bold"> Ghi chú </label>
-                    <textarea name="note" class="form-control" placeholder="Ghi chú..."
-                        v-model="orderLocal.note"></textarea>
-                    <ErrorMessage name="note" class="error-feedback" />
-                </div>
+                    </div>
 
-                <!-- <div class="form-group col-12">
+                    <!-- <div class="form-group col-12">
                     <label class="font-weight-bold"> Phương thức thanh toán </label>
                     <div>
                         <input type="radio" id="paymentVnPay" name="payment" value="vnpay" v-model="orderLocal.payment" />
@@ -292,13 +349,16 @@
                         <label for="paymentPayLater">Thanh toán trực tiếp</label>
                     </div>
                 </div> -->
-                <!-- {{ console.log(orderLocal.payment) }} -->
+                    <!-- {{ console.log(orderLocal.payment) }} -->
 
-            </div>
-            <div class="form-group col-12">
-                <button type="submit" class="btn btn-primary">Đặt tiệc</button>
-            </div>
-        </Form>
+                </div>
+                <div class="form-group text-center col-12">
+                    <button type="submit" class="btn btn-primary"> <i class="fa-regular fa-paper-plane"></i> Đặt
+                        tiệc</button>
+                </div>
+            </Form>
+        </div>
+
     </div>
 </template>
 
@@ -349,7 +409,7 @@ export default {
                 .required("Vui lòng nhập số điện thoại"),
             event_date: yup.date()
                 .typeError("Vui lòng chọn ngày diễn ra")
-                .test('is-greater-than-now', 'Vui lòng được trước 3 ngày', function (value) {
+                .test('is-greater-than-now', 'Vui lòng đặt trước 3 ngày', function (value) {
                     if (!value) return true;
                     const currentDate = moment();
                     const selectedDate = moment(value, 'MM/DD/YYYY');
@@ -360,13 +420,16 @@ export default {
             ,
             tray_quantity: yup.number()
                 .typeError("Vui lòng nhập số lượng bàn")
-                .min(10, "Chỉ phục vụ từ 10 bàn")
+                .min(5, "Chỉ phục vụ từ 5 bàn")
                 .required("Vui lòng nhập số lượng bàn"),
 
             event_time: yup.string()
                 .typeError("Vui lòng  chọn giờ diễn ra")
                 .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Giờ diễn ra không hợp lệ")
                 .required("Vui lòng chọn giờ diễn ra"),
+            // province: yup.string()
+            // .typeError("Vui lòng chọn tỉnh thành")
+            // .required("Vui lòng chọn tỉnh thành"),
             // address_book: yup.string()
             //     .typeError("Vui lòng cung cấp địa chỉ")
             //     .required("Vui lòng cung cấp địa chỉ"),
@@ -387,7 +450,7 @@ export default {
             orderLocal: {
                 event_date: "",
                 event_time: "",
-                tray_quantity: 10,
+                tray_quantity: 5,
                 cart: this.cartOrder,
                 note: "",
                 fullname: "",
@@ -566,13 +629,14 @@ export default {
 
         async updateDrink(service_id, drinkId, quantity) {
             await this.addDrinkToCartReal({ service_id, drinkId, quantity });
-
+            this.editDrinkSuccessToast();
         },
         async deleteDrinkReal(service_id, drinkId) {
             try {
                 if (confirm("Xác nhận xóa?")) {
                     await MenuService.deleteDrink(service_id, drinkId);
                     this.getItemsInDrinkCart();
+                    this.removeSuccessToast();
                 }
 
             } catch (error) {
@@ -583,9 +647,11 @@ export default {
         },
         async removeFoodInCartReal(service_id, foodId) {
             await this.removeFoodInCart({ service_id, foodId });
+            this.removeSuccessToast();
         },
         async removeOtherInCartReal(service_id, otherId) {
             await this.removeOtherInCart({ service_id, otherId });
+            this.removeSuccessToast();
         },
         calculateTotal(localCart) {
             let totalMenu = 0;
@@ -616,6 +682,7 @@ export default {
                 this.localCart.items[0].menu = updatedMenu;
                 this.localCart.items[0].totalMenu = this.calculateTotal(this.localCart);
                 localStorage.setItem('localCart', JSON.stringify(this.localCart));
+                this.removeSuccessToast();
             }
         },
         removeOtherInLocalCart(otherId) {
@@ -624,6 +691,7 @@ export default {
                 this.localCart.items[2].other = updatedMenu;
                 this.localCart.items[2].totalOther = this.calculateOtherTotal(this.localCart);
                 localStorage.setItem('localCart', JSON.stringify(this.localCart));
+                this.removeSuccessToast();
             }
         },
         removeDrinkInLocalCart(drinkId) {
@@ -632,12 +700,21 @@ export default {
                 this.localCart.items[1].drink = updatedMenu;
                 this.localCart.items[1].totalDrink = this.calculateDrinkTotal(this.localCart);
                 localStorage.setItem('localCart', JSON.stringify(this.localCart));
+                this.removeSuccessToast();
             }
         },
 
         async updateDrinkLocalCart(service_id, drinkObject, quantity) {
 
             await this.addDrinkToLocalCart({ service_id, drinkObject, quantity });
+            this.editDrinkSuccessToast();
+        },
+
+        editDrinkSuccessToast() {
+            toast.success('Cập nhật thành công', { autoClose: 1000 });
+        },
+        removeSuccessToast() {
+            toast.success('Xóa thành công', { autoClose: 1000 });
         },
 
     },

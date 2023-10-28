@@ -1,53 +1,60 @@
 <template>
     <!-- Form sử dụng thư viện VeeValidate để hiển thị validation error message và emit event khi submit -->
     <Form @submit="submitRegister" :validation-schema="RegisterFormSchema">
-        <div class="form-group">
-            <label for="service_name" class="font-weight-bold">Tên dịch vụ</label>
-            <Field name="service_name" type="text" class="form-control" v-model="RegisterLocal.service_name" />
-            <!-- Hiển thị validation error message nếu có -->
-            <ErrorMessage name="service_name" class="error-feedback" />
-        </div>
-        <!-- Tạo ra input field cho tên -->
-        <div class="form-group">
-            <label for="email" class="font-weight-bold">Email</label>
-            <Field name="email" type="text" class="form-control" v-model="RegisterLocal.email" />
-            <!-- Hiển thị validation error message nếu có -->
-            <ErrorMessage name="email" class="error-feedback" />
-        </div>
+        <div class="form-columns">
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="service_name" class="font-weight-bold">Tên dịch vụ</label>
+                    <Field name="service_name" type="text" class="form-control" v-model="RegisterLocal.service_name" />
+                    <!-- Hiển thị validation error message nếu có -->
+                    <ErrorMessage name="service_name" class="error-feedback" />
+                </div>
+                <!-- Tạo ra input field cho tên -->
+                <div class="form-group">
+                    <label for="email" class="font-weight-bold">Email</label>
+                    <Field name="email" type="text" class="form-control" v-model="RegisterLocal.email" />
+                    <!-- Hiển thị validation error message nếu có -->
+                    <p class="text-danger ml-2">{{ this.message }}</p>
+                    <ErrorMessage name="email" class="error-feedback" />
+                </div>
 
-        <div class="form-group">
-            <label for="phone" class="font-weight-bold">Số điện thoại</label>
-            <Field name="phone" type="text" class="form-control" v-model="RegisterLocal.phone" />
-            <!-- Hiển thị validation error message nếu có -->
-            <ErrorMessage name="phone" class="error-feedback" />
-        </div>
-        <div class="form-group">
-            <label for="province">Tỉnh/Thành phố</label>
-            <select name="province" class="form-control" v-model="areaLocal.province">
-                <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
-                <option v-for="province in provinces" :value="province">{{ province.name }}</option>
-            </select>
-        </div>
+                <div class="form-group">
+                    <label for="phone" class="font-weight-bold">Số điện thoại</label>
+                    <Field name="phone" type="text" class="form-control" v-model="RegisterLocal.phone" />
+                    <!-- Hiển thị validation error message nếu có -->
+                    <ErrorMessage name="phone" class="error-feedback" />
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label class="font-weight-bold" for="province">Tỉnh/Thành phố</label>
+                    <select name="province" class="form-control" v-model="areaLocal.province">
+                        <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
+                        <option v-for="province in provinces" :value="province">{{ province.name }}</option>
+                    </select>
+                </div>
 
-        <div class="form-group">
-            <label for="district">Quận/Huyện</label>
-            <select name="district" class="form-control" v-model="areaLocal.district">
-                <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
-                <option v-for="district in districts" :value="district">{{ district.name }}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="ward">Xã/Phường/Thị Trấn</label>
-            <select name="ward" class="form-control" v-model="areaLocal.ward">
-                <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
-                <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="address" class="font-weight-bold">Địa chỉ</label>
-            <Field name="address" type="text" class="form-control" v-model="RegisterLocal.address_detail" />
-            <!-- Hiển thị validation error message nếu có -->
-            <ErrorMessage name="address" class="error-feedback" />
+                <div class="form-group">
+                    <label class="font-weight-bold" for="district">Quận/Huyện</label>
+                    <select name="district" class="form-control" v-model="areaLocal.district">
+                        <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
+                        <option v-for="district in districts" :value="district">{{ district.name }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" for="ward">Xã/Phường/Thị Trấn</label>
+                    <select name="ward" class="form-control" v-model="areaLocal.ward">
+                        <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
+                        <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="font-weight-bold">Địa chỉ</label>
+                    <Field name="address" type="text" class="form-control" v-model="RegisterLocal.address_detail" />
+                    <!-- Hiển thị validation error message nếu có -->
+                    <ErrorMessage name="address" class="error-feedback" />
+                </div>
+            </div>
         </div>
         <!-- Tạo ra input field cho password -->
 
@@ -57,6 +64,7 @@
         <div class="form-group">
             <button class="btn btn-primary">Thêm</button>
         </div>
+
     </Form>
 </template>
   
@@ -69,6 +77,9 @@ export default {
         Form,
         Field,
         ErrorMessage,
+    },
+    props: {
+        message: ''
     },
     emits: ["submit:register"],
     data() {
@@ -160,7 +171,7 @@ export default {
 
                 const rs = await getProvincesOpenAPI.getProvince(this.areaLocal.province.code);
                 this.districts = rs.districts;
-                this.orderLocal.provinceName = await this.areaLocal.province.name;
+                this.RegisterLocal.provinceName = await this.areaLocal.province.name;
 
 
             } catch (error) {
@@ -173,7 +184,7 @@ export default {
                 // this.wards = await ProvinceService.getWards(this.areaLocal.district.code, this.wardName);
                 const rs = await getProvincesOpenAPI.getDistrict(this.areaLocal.district.code);
                 this.wards = rs.wards;
-                this.orderLocal.districtName = await this.areaLocal.district.name;
+                this.RegisterLocal.districtName = await this.areaLocal.district.name;
 
 
             } catch (error) {
@@ -182,7 +193,7 @@ export default {
         },
         async getWardName() {
             try {
-                this.orderLocal.wardName = await this.areaLocal.ward.name;
+                this.RegisterLocal.wardName = await this.areaLocal.ward.name;
 
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -197,5 +208,15 @@ export default {
   
 <style scoped>
 @import "@/assets/form.css";
+
+.form-columns {
+    display: flex;
+}
+
+.form-column {
+    flex: 1;
+    margin-right: 20px;
+    /* Khoảng cách giữa 2 cột */
+}
 </style>
   

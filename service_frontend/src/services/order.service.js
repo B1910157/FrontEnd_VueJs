@@ -40,6 +40,7 @@ class OrderService {
   async getDrinkNotInOrder(orderId) {
     return (await this.api.get(`/order/findDrinkNotInOrder/${orderId}`)).data;
   }
+
   async addOrUpdateDrink(orderId, data) {
     return (await this.api.put(`/${orderId}/addOrUpdateDrink`, data)).data;
   }
@@ -58,6 +59,18 @@ class OrderService {
   async removeOtherInOrder(orderId, otherId) {
     return (await this.api.delete(`/removeOtherInOrder/${orderId}/${otherId}`))
       .data;
+  }
+  async updateInfoParty(orderId, data) {
+    return (await this.api.post(`/updateInfoParty/${orderId}`, data)).data;
+  }
+  async addSurcharges(data) {
+    return (await this.api.post(`/surcharges`, data)).data;
+  }
+  async reSendMail(orderId) {
+    return (await this.api.get(`/reSendMail/${orderId}`)).data;
+  }
+  async findOrdersByDate(data) {
+    return (await this.api.post(`/findOrdersByDate`, data)).data;
   }
 }
 

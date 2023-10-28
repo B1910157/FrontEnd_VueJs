@@ -1,138 +1,176 @@
 <template>
     <div v-if="this.order.cart[0].menu.length > 0">
-        <div>
-            <h5 class="text-center">Thực đơn</h5>
-            <table class="table table-bordered ">
-                <thead>
-                    <th>Tên món</th>
-                    <th>Hình ảnh</th>
-                    <th>Giá</th>
-                    <th v-if="this.isEditing == true">Thao tác</th>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in this.order.cart[0].menu" :key="index">
-                        <td>{{ item.food_name }}</td>
-                        <td><v-img :src="getImage(item)" cover height="100px"></v-img></td>
-                        <td>{{ item.price }}</td>
-                        <td v-if="this.isEditing == true">
-                            <button class="btn btn-danger" @click="removeFoodInOrder(item._id)"> <i
-                                    class="fa fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Tổng tiền Menu: {{ formatCurrency(this.order.cart[0].totalMenu) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div v-if="this.isEditing == true" class="row text-right">
-                <button @click="addFoodToMenu()" class="mb-4  btn btn-primary offset-md-11">
-                    <i class="fas fa-add"></i> </button>
+        <div class="row full-background">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 col-12 my-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="text-center">Thực đơn</h5>
+                            <table class="table text-center">
+                                <thead>
+                                    <th>Tên món</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
+                                    <th v-if="this.isEditing == true">Thao tác</th>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in this.order.cart[0].menu" :key="index">
+                                        <td>{{ item.food_name }}</td>
+                                        <td><v-img :src="getImage(item)" cover style="width: 90px; height: 70px;"></v-img>
+                                        </td>
+                                        <td>{{ item.price }}</td>
+                                        <td v-if="this.isEditing == true">
+                                            <button class="btn btn-danger" @click="removeFoodInOrder(item._id)"> <i
+                                                    class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Tổng tiền Menu: {{ formatCurrency(this.order.cart[0].totalMenu) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-if="this.isEditing == true" class="row text-right">
+                                <button @click="addFoodToMenu()" class="mb-4  btn btn-primary offset-md-11">
+                                    <i class="fas fa-add"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-center">Đồ uống</h5>
+                        <div v-if="this.order.cart[1].drink.length > 0">
+
+                            <div>
+                                <table class="table table-bordered text-center">
+                                    <thead>
+                                        <th>Tên</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                        <th v-if="this.isEditing == true">Thao tác</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in   this.order.cart[1].drink  " :key="index">
+                                            <td>{{ item.drink_name }}</td>
+                                            <td v-if="this.isEditing == true">
+                                                <input type="number" name="quantity" v-model="item.quantity" min="1"
+                                                    class="input-small">
+                                                /{{ item.unit }}
+                                            </td>
+                                            <td v-if="this.isEditing == false">
+
+                                                {{ item.quantity + " " + item.unit }}
+                                            </td>
+                                            <td>{{ item.price }}</td>
+
+                                            <td v-if="this.isEditing == true">
+                                                <button class="btn btn-warning"
+                                                    @click="updateDrink(item._id, item.quantity)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-danger mt-2" @click="removeDrinkInOrder(item._id)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Tổng tiền Đồ uống: {{ formatCurrency(this.order.cart[1].totalDrink) }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div v-else class="text-center">
+                            <br>
+                            <p> <i>Không có</i></p>
+
+                        </div>
+
+                        <div v-if="this.isEditing == true" class="row text-right">
+                            <button @click="addDinkToMenu()" class="mb-4  btn btn-primary offset-md-11">
+                                <i class="fas fa-add"></i> </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="text-center">Khác</h5>
+                        <div v-if="this.order.cart[2].other.length > 0">
+
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <th>Tên</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
+                                    <th v-if="this.isEditing == true">Thao tác</th>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(  item, index  ) in   this.order.cart[2].other  " :key="index">
+
+                                        <td>{{ item.other_name }}</td>
+                                        <td><v-img :src="getImage(item)" cover style="height: 70px; width: 90px;"></v-img>
+                                        </td>
+                                        <td>{{ item.price }}</td>
+                                        <td v-if="this.isEditing == true">
+                                            <button class="btn btn-danger" @click="removeOtherInOrder(item._id)">
+                                                <i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Tổng tiền Khác: {{ formatCurrency(this.order.cart[2].totalOther) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <div v-else class="text-center">
+                            <br>
+                            <p> <i>Không có</i></p>
+
+                        </div>
+                        <div v-if="this.isEditing == true" class="row text-right">
+                            <button @click="addOtherToMenu()" class="mb-4 btn btn-primary  offset-md-11">
+                                <i class="fas fa-add"></i> </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-    </div>
-    <hr>
-    <h5 class="text-center">Đồ uống</h5>
-    <div v-if="this.order.cart[1].drink.length > 0">
+            <!-- <div class="col-6">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScDjAIzji-MCXnfLhrkcfRdb9XaRD7CCImR8qwP3wQ6SUiURo3YcxYy5rV7xSTyPs3VX4&usqp=CAU"
+                    class="rounded float-start" cover alt="...">
+            </div> -->
 
-        <div>
-            <table class="table table-bordered text-center">
-                <thead>
-                    <th>Tên</th>
-                    <th>Số lượng</th>
-                    <th>Giá</th>
-                    <th v-if="this.isEditing == true">Thao tác</th>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in   this.order.cart[1].drink  " :key="index">
-                        <td>{{ item.drink_name }}</td>
-                        <td v-if="this.isEditing == true">
-                            <input type="number" name="quantity" v-model="item.quantity" min="1" class="input-small">
-                            /{{ item.unit }}
-                        </td>
-                        <td v-if="this.isEditing == false">
-
-                            {{ item.quantity + " " + item.unit }}
-                        </td>
-                        <td>{{ item.price }}</td>
-
-                        <td v-if="this.isEditing == true">
-                            <button class="btn btn-warning" @click="updateDrink(item._id, item.quantity)">
-                                <i class="fa fa-pencil"></i>
-                            </button>
-                            <button class="btn btn-danger ml-2" @click="removeDrinkInOrder(item._id)"> <i
-                                    class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Tổng tiền Đồ uống: {{ formatCurrency(this.order.cart[1].totalDrink) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
 
     </div>
-    <div v-else class="text-center">
-        <br>
-        <p> <i>Không có</i></p>
-
-    </div>
-    <div v-if="this.isEditing == true" class="row text-right">
-        <button @click="addDinkToMenu()" class="mb-4  btn btn-primary offset-md-11">
-            <i class="fas fa-add"></i> </button>
-    </div>
     <hr>
-    <h5 class="text-center">Khác</h5>
-    <div v-if="this.order.cart[2].other.length > 0">
 
-        <table class="table table-bordered text-center">
-            <thead>
-                <th>Tên</th>
-                <th>Hình ảnh</th>
-                <th>Giá</th>
-                <th v-if="this.isEditing == true">Thao tác</th>
-            </thead>
-            <tbody>
-                <tr v-for="(  item, index  ) in   this.order.cart[2].other  " :key="index">
 
-                    <td>{{ item.other_name }}</td>
-                    <td><v-img :src="getImage(item)" cover height="100px"></v-img></td>
-                    <td>{{ item.price }}</td>
-                    <td v-if="this.isEditing == true">
-                        <button class="btn btn-danger" @click="removeOtherInOrder(item._id)">
-                            <i class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Tổng tiền Khác: {{ formatCurrency(this.order.cart[2].totalOther) }}
-                    </td>
-                </tr>
-            </tbody>
-
-        </table>
-
-    </div>
-    <div v-else class="text-center">
-        <br>
-        <p> <i>Không có</i></p>
-
-    </div>
-    <div v-if="this.isEditing == true" class="row text-right">
-        <button @click="addOtherToMenu()" class="mb-4 btn btn-primary  offset-md-11">
-            <i class="fas fa-add"></i> </button>
-    </div>
     <div class="row">
         <div class="offset-md-11">
-            <span v-if="this.isEditing == false && order.status == 0" @click="editOrder()" class="mt-2 btn btn-warning">
+            <span v-if="this.isEditing == false && isCurrentDateGreaterThanEventDate()" @click="editOrder()"
+                class="mt-2 btn btn-warning">
                 <i class="fas fa-edit"></i> </span>
             <div v-else-if="this.isEditing == true">
                 <span @click="saveOrder()" class="mt-2 btn btn-danger">
                     <i class="fas fa-close"></i> </span>
+            </div>
+
+        </div>
+        <div class="col-12">
+            <div class="text-danger border" v-if="!isCurrentDateGreaterThanEventDate()">
+                Hết thời gian chỉnh sửa (Chỉnh sửa trước ngày diễn ra 2 ngày )
             </div>
         </div>
     </div>
@@ -141,7 +179,7 @@
 <script>
 
 import { VImg } from "vuetify/lib/components/index.mjs";
-
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         VImg
@@ -160,11 +198,33 @@ export default {
     emits: ["openListFood", "openListOther", "openListDrink", "removeFoodInOrder", "updateDrink"],
     methods: {
 
+        isCurrentDateGreaterThanEventDate() {
+            // Lấy ngày hiện tại
+            // console.log("HELOO")
+            const eventDate = this.order.event_date;
+
+            const currentDate = new Date();
+
+            // Chuyển định dạng ngày từ YYYY-MM-DD sang MM/DD/YYYY
+            const eventDateParts = eventDate.split("-");
+            const formattedEventDate = `${eventDateParts[1]}/${eventDateParts[2]}/${eventDateParts[0]}`;
+
+            // Tạo một đối tượng ngày từ eventDate
+            const eventDateObj = new Date(formattedEventDate);
+
+            // Tính toán ngày trong tương lai (ngày eventDate + 2 ngày)
+            const futureDate = new Date(eventDateObj);
+            futureDate.setDate(futureDate.getDate() - 2);
+            // console.log("1234 check time", currentDate + "aloooo " + futureDate)
+            // So sánh ngày hiện tại với ngày trong tương lai
+            return currentDate < futureDate;
+        },
         getImage(food) {
             return `http://localhost:3000/${food.image}`;
         },
         updateDrink(drinkId, quantity) {
             this.$emit("updateDrink", drinkId, quantity);
+
         },
         addFoodToMenu() {
             this.$emit("openListFood");
@@ -172,6 +232,7 @@ export default {
         },
         addDinkToMenu() {
             this.$emit("openListDrink");
+
         },
         addOtherToMenu() {
             this.$emit("openListOther");
@@ -232,5 +293,17 @@ input {
     margin-right: 10px;
     padding-left: 10px;
     text-align: center;
+}
+
+.full-background {
+    background-image: url('https://m.media-amazon.com/images/I/91AOPv2q-NL.jpg');
+    /* background-size: cover; */
+    /* Làm hình ảnh nền lấp đầy toàn bộ kích thước của phần tử */
+    background-position: center;
+    /* Căn giữa hình ảnh nền */
+    background-repeat: repeat;
+    /* Ngăn lặp lại hình ảnh nền */
+    /* height: 100vh; */
+    /* Điều chỉnh chiều cao của phần tử để đảm bảo nó lấp đầy cửa sổ trình duyệt */
 }
 </style>

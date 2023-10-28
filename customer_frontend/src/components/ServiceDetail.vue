@@ -1,7 +1,7 @@
 <template>
-    <div class="col-12 row text-left pt-3 pl-12 bg-light">
+    <div class="col-12 row text-left p-2 container">
         <div class="col-6">
-            <v-img :src="getImage(service)" cover height="215px"></v-img>
+            <v-img :src="getImage(service)" cover class="rounded" height="269px"></v-img>
         </div>
         <div class="col-6">
             <v-card variant="tonal">
@@ -38,6 +38,7 @@
 
 
                     </div>
+
                     <div v-else-if="!this.Auth">
                         <div v-if="(this.localCart.service_id == null)" class="bg-light">
                             <!-- <button @click="chooseService(this.service._id)">Chọn (Chưa chọn dịch vụ nào)</button> -->
@@ -53,7 +54,27 @@
                                 dịch vụ khác</button>
                         </div>
                     </div>
+
+
+
+                    <!-- SAO ĐÁNH GIÁ -->
+
+
                 </v-card-actions>
+                <div class="ml-3">
+
+                    <div class="row">
+                        <p class="col-md-4 font-weight-bold">Đánh giá</p>
+                        <div class="col-md-8 text-left rating">
+
+                            <span :class="{ 'selected-star': index <= 4 }" v-for="index in [5, 4, 3, 2, 1]"
+                                :key="index">&#9733;</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
             </v-card>
         </div>
     </div>
@@ -152,7 +173,7 @@
                         <v-card-title>
                             {{ other.other_name }}
                         </v-card-title>
-                        <v-card-subtitle style="width: 260px; height: 100px;">
+                        <v-card-subtitle style="width: 230px; height: 100px;">
                             {{ formatCurrency(other.price) }}
                             <p class="description"> <b>Mô tả:</b> {{ limitDescription(other.description, 80) }}</p>
                         </v-card-subtitle>
@@ -530,5 +551,28 @@ export default {
 .custom-select:hover {
     border: 2px solid #007bff;
     /* Màu border khi hover */
+}
+
+
+.rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+.rating>span {
+    display: inline-block;
+    position: relative;
+    width: 1.1em;
+}
+
+.rating>span:hover:before,
+.rating>span:hover~span:before {
+    content: "\2605";
+    position: absolute;
+}
+
+.selected-star {
+    color: gold;
+    /* hoặc màu vàng khác tùy ý bạn chọn */
 }
 </style>

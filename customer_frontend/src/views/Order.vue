@@ -1,5 +1,5 @@
 <template>
-    <div class=" row shadow ">
+    <div class="row shadow bg">
         <div class="mt-3 col-md-12">
             <!-- hihi {{ this.dataOrder }} -->
             <div>
@@ -52,6 +52,7 @@ export default {
         showSuccessToast() {
             toast.success('Đặt tiệc thành công', { autoClose: 3000 });
         },
+
         // showSuccessToast() {
         //     const VueToast = useToast();
         //     VueToast.open({
@@ -147,12 +148,19 @@ export default {
                     localStorage.setItem("localCart", JSON.stringify(newLocalCart));
                     this.getLocalCart();
                     this.showSuccessToast();
+                    setTimeout(() => {
+                        this.$router.push({ name: 'home' });// Thay đổi URL tới trang chủ của bạn
+                    }, 1000);
                     // this.$router.push({ name: 'home' });
                 } else if (this.Auth) {
                     this.getCart();
                     this.getItemsInDrinkCart();
                     this.getOtherInCart();
                     this.showSuccessToast();
+                    setTimeout(() => {
+                        this.$router.push({ name: 'home' });// Thay đổi URL tới trang chủ của bạn
+                    }, 1000);
+                    // 
                     // this.$router.push({ name: 'history' });
                 }
                 // this.$router.push({ name: 'payment' });
@@ -212,8 +220,15 @@ export default {
 };
 </script>
 <style scoped>
-.page {
+/* .page {
     text-align: left;
     max-width: 750px;
+} */
+
+.bg {
+    background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVgbpyqddpsPNP0k31Fv8Sqwi46gV-b-S7Eg&usqp=CAU);
+    background-repeat: repeat;
+    background-size: 100% 100%;
+
 }
 </style>
