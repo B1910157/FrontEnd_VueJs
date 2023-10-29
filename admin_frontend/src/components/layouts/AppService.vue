@@ -24,12 +24,17 @@
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/services/) }">
                 <router-link to="/services" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Quản Lý Dịch Vụ
+                    <i class="fa-solid fa-box me-3 "></i> Nhà hàng
                 </router-link>
             </li>
-            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/menu/) }">
+            <!-- <li class="nav-item " :class="{ 'active': $route.path.match(/^\/menu/) }">
                 <router-link to="/menu" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Quản Lý Khách Hàng
+                    <i class="fa-solid fa-box me-3 "></i> Khách Hàng
+                </router-link>
+            </li> -->
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/comments/) }">
+                <router-link to="/comments" class="nav-link">
+                    <i class="fa-solid fa-box me-3 "></i> Bình luận
                 </router-link>
             </li>
 

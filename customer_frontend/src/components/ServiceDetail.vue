@@ -67,7 +67,7 @@
                         <p class="col-md-4 font-weight-bold">Đánh giá</p>
                         <div class="col-md-8 text-left rating">
 
-                            <span :class="{ 'selected-star': index <= 4 }" v-for="index in [5, 4, 3, 2, 1]"
+                            <span :class="{ 'selected-star': index <= this.star }" v-for="index in [5, 4, 3, 2, 1]"
                                 :key="index">&#9733;</span>
                         </div>
                     </div>
@@ -259,6 +259,7 @@ import InputSearch from './InputSearch.vue';
 import { useToast } from 'vue-toast-notification';
 import foodCategory from "../services/food_category.service";
 import { toast } from 'vue3-toastify';
+import { number } from 'yup';
 export default {
     components: {
         AddDrinkToCart,
@@ -290,6 +291,7 @@ export default {
         cart: {
             type: []
         },
+        star: number,
 
         chooseService: Function,
         unChooseService: Function,

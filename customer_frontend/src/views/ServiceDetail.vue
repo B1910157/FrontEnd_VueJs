@@ -2,15 +2,17 @@
   <ServiceDetail :service="filteredService" :menuOfService="filteredMenuOfService" :foodOfService="this.foodOfService"
     :cart="this.cart" :chooseService="chooseService" :unChooseService="unChooseService"
     :chooseWithOtherService="chooseWithOtherService" :drinkOfService="this.drinkOfService"
-    :otherOfService="this.otherOfService" />
+    :otherOfService="this.otherOfService" :star="this.avgStar" />
 
-  <div class="border container">
+
+  <div class="container">
+    <hr>
     <div class="text-center">
-      <!-- <h5 class="font-weight-bold">Đánh giá</h5> -->
+      <h5 class="font-weight-bold">Đánh giá</h5>
       <div class="ratings">
         <!-- Hình 5 sao - sử dụng Vue để xử lý sự kiện đánh giá -->
         <div class="rating">
-          <button @click="submitEvaluate()" class="badge badge-primary ml-3">
+          <button @click="addEvaluate()" class="badge badge-primary ml-3">
             Đánh giá
           </button>
           <span :class="{ 'selected-star': index <= userRating }" v-for="index in [5, 4, 3, 2, 1]" :key="index"
@@ -26,18 +28,20 @@
 
       <form @submit.prevent="addComment">
         <input type="text" v-model="newComment" placeholder="Thêm bình luận...">
-        <button type="submit">Gửi</button>
+        <button class="badge badge-primary text-white" type="submit">Bình luận</button>
       </form>
       <hr>
       <div class="comment-section" id="comments">
         <!-- Hiển thị các bình luận từ dữ liệu -->
         <div class="comment" v-for="(comment, index) in this.comments" :key="index">
-          <strong>{{ comment.user_id }}: </strong> {{ comment.comment }}
+          <strong>{{ comment.fullname }}: </strong> {{ comment.comment }}
           <p>{{ formatDate(comment.createAt) }}</p>
 
           <hr>
+
         </div>
       </div>
+      <!-- {{ this.evaluates }} -->
     </div>
   </div>
 </template>
@@ -46,6 +50,7 @@
 import FoodCard from "@/components/FoodCard.vue";
 import ServiceDetail from "@/components/ServiceDetail.vue";
 import infoService from "../services/info.service";
+
 import MenuService from "../services/menu.service";
 import CommentAndEvaluate from "../services/commentAndEvaluate.service.js";
 import Home from "@/services/home.service";
@@ -53,6 +58,7 @@ import { object } from "yup";
 import { mapActions, mapState } from 'vuex';
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
+import { toast } from 'vue3-toastify';
 
 export default {
   components: {
@@ -76,14 +82,17 @@ export default {
       drinkOfService: [],
       otherOfService: [],
       cart: [],
-      comments: [
-        { user: 'Nguyễn Văn A', comment: 'Hello' },
-        { user: 'Nguyễn Thị B', comment: 'Cửa hàng rất tuyệt vời!' },
-        // Thêm dữ liệu bình luận khác tại đây
-      ],
+      // comments: [
+      //   { user: 'Nguyễn Văn A', comment: 'Hello' },
+      //   { user: 'Nguyễn Thị B', comment: 'Cửa hàng rất tuyệt vời!' },
+
+      // ],
       userRating: 0,
       newComment: "",
       comments: [],
+      evaluates: [],
+      avgStar: 0
+      // checkEvaluate: false,
     };
   },
   watch: {
@@ -120,12 +129,10 @@ export default {
   },
 
   methods: {
-    submitEvaluate() {
-      if (this.userRating != 0) {
-        console.log("SỐ SAO", this.userRating)
-      }
-
+    evaluateSuccessToast() {
+      toast.success('Đã đánh giá', { autoClose: 1000 });
     },
+
     formatDate(dateString) {
       const date = new Date(dateString);
       const day = date.getDate();
@@ -137,9 +144,25 @@ export default {
       const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       return formattedDate;
     },
+    getAvgStarOfService() {
+      if (this.evaluates && this.evaluates.length > 0) {
+        let totalStar = 0;
+        for (const e of this.evaluates) {
+          totalStar = e.evaluate + totalStar;
+        }
+        if (totalStar != 0) {
+          this.avgStar = Math.ceil(totalStar / (this.evaluates.length));
+        } else {
+          this.avgStar = 0;
+        }
+
+
+      }
+
+    },
     async addComment() {
       if (this.newComment && this.Auth) {
-        console.log("HELLO nè", this.newComment)
+
         const data = {
           user_id: this.info._id,
           service_id: this.service_id,
@@ -147,19 +170,65 @@ export default {
 
         };
         const rs = await CommentAndEvaluate.createComment(data);
+        this.newComment = "";
         this.getService(this.service_id);
       } else if (!this.Auth) {
         alert("Vui lòng đăng nhập!!");
       }
     },
+
     async getCommentOfService() {
       this.comments = await CommentAndEvaluate.getAllCommentOfService(this.service_id);
       // console.log("COMT", this.comments)
     },
+
+
+
+    //EVALUATE
+    async addEvaluate() {
+
+      if (this.userRating && this.Auth) {
+
+        const data = {
+          user_id: this.info._id,
+          service_id: this.service_id,
+          evaluate: this.userRating
+
+        };
+        const rs = await CommentAndEvaluate.createEvaluate(data);
+        console.log("HIhi")
+        this.evaluateSuccessToast();
+        this.getService(this.service_id);
+      } else if (!this.Auth) {
+        alert("Vui lòng đăng nhập!!");
+      }
+    },
+
+    async getEvaluateOfService() {
+      this.evaluates = await CommentAndEvaluate.getAllEvaluateOfService(this.service_id);
+      this.getEvaluateOfUser();
+      this.getAvgStarOfService();
+      // console.log("COMT", this.comments)
+    },
     handleUserRating(rating) {
-      this.userRating = rating; // Lưu điểm đánh giá từ người dùng
-      console.log("saoooo: ", this.userRating);
-      // Có thể thực hiện các hành động khác liên quan đến việc lưu trữ hoặc gửi điểm đánh giá
+
+      this.userRating = rating;
+      // console.log("saoooo: ", this.userRating);
+
+
+
+    },
+    getEvaluateOfUser() {
+      // let check = false;
+      for (const user of this.evaluates) {
+        if (user.user_id == this.info._id) {
+          // this.checkEvaluate = true;
+          this.userRating = user.evaluate;
+        } else {
+          this.userRating = "";
+
+        }
+      }
     },
     ...mapActions(['getCart', 'getOtherInCart', 'getItemsInDrinkCart']),
     async retrieveInfo() {
@@ -178,18 +247,18 @@ export default {
     async chooseService(service_id) {
       try {
         if (!this.Auth) {
-          console.log("voo", this.localCart)
+
           this.localCart.service_id = service_id;
 
           localStorage.setItem('localCart', JSON.stringify(this.localCart));
-          console.log(localStorage.getItem("localCart"));
+
           this.getService(service_id);
 
         } else {
           const rs = await Home.chooseService(service_id);
 
           if (rs) {
-            console.log("đã chọn dịch vụ");
+
             this.getCart();
             this.getOtherInCart();
             this.getItemsInDrinkCart();
@@ -242,10 +311,12 @@ export default {
 
 
     },
+
     async getService(service_id) {
       try {
         this.service = await Home.getService(service_id);
-
+        this.getCommentOfService();
+        this.getEvaluateOfService();
       } catch (error) {
         console.log(error);
         this.$router.push({
@@ -314,7 +385,7 @@ export default {
   },
   created() {
     this.getService(this.service_id);
-    this.getCommentOfService();
+
     this.getMenuOfService(this.service_id);
     this.getFoodOfService(this.service_id);
     this.getDrinkOfService(this.service_id);

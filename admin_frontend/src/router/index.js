@@ -26,6 +26,11 @@ const routes = [
     name: "info",
     component: () => import("@/views/Info.vue"),
   },
+  {
+    path: "/comments/",
+    name: "comments",
+    component: () => import("@/views/Comments/Comments.vue"),
+  },
 
   {
     path: "/login/",

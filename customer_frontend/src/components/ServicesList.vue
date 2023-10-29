@@ -1,6 +1,7 @@
 <script>
 import InputSearch from './InputSearch.vue';
 import { VImg } from "vuetify/lib/components/index.mjs";
+import CommentAndEvaluate from "../services/commentAndEvaluate.service.js";
 
 export default {
   components: {
@@ -11,7 +12,9 @@ export default {
   data() {
     return {
 
-      searchText: ""
+      searchText: "",
+      avgStar: 0,
+      evaluates: []
 
     };
   },
@@ -49,8 +52,41 @@ export default {
     getImage(item) {
       return `http://localhost:3000/${item.image}`;
     },
+    getAvgStarOfService() {
+      if (this.evaluates && this.evaluates.length > 0) {
+        let totalStar = 0;
+        for (const e of this.evaluates) {
+          totalStar = e.evaluate + totalStar;
+        }
+        if (totalStar != 0) {
+          this.avgStar = Math.ceil(totalStar / (this.evaluates.length));
+        } else {
+          this.avgStar = 0;
+        }
+
+      }
+
+    },
+    async getEvaluateOfService() {
+      this.evaluates = await CommentAndEvaluate.getAllEvaluate();
+
+      this.filteredService.forEach(async (food) => {
+        const evaluatesForThisService = this.evaluates.filter(evaluate => evaluate.service_id === food._id);
+
+        if (evaluatesForThisService.length > 0) {
+          let totalStar = evaluatesForThisService.reduce((acc, evaluate) => acc + evaluate.evaluate, 0);
+          food.avgStar = Math.ceil(totalStar / evaluatesForThisService.length);
+        } else {
+          food.avgStar = 0;
+        }
+      });
+
+    },
 
   },
+  created() {
+    this.getEvaluateOfService();
+  }
 };
 </script>
 <template>
@@ -68,8 +104,6 @@ export default {
     </div>
   </div>
   <div class="container">
-
-
     <div v-for="(food, index) in filteredService" :key="food._id" :class="{ active: index === activeIndex }"
       @click="updateActiveIndex(index)">
 
@@ -106,7 +140,7 @@ export default {
             <p class="col-md-4 font-weight-bold">Đánh giá</p>
             <div class="col-md-8 text-left rating">
 
-              <span :class="{ 'selected-star': index <= 4 }" v-for="index in 5" :key="index">&#9733;</span>
+              <span :class="{ 'selected-star': index <= food.avgStar }" v-for="index in 5" :key="index">&#9733;</span>
             </div>
           </div>
 
