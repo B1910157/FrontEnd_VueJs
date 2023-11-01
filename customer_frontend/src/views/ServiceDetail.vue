@@ -31,17 +31,18 @@
         <button class="badge badge-primary text-white" type="submit">Bình luận</button>
       </form>
       <hr>
+
       <div class="comment-section" id="comments">
-        <!-- Hiển thị các bình luận từ dữ liệu -->
-        <div class="comment" v-for="(comment, index) in this.comments" :key="index">
+
+        <div class="comment" v-for="(comment, index) in latestComments" :key="index">
           <strong>{{ comment.fullname }}: </strong> {{ comment.comment }}
-          <p>{{ formatDate(comment.createAt) }}</p>
-
+          <p><i> {{ formatDate(comment.createAt) }}</i></p>
           <hr>
-
         </div>
+
+        <button v-if="showViewMoreButton" @click="viewAllComments">Xem tất cả <i
+            class="fa-solid fa-angles-down"></i></button>
       </div>
-      <!-- {{ this.evaluates }} -->
     </div>
   </div>
 </template>
@@ -91,7 +92,8 @@ export default {
       newComment: "",
       comments: [],
       evaluates: [],
-      avgStar: 0
+      avgStar: 0,
+      maxVisibleComments: 2,
       // checkEvaluate: false,
     };
   },
@@ -114,6 +116,12 @@ export default {
 
   },
   computed: {
+    latestComments() {
+      return this.comments.slice(0, this.maxVisibleComments);
+    },
+    showViewMoreButton() {
+      return this.comments.length > this.maxVisibleComments;
+    },
     filteredinfo() {
       return this.info;
     },
@@ -175,6 +183,10 @@ export default {
       } else if (!this.Auth) {
         alert("Vui lòng đăng nhập!!");
       }
+    },
+    viewAllComments() {
+
+      this.maxVisibleComments = this.comments.length;
     },
 
     async getCommentOfService() {

@@ -1,140 +1,18 @@
 <template>
-    <!-- <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0"
-        aria-valuemax="100">
-        <div class="progress-bar bg-success" style="width: 25%">25%</div>
+    <div class="container">
+
+        <v-combobox v-model="this.year" label="Năm" :items="yearOptions"></v-combobox>
     </div>
-    <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="50" aria-valuemin="0"
-        aria-valuemax="100">
-        <div class="progress-bar bg-info text-dark" style="width: 50%">50%</div>
-    </div> -->
 
-
-
-
-    <div class="row container justify-content-start">
-        <div class="col-4 my-3">
-            <v-card class="mx-auto" max-width="300">
-                <v-card-item class="text-primary" title="LƯỢT ĐẶT TIỆC">
-                    <template v-slot:subtitle>
-                        <v-icon icon="fa fa-bar-chart" size="18" color="primary" class="me-1 pb-1"></v-icon>
-                        trong tháng 9
-                    </template>
-                </v-card-item>
-                <v-card-text class="py-0">
-                    <v-row align="center" no-gutters>
-                        <v-col class="text-h2 text-secondary" cols="6">
-                            64&deg;F
-
-                        </v-col>
-
-                        <v-col cols="6" class="text-right">
-                            <v-icon color="primary" icon="fa fa-book" size="70"></v-icon>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-btn @click="expand = !expand">
-                        {{ !expand ? 'Full Report' : 'Hide Report' }}
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </div>
-        <div class="col-4 my-3">
-            <v-card class="mx-auto" max-width="300">
-                <v-card-item class="text-primary" title="MÓN ĂN">
-                    <template v-slot:subtitle>
-                        <v-icon icon="fa fa-bar-chart" size="18" color="primary" class="me-1 pb-1"></v-icon>
-
-                    </template>
-                </v-card-item>
-                <v-card-text class="py-0">
-                    <v-row align="center" no-gutters>
-                        <v-col class="text-h2 text-secondary" cols="6">
-                            64&deg;F
-
-                        </v-col>
-
-                        <v-col cols="6" class="text-right">
-                            <v-icon color="primary" icon="fa fa-book" size="70"></v-icon>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-btn @click="expand = !expand">
-                        {{ !expand ? 'Full Report' : 'Hide Report' }}
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </div>
-        <div class="col-4 my-3">
-            <v-card class="mx-auto" max-width="300">
-                <v-card-item class="text-primary" title="ĐỒ UỐNG">
-                    <template v-slot:subtitle>
-                        <v-icon icon="fa fa-bar-chart" size="18" color="primary" class="me-1 pb-1"></v-icon>
-
-                    </template>
-                </v-card-item>
-                <v-card-text class="py-0">
-                    <v-row align="center" no-gutters>
-                        <v-col class="text-h2 text-secondary" cols="6">
-                            64&deg;F
-
-                        </v-col>
-
-                        <v-col cols="6" class="text-right">
-                            <v-icon color="primary" icon="fa fa-book" size="70"></v-icon>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-btn @click="expand = !expand">
-                        {{ !expand ? 'Full Report' : 'Hide Report' }}
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </div>
-        <div class="col-4 my-3">
-            <v-card class="mx-auto" max-width="300">
-                <v-card-item class="text-primary" title="KHÁC">
-                    <template v-slot:subtitle>
-                        <v-icon icon="fa fa-bar-chart" size="18" color="primary" class="me-1 pb-1"></v-icon>
-
-                    </template>
-                </v-card-item>
-                <v-card-text class="py-0">
-                    <v-row align="center" no-gutters>
-                        <v-col class="text-h2 text-secondary" cols="6">
-                            64&deg;F
-
-                        </v-col>
-
-                        <v-col cols="6" class="text-right">
-                            <v-icon color="primary" icon="fa fa-book" size="70"></v-icon>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-btn @click="expand = !expand">
-                        {{ !expand ? 'Full Report' : 'Hide Report' }}
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </div>
-    </div>
+    <canvas id="combinedLineChart" width="350" height="200"></canvas>
 </template>
 <script>
-import { VBtn, VCard, VList, VSlider, VListItem, VRow, VCol, VImg, VCardTitle, VCardSubtitle, VCardActions, VCardText, VCardItem, VIcon } from "vuetify/lib/components/index.mjs";
-
+import { VBtn, VCombobox, VCard, VList, VSlider, VListItem, VRow, VCol, VImg, VCardTitle, VCardSubtitle, VCardActions, VCardText, VCardItem, VIcon } from "vuetify/lib/components/index.mjs";
+import Chart from 'chart.js/auto';
+import orderService from "../services/order.service";
 export default {
     components: {
+        VCombobox,
         VBtn,
         VCard,
         VImg,
@@ -152,16 +30,121 @@ export default {
 
 
     },
-    data: () => ({
-        labels: { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WED', 4: 'TH', 5: 'FR', 6: 'SA' },
-        expand: false,
-        time: 0,
-        forecast: [
-            { day: 'Tuesday', icon: 'mdi-white-balance-sunny', temp: '24\xB0/12\xB0' },
-            { day: 'Wednesday', icon: 'mdi-white-balance-sunny', temp: '22\xB0/14\xB0' },
-            { day: 'Thursday', icon: 'mdi-cloud', temp: '25\xB0/15\xB0' },
-        ],
-    }),
+    data() {
+        return {
+            dataOrder: [],
+            dataOrderSuccess: [],
+            year: 2023,
+            chart: null
+        };
+    },
+    computed: {
+        yearOptions() {
+            const currentYear = new Date().getFullYear();
+            const startYear = 2020; // Bắt đầu từ năm 2000 hoặc năm mong muốn
+            const years = [];
+            for (let i = currentYear; i >= startYear; i--) {
+                years.push(i);
+            }
+
+            return years;
+        },
+
+    },
+    watch: {
+        year: {
+            deep: true,
+            handler() {
+                this.start();
+
+            },
+        },
+    },
+    methods: {
+
+        async getOrdersByMonth() {
+            try {
+
+                const orders = await orderService.findOrdersByMonth();
+                this.dataOrder = orders.filter(order => order._id.year === this.year);
+
+                // this.createChart();
+                const order2 = await orderService.findOrdersSuccess();
+                // console.log("data success1", this.dataOrderSuccess);
+                this.dataOrderSuccess = order2.filter(order => order._id.year === this.year);
+                this.createChart();
+
+            } catch (error) {
+
+            }
+        },
+
+        start() {
+            console.log("year 1 nè", this.year);
+            this.getOrdersByMonth();
+            // this.getOrdersSuccess();
+
+        },
+        createChart() {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+            console.log("year CARTES nè", this.year);
+            const lineChartCanvas = document.getElementById('combinedLineChart');
+
+            let orderData = Array(12).fill(0);
+            let orderDataSuccess = Array(12).fill(0);
+
+            for (const order of this.dataOrder) {
+                const monthIndex = order._id.month - 1;
+                orderData[monthIndex] = order.count;
+            }
+
+            for (const order of this.dataOrderSuccess) {
+                const monthIndex = order._id.month - 1;
+                orderDataSuccess[monthIndex] = order.count;
+            }
+            console.log("data success", orderDataSuccess)
+
+            this.chart = new Chart(lineChartCanvas, {
+                type: 'line',
+                data: {
+                    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                    datasets: [
+                        {
+                            label: 'Số lượt đặt tiệc',
+                            data: orderData, // Thay data mẫu với dữ liệu từ this.dataOrder
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            fill: false,
+                        },
+                        {
+                            label: 'Số lượng đơn thành công',
+                            data: orderDataSuccess, // Số lượng hóa đơn từ dữ liệu mẫu
+                            borderColor: 'rgba(192, 75, 192, 1)',
+                            borderWidth: 1,
+                            fill: false,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                        },
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        },
+    },
+    created() {
+        this.start();
+    },
+
+
 }
 </script>
 <style scoped></style>

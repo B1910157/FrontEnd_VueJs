@@ -11,6 +11,12 @@ class OrderService {
   async findAll() {
     return (await this.api.get("/")).data;
   }
+  async findOrdersByMonth() {
+    return (await this.api.get("/findOrderByMonth")).data;
+  }
+  async findOrdersSuccess() {
+    return (await this.api.get("/findOrdersSuccess")).data;
+  }
   async getOrder() {
     return (await this.api.get("/getOrder")).data;
   }

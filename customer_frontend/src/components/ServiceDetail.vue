@@ -32,8 +32,12 @@
                             <v-btn @click="unChooseService()" variant="tonal" class="btn btn-danger">Hủy chọn</v-btn>
                         </div>
                         <div v-else-if="cart.service_id != service._id" class=" bg-light">
-                            <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)">Đã chọn 1 dịch
-                                vụ khác</button>
+                            <!-- <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)">Chọn dịch vụ
+                                (!)</button> -->
+
+                            <v-btn @click="chooseWithOtherService(this.service._id)" variant="tonal"
+                                class="btn btn-success">Chọn dịch vụ (!)</v-btn>
+
                         </div>
 
 
@@ -50,8 +54,11 @@
                             <v-btn @click="unChooseService()" variant="tonal" class="btn btn-danger">Hủy chọn</v-btn>
                         </div>
                         <div v-else-if="(this.localCart.service_id != service._id)" class="bg-light">
-                            <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)"> Đã chọn 1
-                                dịch vụ khác</button>
+                            <!-- <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)"> Chọn dịch vụ
+                                (!)</button> -->
+
+                            <v-btn @click="chooseWithOtherService(this.service._id)" variant="tonal"
+                                class="btn btn-success">Chọn dịch vụ (!)</v-btn>
                         </div>
                     </div>
 

@@ -17,6 +17,9 @@ class PaymentService {
   async vnPay_return() {
     return (await this.api.get("/vnpay_return")).data;
   }
+  async createPaymentStripe(data) {
+    return (await this.api.post("/createSession", data)).data;
+  }
 }
 
 export default new PaymentService();

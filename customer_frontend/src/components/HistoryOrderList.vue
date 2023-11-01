@@ -177,7 +177,11 @@ export default {
                   <span class="label"><i class="fa-solid fa-credit-card"></i> Trạng thái thanh toán &nbsp;</span>
                   <span class="badge badge-success d-flex align-items-center"
                     v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
-                    Đã thanh toán
+                    Đã thanh toán vnpay
+                  </span>
+                  <span class="badge badge-success d-flex align-items-center"
+                    v-if="order.statusPayment == 1 && order.paymentMethod == 'stripe'">
+                    Đã thanh toán stripe
                   </span>
                   <span class="badge badge-success d-flex align-items-center"
                     v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
@@ -206,6 +210,17 @@ export default {
                   <span class="label"><i class="fa-solid fa-dollar-sign"></i> Tổng tiền: &nbsp;</span>
                   <span class="value">{{ formatCurrency(order.total) }}</span>
                 </div>
+
+                <div class="info-row" v-if="order.deposit !== 0">
+                  <span class="label" v-if="order.paymentMethod != ''"><i class="fa-solid fa-dollar-sign"></i> Số
+                    tiền đã thanh toán: &nbsp;</span>
+
+                  <span class="value" v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                    {{ formatCurrency(order.deposit) }}</span>
+                  <span class="value" v-if="order.statusPayment == 1 && order.paymentMethod == 'stripe'">
+                    {{ formatCurrency(order.deposit) }}
+                  </span>
+                </div>
                 <div v-if="order.surcharges && order.surcharges.length > 0" class="info-row">
                   <table class="table">
                     <tr>
@@ -220,13 +235,6 @@ export default {
                     </tr>
                   </table>
 
-                </div>
-                <div class="info-row" v-if="order.deposit !== 0">
-                  <span class="label" v-if="order.paymentMethod == 'vnpay'"><i class="fa-solid fa-dollar-sign"></i> Số
-                    tiền đã thanh toán: &nbsp;</span>
-                  <span class="value" v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
-                    {{ formatCurrency(order.deposit) }}
-                  </span>
                 </div>
               </div>
 

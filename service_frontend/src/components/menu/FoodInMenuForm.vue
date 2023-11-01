@@ -4,7 +4,45 @@
         <div class="scrollable-list">
             <v-card-text>
                 <table class="table">
+                    <template v-for="(foods, categoryId) in sortedFoodByCategory" :key="categoryId">
+                        <tr v-if="foods.length > 0" :key="categoryId">
+                            <th>{{ getCategoryName(categoryId) }}</th>
+                            <table class="table">
+                                <tr v-for="food in foods" :key="food.foodId">
+
+                                    <td class="d-none d-md-block">
+                                        <v-img :src="getImage(food)" cover height="30px" width="30px"></v-img>
+                                    </td>
+                                    <td>
+                                        {{
+                                            food.food_name
+                                        }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ formatCurrency(food.price) }}
+                                    </td>
+                                    <td>
+                                        <span v-if="this.isEditing == true" @click="removeFoodInMenu(food._id)"
+                                            class="mt-2 badge badge-danger" style="font-size: 16px;">
+                                            <i class="fas fa-trash"></i> </span>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                            <!-- <td v-for="food in foods" :key="food.foodId">
+                           
+                            {{ food.food_name }}
+                        </td> -->
+                        </tr>
+                    </template>
+                </table>
+
+                <!-- <table class="table">
                     <tr v-for="(food, i) in this.menu.list" :key="food.foodId">
+
                         <td class="d-none d-md-block">
                             <v-img :src="getImage(food)" cover height="30px" width="30px"></v-img>
                         </td>
@@ -13,6 +51,8 @@
                                 food.food_name
                             }}
                         </td>
+
+
                         <td>
                             {{ formatCurrency(food.price) }}
                         </td>
@@ -22,12 +62,13 @@
                                 <i class="fas fa-trash"></i> </span>
                         </td>
                     </tr>
-                    <!-- <tr class="text-right">
+
+                </table> -->
+                <!-- <tr class="text-right">
                         <td colspan="4">
                             Tổng: {{ formatCurrency(this.menu.total) }}
                         </td>
                     </tr> -->
-                </table>
             </v-card-text>
         </div>
         <div class="action">
@@ -64,6 +105,7 @@
                         <i class="fas fa-close"></i> </span>
                 </div>
             </v-card-actions>
+            {{ console.log(sortedFoodByCategory) }}
         </div>
     </div>
 </template>
@@ -71,6 +113,7 @@
 
 import { VBtn, VImg, VCardText, VCardActions } from "vuetify/lib/components/index.mjs";
 import MenuService from "../../services/menu.service";
+import foodCategoryService from "../../services/foodCategory.service";
 import { useConfirm } from "primevue/useconfirm";
 
 
@@ -86,15 +129,42 @@ export default {
     props: {
         menu: []
     },
+    computed: {
+        sortedFoodByCategory() {
+            const sortedFoods = {};
+            const sortedCategories = this.categories.slice().sort((a, b) => a.position - b.position);
+            // Tạo object rỗng cho mỗi danh mục thức ăn
+            sortedCategories.forEach(category => {
+                sortedFoods[category._id] = [];
+            });
+
+            // Phân loại các món ăn vào từng danh mục thức ăn
+            this.menu.list.forEach(food => {
+                const categoryId = food.food_category;
+
+                if (sortedFoods[categoryId]) {
+                    sortedFoods[categoryId].push(food);
+                }
+            });
+
+            return sortedFoods;
+        },
+    },
     data() {
 
         return {
             // menuLocal: this.foodList,
             isEditing: false,
+            categories: [],
+
         };
     },
     emits: ["addFood"],
     methods: {
+        getCategoryName(categoryId) {
+            const category = this.categories.find(cat => cat._id === categoryId);
+            return category ? category.food_category : "Unknown Category";
+        },
         editMenu() {
             this.isEditing = true;
 
@@ -142,6 +212,39 @@ export default {
 
 
         },
+
+
+
+        async getCategory() {
+            try {
+                this.categories = await foodCategoryService.getAll();
+                this.categories.forEach(category => {
+                    switch (category._id) {
+                        case '64c77355547b60b327d40aa0': //khai vị
+                            category.position = 1;
+                            break;
+                        case '64c77349547b60b327d40a9f': // món chính
+                            category.position = 2;
+                            break;
+                        case '64c77364547b60b327d40aa1': //lẩu
+                            category.position = 3;
+                            break;
+                        case '64c0a81c55b96a29607b7f1d':
+                            category.position = 4; //tráng miệng
+                            break;
+                        // Các loại món ăn khác và gán vị trí tương ứng
+                        default:
+                            category.position = 5; // Điều chỉnh vị trí cho các loại món ăn khác
+                            break;
+                    }
+                });
+
+                console.log("category nè", this.categories);
+            } catch (error) {
+
+            }
+
+        },
         async removeFoodInMenu(foodId) {
             if (confirm("Bạn muốn xóa món này khỏi menu?")) {
                 try {
@@ -171,6 +274,10 @@ export default {
             return formatter.format(number);
         },
 
+
+    },
+    created() {
+        this.getCategory();
 
     },
     mounted() {

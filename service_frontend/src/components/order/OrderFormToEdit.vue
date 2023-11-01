@@ -7,7 +7,37 @@
                     <div class="card-body">
                         <div>
                             <h5 class="text-center">Thực đơn</h5>
-                            <table class="table text-center">
+                            <table class="table ">
+                                <template v-for="(foods, categoryId) in sortedFoodByCategory" :key="categoryId">
+                                    <tr v-if="foods.length > 0" :key="categoryId">
+                                        <th>{{ getCategoryName(categoryId) }}</th>
+                                        <table class="table ">
+                                            <tr v-for="(item, index) in foods" :key="index">
+                                                <td style="width: 25%;">{{ item.food_name }} </td>
+                                                <td style="width: 25%;"><v-img :src="getImage(item)" cover
+                                                        style="width: 90px; height: 70px;"></v-img>
+                                                </td>
+                                                <td style="width: 25%;">{{ item.price }}</td>
+                                                <td style="width: 25%;" v-if="this.isEditing == true">
+                                                    <button class="btn btn-danger" @click="removeFoodInOrder(item._id)"> <i
+                                                            class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </tr>
+
+                                </template>
+                                <tr>
+                                    <td class="text-center" colspan="4">
+                                        Tổng tiền Menu: {{ formatCurrency(this.order.cart[0].totalMenu) }}
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- <table class="table text-center">
                                 <thead>
                                     <th>Tên món</th>
                                     <th>Hình ảnh</th>
@@ -31,7 +61,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> -->
                             <div v-if="this.isEditing == true" class="row text-right">
                                 <button @click="addFoodToMenu()" class="mb-4  btn btn-primary offset-md-11">
                                     <i class="fas fa-add"></i> </button>
@@ -179,6 +209,7 @@
 <script>
 
 import { VImg } from "vuetify/lib/components/index.mjs";
+import foodCategoryService from "../../services/foodCategory.service";
 import { toast } from 'vue3-toastify';
 export default {
     components: {
@@ -192,12 +223,47 @@ export default {
     data() {
         return {
 
-            isEditing: false
+            isEditing: false,
+            categories: []
         };
     },
     emits: ["openListFood", "openListOther", "openListDrink", "removeFoodInOrder", "updateDrink"],
     methods: {
+        getCategoryName(categoryId) {
+            const category = this.categories.find(cat => cat._id === categoryId);
+            return category ? category.food_category : "Unknown Category";
+        },
+        async getCategory() {
+            try {
+                this.categories = await foodCategoryService.getAll();
 
+                this.categories.forEach(category => {
+                    switch (category._id) {
+                        case '64c77355547b60b327d40aa0': //khai vị
+                            category.position = 1;
+                            break;
+                        case '64c77349547b60b327d40a9f': // món chính
+                            category.position = 2;
+                            break;
+                        case '64c77364547b60b327d40aa1': //lẩu
+                            category.position = 3;
+                            break;
+                        case '64c0a81c55b96a29607b7f1d':
+                            category.position = 4; //tráng miệng
+                            break;
+
+                        default:
+                            category.position = 5;
+                            break;
+                    }
+                });
+
+
+            } catch (error) {
+
+            }
+
+        },
         isCurrentDateGreaterThanEventDate() {
             // Lấy ngày hiện tại
             // console.log("HELOO")
@@ -282,6 +348,30 @@ export default {
 
 
 
+    },
+    computed: {
+        sortedFoodByCategory() {
+            const sortedFoods = {};
+            const sortedCategories = this.categories.slice().sort((a, b) => a.position - b.position);
+            // Tạo object rỗng cho mỗi danh mục thức ăn
+            sortedCategories.forEach(category => {
+                sortedFoods[category._id] = [];
+            });
+
+            // Phân loại các món ăn vào từng danh mục thức ăn
+            this.order.cart[0].menu.forEach(food => {
+                const categoryId = food.food_category;
+
+                if (sortedFoods[categoryId]) {
+                    sortedFoods[categoryId].push(food);
+                }
+            });
+
+            return sortedFoods;
+        },
+    },
+    created() {
+        this.getCategory();
     }
 };
 

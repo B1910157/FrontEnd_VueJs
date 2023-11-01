@@ -51,10 +51,13 @@ export default {
         },
         async createOrder() {
             try {
-                const statusTransaction = this.$route.query.vnp_TransactionStatus;
-                const statusResponse = this.$route.query.vnp_ResponseCode;
+                console.log("Tới đây nè stripe");
 
-                if (statusTransaction === '00' && statusResponse === '00') {
+
+                if (this.$route.query.vnp_TransactionStatus && this.$route.query.vnp_ResponseCode && this.$route.query.vnp_TransactionStatus === '00' && this.$route.query.vnp_ResponseCode === '00') {
+
+                    // const statusTransaction = this.$route.query.vnp_TransactionStatus;
+                    // const statusResponse = this.$route.query.vnp_ResponseCode;
                     const orderIdEncode = this.$route.query.vnp_TxnRef;
                     const amount = this.$route.query.vnp_Amount;
                     const orderId = orderIdEncode.split('_')[0];
@@ -70,8 +73,21 @@ export default {
                     // this.$router.push({ name: 'order' });
                     // this.showFailedToast();
 
-                } else {
-                    // this.showFailedToast();
+                } else if (this.$route.query.statusPayment && this.$route.query.statusPayment == 'success') {
+                    const orderId = this.$route.query.orderId;
+                    const amount = this.$route.query.amount;
+                    const data = {
+                        orderId: orderId,
+                        paymentMethod: 'stripe',
+                        amount: amount
+
+                    };
+                    await orderService.choosePayment(data) //data:  { orderID, paymentMethod}
+                    this.paymentSuccess = true;
+                    // console.log("aloo", this.$route.query.statusPayment, this.$route.query.orderId)
+                }
+                else if (this.$route.query.statusPayment && this.$route.query.statusPayment == 'error') {
+
                 }
             } catch (error) {
                 console.error(error);

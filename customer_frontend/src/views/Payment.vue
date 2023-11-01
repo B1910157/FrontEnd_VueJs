@@ -41,9 +41,9 @@
                     <div class="row">
                         <div class="col-6 row">
                             <div class="col-6 ">
-                                <input class="" type="radio" name="percentPayment" value="0.2"
+                                <input class="" type="radio" name="percentPayment" value="0.1"
                                     v-model="this.percentPayment" />
-                                <label class=""> 20%</label>
+                                <label class=""> 10%</label>
                             </div>
 
                             <div class="col-6">
@@ -60,6 +60,10 @@
                     <div>
                         <input type="radio" id="paymentVnPay" name="payment" value="vnpay" v-model="paymentLocal.payment" />
                         <label for="paymentVnPay">Thanh toán qua VN Pay</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="stripe" name="stripe" value="stripe" v-model="paymentLocal.payment" />
+                        <label for="stripe">Thanh toán qua Stripe</label>
                     </div>
                     <div>
                         <input type="radio" id="paymentPayLater" name="payment" value="paylater"
@@ -102,7 +106,7 @@ export default {
                 payment: 'vnpay',
                 // percentPayment: 0.2
             },
-            percentPayment: 0.2,
+            percentPayment: 0.1,
             amount: 0,
             paymentFormSchema
 
@@ -131,6 +135,29 @@ export default {
                 console.log("this order", data);
                 const link = await payment.createPaymentVNPay(data);
                 const linkReal = link.vnpUrl;
+                if (linkReal) {
+                    try {
+                        window.location.href = linkReal;
+                        // await orderService.addOrder(data);
+                        // this.showSuccessToast();
+
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                }
+            } else if (paymentMethod == 'stripe') {
+
+                this.amount = this.order.total * this.percentPayment;
+                const amountReal = parseInt(this.amount);
+                const data = {
+                    orderId: this.orderId,
+                    // paymentMethod,
+                    amount: amountReal
+                };
+                console.log("this order", data);
+                const link = await payment.createPaymentStripe(data);
+                const linkReal = link.url;
                 if (linkReal) {
                     try {
                         window.location.href = linkReal;

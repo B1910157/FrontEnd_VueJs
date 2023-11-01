@@ -1,9 +1,22 @@
 <template>
     <div class="container">
         <div>
+
             <h3 class="text-center my-3">
                 <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử
             </h3>
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label class="font-weight-bold" for="filterDate">Ngày diễn ra: &nbsp;</label>
+                    <input class="border rounded-lg p-1" type="date" id="filterDate" v-model="filterDate" />
+
+                </div>
+                <div class="col-2 text-right">
+                    <button class="btn btn-primary" @click="retrieveOrders()">Tất cả <i
+                            class="fa-solid fa-list"></i></button>
+                </div>
+
+            </div>
             <HistoryOrderList v-if="filleredordercount > 0" :orders="filteredorder" @cancel="cancelEvent" />
             <p v-else>Bạn chưa có đơn nào.</p>
         </div>
@@ -21,6 +34,7 @@ export default {
     data() {
         return {
             orders: [],
+            filterDate: "",
 
 
         };
@@ -42,11 +56,22 @@ export default {
         //     });
         // },
         // Trả về các foood có chứa thông tin cần tìm kiếm.
+
+
+        // filteredorder() {
+        //     return this.orders;
+
+        // },
         filteredorder() {
-            return this.orders;
-
+            if (this.filterDate) {
+                return this.orders.filter((order) => {
+                    // Filter orders based on the selected date
+                    return order.event_date === this.filterDate; // Modify this as per your data structure
+                });
+            } else {
+                return this.orders; // If no date is selected, show all orders
+            }
         },
-
 
         filleredordercount() {
             return this.filteredorder.length;
@@ -57,7 +82,7 @@ export default {
         async retrieveOrders() {
             try {
                 this.orders = await orderService.historyOrder();
-                console.log(this.orders);
+                this.filterDate = "";
             } catch (error) {
                 console.log(error);
             }

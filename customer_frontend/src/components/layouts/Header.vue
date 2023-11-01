@@ -20,7 +20,7 @@
                         <!-- <div @click="navigateHome" class="nav-link">Trang chủ <i class="fas fa-home"></i></div> -->
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{}" class="nav-link">Tuyển dụng <i class="fa fa-bullhorn"
+                        <router-link :to="{ name: 'employments' }" class="nav-link">Tuyển dụng <i class="fa fa-bullhorn"
                                 aria-hidden="true"></i></router-link>
                     </li>
                     <!-- <li class="nav-item dropdown">

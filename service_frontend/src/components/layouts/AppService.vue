@@ -8,7 +8,7 @@
 
                 <div class="media-body">
                     <p class="font-weight-normal text-muted mb-0">Xin chào</p>
-                    <h4 class="m-0">Quản trị viên</h4>
+                    <h4 class="m-0">Nhà Hàng</h4>
                 </div>
             </div>
             <button class="btn btn-primary btn-sm ml-12 mt-2" @click="showImageUploadForm">Đổi ảnh </button>

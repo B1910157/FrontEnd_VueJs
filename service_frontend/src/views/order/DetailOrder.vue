@@ -332,27 +332,29 @@ export default {
         },
         isCurrentDateGreaterThanEventDate() {
             // Lấy ngày hiện tại
+            if (this.order && this.order.event_date) {
+                const eventDate = this.order.event_date;
 
-            const eventDate = this.order.event_date;
+                const currentDate = new Date();
 
-            const currentDate = new Date();
+                // Chuyển định dạng ngày từ YYYY-MM-DD sang MM/DD/YYYY
+                const eventDateParts = eventDate.split("-");
+                const formattedEventDate = `${eventDateParts[1]}/${eventDateParts[2]}/${eventDateParts[0]}`;
 
-            // Chuyển định dạng ngày từ YYYY-MM-DD sang MM/DD/YYYY
-            const eventDateParts = eventDate.split("-");
-            const formattedEventDate = `${eventDateParts[1]}/${eventDateParts[2]}/${eventDateParts[0]}`;
+                // Tạo một đối tượng ngày từ eventDate
+                const eventDateObj = new Date(formattedEventDate);
 
-            // Tạo một đối tượng ngày từ eventDate
-            const eventDateObj = new Date(formattedEventDate);
+                // Tính toán ngày trong tương lai (ngày eventDate + 2 ngày)
+                const futureDate = new Date(eventDateObj);
+                futureDate.setDate(futureDate.getDate() - 2);
+                // console.log("1234 check time", currentDate + "aloooo " + futureDate)
+                // So sánh ngày hiện tại với ngày trong tương lai
+                // if (currentDate < futureDate) {
+                //     console.log("TRUE");
+                // }
+                return currentDate < futureDate;
+            }
 
-            // Tính toán ngày trong tương lai (ngày eventDate + 2 ngày)
-            const futureDate = new Date(eventDateObj);
-            futureDate.setDate(futureDate.getDate() - 2);
-            // console.log("1234 check time", currentDate + "aloooo " + futureDate)
-            // So sánh ngày hiện tại với ngày trong tương lai
-            // if (currentDate < futureDate) {
-            //     console.log("TRUE");
-            // }
-            return currentDate < futureDate;
         },
         async submitSurcharges(data) {
 
