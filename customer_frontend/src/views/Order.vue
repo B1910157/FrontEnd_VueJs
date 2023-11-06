@@ -81,6 +81,7 @@ export default {
 
         async addOrder(data) {
             try {
+               
                 const confirmed = confirm("Xác nhận đặt tiệc?");
                 if (!confirmed) {
                     return;

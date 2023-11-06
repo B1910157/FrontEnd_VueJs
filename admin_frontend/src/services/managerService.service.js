@@ -14,6 +14,27 @@ class ManagerService {
   async updateStatus(data) {
     return (await this.api.put(`/updateStatus`, data)).data;
   }
+  async findOrdersByMonthOfService(service_id) {
+    return (await this.api.get(`findOrderByMonth/${service_id}`)).data;
+  }
+  async findOrdersSuccessOfService(service_id) {
+    return (await this.api.get(`/findOrdersSuccess/${service_id}`)).data;
+  }
+  async findOrdersByMonthOfAllService() {
+    return (await this.api.get(`/findOrdersByMonthOfAllService`)).data;
+  }
+  async findOrdersSuccessOfAllService(service_id) {
+    return (await this.api.get(`/findOrdersSuccessOfAllService`)).data;
+  }
+  async countUser() {
+    return (await this.api.get(`/countUser`)).data;
+  }
+  async countService() {
+    return (await this.api.get(`/countService`)).data;
+  }
+  async totalDeposit() {
+    return (await this.api.get(`/totalDeposit`)).data;
+  }
 }
 
 export default new ManagerService();

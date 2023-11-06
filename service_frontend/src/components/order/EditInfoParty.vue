@@ -63,6 +63,11 @@
             </div>
             <div class="col-6">
                 <div class="form-group">
+                    <label for="type_party"><i class="fa-solid fa-tablet"></i> Loại tiệc</label>
+                    <Field name="type_party" type="text" class="form-control text-left" v-model="orderLocal.type_party" />
+                    <ErrorMessage name="type_party" class="error-feedback" />
+                </div>
+                <div class="form-group">
                     <label for="tray_quantity"><i class="fa-solid fa-tablet"></i> Số lượng bàn</label>
                     <Field name="tray_quantity" type="number" class="form-control text-left"
                         v-model="orderLocal.tray_quantity" />

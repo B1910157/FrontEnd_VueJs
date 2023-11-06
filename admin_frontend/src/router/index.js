@@ -17,6 +17,11 @@ const routes = [
     component: () => import("@/views/Services/Services.vue"),
   },
   {
+    path: "/users",
+    name: "users",
+    component: () => import("@/views/Users/User.vue"),
+  },
+  {
     path: "/updateInfo/",
     name: "updateInfo",
     component: () => import("@/views/InfoEdit.vue"),
@@ -27,9 +32,20 @@ const routes = [
     component: () => import("@/views/Info.vue"),
   },
   {
+    path: "/food_category/",
+    name: "food_category",
+    component: () => import("@/views/Category/Food_category.vue"),
+  },
+  {
     path: "/comments/",
     name: "comments",
     component: () => import("@/views/Comments/Comments.vue"),
+  },
+  {
+    path: "/detailService/:service_id",
+    name: "detailService",
+    component: () => import("@/views/Services/ServiceDetail.vue"),
+    props: true,
   },
 
   {

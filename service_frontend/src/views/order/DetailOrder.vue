@@ -314,6 +314,7 @@ export default {
             const dataUpdate = {
                 fullname: data.fullname,
                 address: data.address,
+                type_party: data.type_party,
                 email: data.email,
                 event_date: data.event_date,
                 event_time: data.event_time,
@@ -461,6 +462,10 @@ export default {
                             <tr>
                                 <th>Ngày thực hiện: &nbsp;</th>
                                 <td>{{ formatDate(order.createAt) }}</td>
+                            </tr>
+                            <tr v-if="order.type_party">
+                                <th>Loại tiệc: &nbsp;</th>
+                                <td>{{ order.type_party }}</td>
                             </tr>
                             <tr>
                                 <th>Số lượng bàn: &nbsp;</th>

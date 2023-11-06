@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row ml-3 mb-3">
             <h4 class="col-5 title-in-page">
-                Danh sách các dịch vụ {{ }}
+                Danh sách nhà hàng
                 <i class="fa fa-book icon" aria-hidden="true"></i>
             </h4>
             <div>

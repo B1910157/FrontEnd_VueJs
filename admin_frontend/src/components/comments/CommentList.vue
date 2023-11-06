@@ -77,7 +77,7 @@ export default {
     data: () => ({
         headers: [
             {
-                title: 'Ngày tạo',
+                title: 'Ngày thực hiện',
                 align: 'start',
                 key: 'createAt',
 
@@ -129,18 +129,18 @@ export default {
         ],
         itemsPerPage: 5,
         // isOpenDialogReasonCancel: false,
-        isServiceId: '',
+        // isServiceId: '',
 
     }),
-    emits: ["hiddenService", "showService"],
+    emits: ["hiddenCmt", "showCmt"],
     methods: {
 
 
-        async accept(serviceId, status) {
+        async accept(id, status) {
             try {
                 // const rs = await orderService.accept(orderId);
 
-                this.$emit("showService", serviceId, status);
+                this.$emit("showCmt", id, status);
                 // if (rs) {
                 //     this.$emit('accept', this.services)
 
@@ -149,12 +149,12 @@ export default {
                 console.log(error);
             }
         },
-        async cancel(serviceId, status) {
+        async cancel(id, status) {
 
             try {
                 // const rs = await orderService.cancel(orderId);
 
-                this.$emit("hiddenService", serviceId, status);
+                this.$emit("hiddenCmt", id, status);
                 // if (rs) {
                 //     this.$emit('cancel', this.orders)
                 // }
@@ -163,15 +163,15 @@ export default {
             }
         },
 
-        showConfirm(serviceId, status) {
+        showConfirm(id, status) {
             if (confirm("Bạn có chắc chắn muốn hiện bình luận này?")) {
-                this.accept(serviceId, status);
+                this.accept(id, status);
             }
         },
-        showConfirmCancel(serviceId, status) {
+        showConfirmCancel(id, status) {
             if (confirm("Bạn có chắc chắn muốn ẩn bình luận này?")) {
 
-                this.cancel(serviceId, status);
+                this.cancel(id, status);
             }
         },
         // showDetails(serviceId) {

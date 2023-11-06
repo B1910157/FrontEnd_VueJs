@@ -250,6 +250,21 @@
                                 v-model="orderLocal.tray_quantity" />
                             <ErrorMessage name="tray_quantity" class="error-feedback" />
                         </div>
+
+                        <div class="form-group">
+                            <label for="type_party" class="font-weight-bold"><i class="fa-solid fa-bars"></i> Loại
+                                tiệc</label>
+                            <select name="type_party" class="form-control" v-model="orderLocal.type_party"
+                                @change="selectType">
+                                <option value="" disabled>Chọn loại tiệc</option>
+                                <option v-for="type_party in type_parties" :value="type_party.type_party">{{
+                                    type_party.type_party }}</option>
+                                <option value="other">Khác</option>
+                            </select>
+                            <input v-if="orderLocal.type_party === 'other'" type="text" class="form-control"
+                                v-model="otherType" placeholder="Nhập loại tiệc">
+                        </div>
+
                         <div class="form-group">
                             <label for="event_date"><i class="fa-solid fa-calendar-check"></i> Ngày diễn ra</label>
                             <Field name="event_date" type="date" class="form-control" v-model="orderLocal.event_date" />
@@ -374,7 +389,7 @@ import { object } from "yup";
 import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
 import { useToast } from 'vue-toast-notification';
 import { toast } from 'vue3-toastify';
-
+import type_partyService from "../services/type_party.service";
 
 import moment from 'moment';
 import 'moment/locale/vi';
@@ -401,6 +416,7 @@ export default {
             email: yup.string()
                 .email("Email không hợp lệ")
                 .required("Vui lòng nhập email"),
+
             // address_book: yup.string()
             //     .required("Vui lòng cung cấp địa chỉ")
             // ,
@@ -440,6 +456,7 @@ export default {
             provinces: [],
             districts: [],
             wards: [],
+            type_parties: [],
 
             //name truyen vao 
             provinceName: "",
@@ -461,6 +478,8 @@ export default {
                 districtName: "",
                 wardName: "",
                 address_book: "",
+                type_party: "",
+
                 // percentPayment: 0.2
                 // payment: "vnpay"
             },
@@ -471,6 +490,7 @@ export default {
             },
 
             orderFormSchema,
+            otherType: ''
 
         };
     },
@@ -479,6 +499,11 @@ export default {
     computed: {
         ...mapState(["Auth", "cartFood", "cartDrink", "cartOther", "localCart", "cartData"]),
 
+        orderLocal1() {
+            return {
+                type_party: this.orderLocal.type_party === 'other' ? this.otherType : this.orderLocal.type_party
+            };
+        }
     },
 
     created() {
@@ -491,6 +516,7 @@ export default {
             this.getItemsInDrinkCart();
             this.getOtherInCart();
         }
+        this.getType_Party();
         this.getCartToOrder();
         this.retrieveInfo();
 
@@ -515,19 +541,22 @@ export default {
     },
 
     methods: {
+        selectType() {
+            if (this.orderLocal.type_party === 'other') {
+                this.otherType = '';
+            }
+        },
+        async getType_Party() {
+            try {
+                this.type_parties = await type_partyService.getAll();
+
+            } catch (error) {
+
+            }
+        },
         checkMenuInOrderToast() {
             toast.error('Vui lòng chọn món trước khi đặt', { autoClose: 1000 });
         },
-        // checkMenuInOrderToast() {
-        //     const VueToast = useToast();
-        //     VueToast.open({
-        //         message: 'Vui lòng chọn món trước khi đặt',
-        //         type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-        //         position: 'top-right', // Vị trí hiển thị toast
-        //         duration: 3000, // Thời gian hiển thị (milliseconds)
-        //     });
-        // },
-
 
         async getProvince() {
             try {
@@ -613,6 +642,9 @@ export default {
 
         submitOrder() {
             if ((!this.Auth && this.localCart.items[0].menu.length > 0) || (this.Auth && this.cartData.items[0].menu.length > 0)) {
+                if (this.orderLocal.type_party === 'other') {
+                    this.orderLocal.type_party = this.otherType;
+                }
                 this.$emit("submit:order", this.orderLocal);
             } else {
                 this.checkMenuInOrderToast();

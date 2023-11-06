@@ -14,6 +14,10 @@ class CommentService {
     return (await this.api.get(`/comment`)).data;
   }
 
+  async updateStatus(data) {
+    return (await this.api.put("/comment", data)).data;
+  }
+
   //EVALUATE
   // async getAllEvaluateOfService(service_id) {
   //   return (await this.api.get(`/evaluate/${service_id}`)).data;

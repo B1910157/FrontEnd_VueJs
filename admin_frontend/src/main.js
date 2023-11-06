@@ -6,9 +6,16 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "vuetify/dist/vuetify.min.css";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-import "vue-toast-notification/dist/theme-sugar.css";
-import "vue-toast-notification/dist/theme-default.css";
+// import "vue-toast-notification/dist/theme-sugar.css";
+// import "vue-toast-notification/dist/theme-default.css";
+import "@mdi/font/css/materialdesignicons.css";
+import "vue3-toastify/dist/index.css";
+import "vuetify/styles";
 // import PrimeVue from "primevue/config";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+// import { ref, onMounted } from "vue";
+// import Chart from "chart.js";
+
 // import VueGoodTablePlugin from "vue-good-table";
 // import "vue-good-table/dist/vue-good-table.css";
 //
@@ -23,7 +30,9 @@ createApp(App)
   .use(router)
   .use(store)
   .use(vuetify)
-//   .use(PrimeVue)
+  // .use(PrimeVue)
+  .use(CKEditor)
+
   // .use(VueGoodTablePlugin)
 
   .mount("#app");

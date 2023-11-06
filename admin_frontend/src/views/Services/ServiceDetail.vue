@@ -1,14 +1,16 @@
 <template>
     <div class="container">
-        <v-combobox v-model="this.year" label="Năm" :items="yearOptions"></v-combobox>
-        <canvas id="combinedLineChart" width="300" height="100"></canvas>
 
+        <v-combobox v-model="this.year" label="Năm" :items="yearOptions"></v-combobox>
     </div>
+
+    <canvas id="combinedLineChart" width="300" height="100"></canvas>
 </template>
 <script>
 import { VBtn, VCombobox, VCard, VList, VSlider, VListItem, VRow, VCol, VImg, VCardTitle, VCardSubtitle, VCardActions, VCardText, VCardItem, VIcon } from "vuetify/lib/components/index.mjs";
 import Chart from 'chart.js/auto';
-import orderService from "../services/order.service";
+// import orderService from "../services/order.service";
+import managerServiceService from "../../services/managerService.service";
 export default {
     components: {
         VCombobox,
@@ -64,11 +66,11 @@ export default {
         async getOrdersByMonth() {
             try {
 
-                const orders = await orderService.findOrdersByMonth();
+                const orders = await managerServiceService.findOrdersByMonthOfService(this.$route.params.service_id);
                 this.dataOrder = orders.filter(order => order._id.year === this.year);
 
                 // this.createChart();
-                const order2 = await orderService.findOrdersSuccess();
+                const order2 = await managerServiceService.findOrdersSuccessOfService(this.$route.params.service_id);
                 // console.log("data success1", this.dataOrderSuccess);
                 this.dataOrderSuccess = order2.filter(order => order._id.year === this.year);
                 this.createChart();

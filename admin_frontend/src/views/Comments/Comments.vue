@@ -9,7 +9,7 @@
         </div>
         <div class="container">
 
-            <CommentList :comments="filteredComment" />
+            <CommentList :comments="filteredComment" @hiddenCmt="hiddenCmt" @showCmt="showCmt" />
             <!-- <CommentList :comments="filteredComment" @hiddenService="hiddenService" @showService="showService" /> -->
         </div>
 
@@ -67,7 +67,30 @@ export default {
 
     },
     methods: {
-
+        async hiddenCmt(id, status) {
+            try {
+                const data = {
+                    id: id,
+                    status: status
+                }
+                await commentsService.updateStatus(data);
+                this.refreshList();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async showCmt(id, status) {
+            try {
+                const data = {
+                    id: id,
+                    status: status
+                }
+                await commentsService.updateStatus(data);
+                this.refreshList();
+            } catch (error) {
+                console.log(error);
+            }
+        },
         async retrieveComments() {
             try {
                 this.comments = await commentsService.getAllComment();

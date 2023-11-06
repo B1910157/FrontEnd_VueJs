@@ -35,15 +35,7 @@
                         v-model="jobLocal.wage" />
                     <ErrorMessage name="wage" class="error-feedback" />
                 </div>
-                <div class="form-group">
-                    <label class="font-weight-bold" for="area">Khu vực </label>
-                    <div class="border p-2" :style="{ display: !isEditing ? 'block' : 'none' }" style="width: 100%;">
-                        {{ jobLocal.area }}
-                    </div>
-                    <Field :style="{ display: isEditing ? 'block' : 'none' }" name="area" type="text" class="form-control"
-                        v-model="jobLocal.area" />
-                    <ErrorMessage name="area" class="error-feedback" />
-                </div>
+
                 <div class="form-group">
                     <label class="font-weight-bold" for="slot">Số lượng </label>
                     <div class="border p-2" :style="{ display: !isEditing ? 'block' : 'none' }" style="width: 100%;">
@@ -65,6 +57,16 @@
 
             </div>
             <div class="col-md-6">
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="area">Khu vực </label>
+                    <div class="border p-2" :style="{ display: !isEditing ? 'block' : 'none' }" style="width: 100%;">
+                        {{ jobLocal.area }}
+                    </div>
+                    <Field :style="{ display: isEditing ? 'block' : 'none' }" name="area" type="text" class="form-control"
+                        v-model="jobLocal.area" />
+                    <ErrorMessage name="area" class="error-feedback" />
+                </div>
                 <div class="form-group ">
                     <label class="font-weight-bold" for="description">Mô tả </label>
                     <div class="border p-2" :style="{ display: !isEditing ? 'block' : 'none' }" style="width: 100%;"

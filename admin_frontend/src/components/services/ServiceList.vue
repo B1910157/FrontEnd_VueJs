@@ -2,7 +2,7 @@
 
 import serviceService from '../../services/service.service';
 import { VDataTable } from "vuetify/labs/VDataTable";
-import { VBtn, VIcon, VDialog } from "vuetify/lib/components/index.mjs";
+import { VBtn, VIcon, VDialog, VBadge, } from "vuetify/lib/components/index.mjs";
 // import ReasonCancelForm from './ReasonCancelForm.vue';
 export default {
     components: {
@@ -10,6 +10,7 @@ export default {
         VBtn,
         VIcon,
         VDialog,
+        VBadge
         // ReasonCancelForm,
     },
     props: {
@@ -27,7 +28,7 @@ export default {
                 const statusText = [];
                 if (service.status === 0) {
                     statusText.push({
-                        text: 'Chưa hoạt động',
+                        text: 'Không hoạt động',
                     });
                 }
                 else if (service.status === 1) {
@@ -39,7 +40,7 @@ export default {
                 // Thêm các hành động dựa trên trạng thái
                 if (service.status === 0) {
                     actions.push({
-                        text: 'Hiển thị',
+                        text: 'Hiện',
                         action: () => this.showConfirm(service._id, service.status),
                     });
 
@@ -168,7 +169,7 @@ export default {
             this.$router.push({
                 name: "detailService",
                 params: {
-                    serviceId: serviceId,
+                    service_id: serviceId,
                 },
 
             });
@@ -193,8 +194,7 @@ export default {
     <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="formattedServices" class="elevation-1"
         item-key="_id">
         <template v-slot:item.actions="{ item }">
-
-            <v-btn :class="item.status === 1 ? 'btn-green' : 'btn-red'" @click="item.actions[0].action">
+            <v-btn :class="['badge', item.status === 1 ? 'btn-green' : 'btn-red']" @click="item.actions[0].action">
                 {{ item.actions[0].text }}
             </v-btn>
         </template>
@@ -223,20 +223,22 @@ export default {
     </v-dialog> -->
 </template>
 <style>
+.badge {
+    padding: 6px 8px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
 .btn-green {
-    background-color: #28a745;
-
+    background-color: green;
     color: white;
-
 }
 
 .btn-red {
-    background-color: #dc3545;
-
+    background-color: red;
     color: white;
-
 }
-
 
 .btn i.fa-eye {
     color: #007BFF;
