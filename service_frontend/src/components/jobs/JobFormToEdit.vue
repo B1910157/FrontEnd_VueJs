@@ -93,19 +93,22 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <button :style="{ display: isEditing ? 'block' : 'none' }" type="submit" class="btn btn-primary"><i
-                    class="fas fa-save"></i></button>
+        <div class="form-group row">
+            <div class="col-12 ">
+                <button :style="{ display: isEditing ? 'block' : 'none' }" type="submit" class=" btn btn-primary"><i
+                        class="fas fa-save"></i> Lưu</button>
+            </div>
+
         </div>
     </Form>
     <div class="row">
         <div class="offset-md-11">
             <span v-if="this.isEditing == false" @click="editPost()" class="mt-2 btn btn-warning">
                 <i class="fas fa-edit"></i> </span>
-            <div v-else-if="this.isEditing == true">
+            <!-- <div v-else-if="this.isEditing == true">
                 <span @click="savePost()" class="mt-2 btn btn-danger">
                     <i class="fas fa-close"></i> </span>
-            </div>
+            </div> -->
         </div>
     </div>
     <br> <br>

@@ -1,9 +1,8 @@
 <template>
     <div class="container">
         <div class="row ml-3 mb-3">
-            <h4 class="col-5 title-in-page">
+            <h4 class="col-5 text-secondary">
                 Loại món
-                <i class="fa fa-book icon" aria-hidden="true"></i>
             </h4>
             <div class="col-7 row text-right">
                 <div class="col-12">
@@ -15,7 +14,7 @@
 
         </div>
 
-        <div class="container">
+        <div class="container ">
 
             <FoodCategory :categories="filterCategories" @delete:cate="deleteCate" @edit:cate="editCate" />
 

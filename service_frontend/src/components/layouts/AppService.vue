@@ -6,12 +6,18 @@
                 <v-img :src="getImage(this.info)" cover style="width: 80px; height: 80px;"
                     class="me-3 rounded-circle shadow border"></v-img>
 
-                <div class="media-body">
+                <!-- <div class="media-body">
                     <p class="font-weight-normal text-muted mb-0">Xin chào</p>
                     <h4 class="m-0">Nhà Hàng</h4>
-                </div>
+                </div> -->
             </div>
-            <button class="btn btn-primary btn-sm ml-12 mt-2" @click="showImageUploadForm">Đổi ảnh </button>
+            <div class="row mt-3">
+                <div class="col-12 text-right">
+                    <button class="btn btn-primary btn-sm " @click="showImageUploadForm">Đổi ảnh </button>
+                </div>
+
+            </div>
+
             <!-- <i @click="showImageUploadForm" class="fa fa-camera btn btn-secondary mt-2 ml-14" aria-hidden="true"></i> -->
             <!-- Form thay đổi ảnh -->
             <div v-if="this.isChange == true">
@@ -44,49 +50,48 @@
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/foods/) }">
                 <router-link to="/foods" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Quản lý món ăn
+                    <i class="fa-solid fa-utensils me-3"></i> Món ăn
                 </router-link>
             </li>
-            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/menu/) }">
-                <router-link to="/menu" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Quản lý Menu
-                </router-link>
-            </li>
+
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/drinks/) }">
                 <router-link to="/drinks" class="nav-link">
-                    <i class="fa-solid fa-list me-3 "></i> Quản lý đồ uống
+                    <i class="fa-solid fa-mug-hot me-3"></i> Đồ uống
                 </router-link>
             </li>
 
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/other/) }">
                 <router-link to="/other" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Quản lý dịch vụ khác
+                    <i class="fa-solid fa-masks-theater me-3"></i>Dịch vụ khác
                 </router-link>
             </li>
-        </ul>
-
-        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/menu/) }">
+                <router-link to="/menu" class="nav-link">
+                    <i class="fa-solid fa-book me-3"></i> Thực đơn
+                </router-link>
+            </li>
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/orders/) }">
                 <router-link to="/orders" class="nav-link">
-                    <i class="fa-solid fa-file-lines me-3 "></i>
-                    Quản lý đặt hàng
+                    <!-- <i class="fa-solid fa-file-lines me-3"></i> -->
+                    <i class="fa-solid fa-paper-plane me-3"></i>
+                    Đơn đặt tiệc
                 </router-link>
             </li>
-        </ul>
 
-        <ul class="nav flex-column bg-white mb-0">
+
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/info/) }">
                 <router-link to="/info" class="nav-link">
-                    <i class="fa-solid fa-user me-3 "></i>
+                    <!-- <i class="fa-solid fa-users-gear me-3"></i> -->
+                    <i class="fa-solid fa-pen-to-square me-3"></i>
                     Thông tin dịch vụ
                 </router-link>
 
             </li>
-        </ul>
-        <ul class="nav flex-column bg-white mb-0">
+
+
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/jobs/) }">
                 <router-link to="/jobs" class="nav-link">
-                    <i class="fa-solid fa-user me-3 "></i>
+                    <i class="fa-solid fa-person-walking-luggage me-3"></i>
                     Tuyển dụng
                 </router-link>
 

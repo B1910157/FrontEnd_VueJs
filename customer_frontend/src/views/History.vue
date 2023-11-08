@@ -1,10 +1,13 @@
 <template>
     <div class="container">
         <div>
+            <h2 class="text-center my-3 text-warning">
+                LỊCH SỬ
+            </h2>
 
-            <h3 class="text-center my-3">
+            <!-- <h3 class="text-center my-3">
                 <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử
-            </h3>
+            </h3> -->
             <div class="row mb-3">
                 <div class="col-4">
                     <label class="font-weight-bold" for="filterDate">Ngày diễn ra: &nbsp;</label>

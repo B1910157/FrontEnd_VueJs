@@ -24,7 +24,7 @@ export default {
                 // Thêm các hành động dựa trên trạng thái
                 if (job.status === 0) {
                     actions.push({
-                        text: 'Hiện',
+                        text: 'Đăng',
 
                         action: () => this.showPublishPost(job._id),
                     });
@@ -97,22 +97,18 @@ export default {
         },
         async publishPost(jobId) {
             try {
-                // const rs = await jobService.publishPost(jobId);
-                if (rs) {
-                    this.$emit('publishPost', this.jobs)
 
-                }
+                this.$emit('publishPost', jobId)
+
             } catch (error) {
                 console.log(error);
             }
         },
         async hiddenPost(jobId) {
-
             try {
-                // const rs = await jobService.hiddenPost(jobId);
-                if (rs) {
-                    this.$emit('hiddenPost', this.jobs)
-                }
+
+                this.$emit('hiddenPost', jobId)
+
             } catch (error) {
                 console.log(error);
             }
@@ -162,8 +158,8 @@ export default {
         <template v-slot:item.actions="{ item }">
             <div v-for="(action, index) in item.selectable.actions" :key="index" @click="action.action" class="m-2">
                 <v-btn :class="{
-                    'btn-green': action.text === 'Hiện',
-                }" class="" style="width: 50px;" v-if="action.text == 'Hiện'">{{ action.text
+                    'btn-green': action.text === 'Đăng',
+                }" class="" style="width: 50px;" v-if="action.text == 'Đăng'">{{ action.text
 }}</v-btn>
 
                 <v-btn :class="{

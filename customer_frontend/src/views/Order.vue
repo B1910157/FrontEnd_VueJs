@@ -1,6 +1,13 @@
 <template>
+    <!-- <h2 class="text-center my-3 text-warning">
+        ĐƠN ĐẶT TIỆC
+    </h2> -->
     <div class="row shadow bg">
+
         <div class="mt-3 col-md-12">
+            <h2 class="text-center  text-warning">
+                ĐƠN ĐẶT TIỆC
+            </h2>
             <!-- hihi {{ this.dataOrder }} -->
             <div>
                 <OrderForm @submit:order="addOrder" />
@@ -81,7 +88,7 @@ export default {
 
         async addOrder(data) {
             try {
-               
+
                 const confirmed = confirm("Xác nhận đặt tiệc?");
                 if (!confirmed) {
                     return;

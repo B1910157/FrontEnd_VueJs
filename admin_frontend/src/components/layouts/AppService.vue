@@ -37,9 +37,15 @@
                     <i class="fa-solid fa-box me-3 "></i> Bình luận
                 </router-link>
             </li>
+
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/food_category/) }">
                 <router-link to="/food_category" class="nav-link">
                     <i class="fa-solid fa-box me-3 "></i> Loại món
+                </router-link>
+            </li>
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/feedback/) }">
+                <router-link to="/feedback" class="nav-link">
+                    <i class="fa-solid fa-box me-3 "></i> Góp ý
                 </router-link>
             </li>
 

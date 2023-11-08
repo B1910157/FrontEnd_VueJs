@@ -14,7 +14,7 @@
 
         </div>
         <div class="d-flex justify-content-end align-items-end mr-3">
-            <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane" aria-hidden="true"></i> Gửi</button>
+            <button type="submit" class="btn btn-primary"> Lưu</button>
         </div>
 
         <ErrorMessage name="cate" class="error-feedback" />

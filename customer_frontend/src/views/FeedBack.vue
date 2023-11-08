@@ -1,9 +1,9 @@
-<!-- <template>
+<template>
     <div class="container">
         <div>
-            <h4>
-                Góp ý
-            </h4>
+            <h2 class="text-center my-3 text-warning">
+                GÓP Ý
+            </h2>
             <FeedBack :feedback="{}" @submit:feedback="addfeedback" />
             <p class="text-success">{{ message }}</p>
 
@@ -33,7 +33,7 @@ export default {
                 await feedbackService.create(data);
                 // this.message = "Góp ý thành công.";
                 alert('Góp ý thành công.');
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -51,4 +51,4 @@ export default {
     text-align: left;
     max-width: 750px;
 }
-</style> -->
+</style>

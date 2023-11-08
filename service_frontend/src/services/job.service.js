@@ -16,6 +16,9 @@ class JobService {
   async updateOnePostJob(jobId, data) {
     return (await this.api.post(`/updateJob/${jobId}`, data)).data;
   }
+  async updateStatus(data) {
+    return (await this.api.put(`/updateStatus`, data)).data;
+  }
 }
 
 export default new JobService();

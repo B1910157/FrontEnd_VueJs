@@ -1,19 +1,14 @@
 <template>
     <div class="container">
-        <div >
-            <h4>
-                Thông tin cá nhân
-            </h4>
-            <InfoForm :info="filteredinfo" @updateInfo="updateInfo"  />
-          
-          <p class="text-success">{{ message }}</p>
-            
+        <div>
+            <h2 class="text-center my-3 text-warning">
+                THÔNG TIN CÁ NHÂN
+            </h2>
+            <InfoForm :info="filteredinfo" @updateInfo="updateInfo" />
+            <p class="text-success">{{ message }}</p>
             <div class="mt-3 row justify-content-around align-items-center">
-               
             </div>
-           
         </div>
-       
     </div>
 </template>
 <script>
@@ -26,36 +21,36 @@ import InfoForm from "../components/InfoForm.vue";
 
 export default {
     components: {
-    // Info,
-    InfoForm
-},
+        // Info,
+        InfoForm
+    },
     data() {
         return {
             info: object,
-            message:""
+            message: ""
 
         };
     },
     watch: {
         // Giám sát các thay đổi của biến searchText.
         // Bỏ chọn phần tử đang được chọn trong danh sách.
-       
+
     },
     // props:{
     //     info: this.info
 
     // },
     computed: {
-      
-        
+
+
         // Trả về các foood có chứa thông tin cần tìm kiếm.
         filteredinfo() {
-             return this.info;
-           
+            return this.info;
+
         },
 
-      
-       
+
+
     },
     methods: {
         async retrieveInfo() {
@@ -82,7 +77,7 @@ export default {
     },
     mounted() {
         this.refreshList();
-        
+
     },
 
 };

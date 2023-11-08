@@ -1,40 +1,42 @@
 <template>
     <div class="container">
         <div class="row ml-3 mb-3">
-            <h4 class="text-secondary ml-4">
-                Danh sách người dùng
+            <!-- <h4 class="col-5 title-in-page">
+                Góp ý của khách hàng
+                <i class="fa fa-book icon" aria-hidden="true"></i>
+            </h4> -->
+            <h4 class="col-5 text-secondary">
+                Góp ý của khách hàng
             </h4>
         </div>
         <div class="container">
 
-            <UserList v-if="filleredusercount > 0" :users="filtereduser" />
-            <p v-else>Không có khách hàng nào.</p>
+            <FeedBackList v-if="filleredfeedbackcount > 0" :feedbacks="filteredfeedback" />
+            <p v-else>Không có góp ý nào.</p>
         </div>
 
 
     </div>
 </template>
 <script>
-import UserList from "@/components/users/UserList.vue";
+import FeedBackList from "@/components/feedback/FeedBackList.vue";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
 
-
-import adminService from "../../services/user.service";
-import managerServiceService from "../../services/managerService.service";
+import feedback from "../../services/feedback.service";
 // import OrderGetItemService from "../services/orderGetItem.service"
 
 // import { EventBus } from './event-bus';
 
 export default {
     components: {
-        UserList,
+        FeedBackList,
         VDialog,
         VBtn,
 
     },
     data() {
         return {
-            users: [],
+            feedbacks: [],
 
             message: ""
 
@@ -48,35 +50,35 @@ export default {
         //     return this.orders;
 
         // },
-        filtereduser() {
+        filteredfeedback() {
             // if (this.showUnconfirmed) {
             //     return this.ordersUnconfirm;
             // } else {
 
             // }
-            return this.users;
+            return this.feedbacks;
         },
         // filteredorderUnconfirm() {
         //     return this.ordersUnconfirm;
 
         // },
-        filleredusercount() {
-            return this.filtereduser.length;
+        filleredfeedbackcount() {
+            return this.filteredfeedback.length;
         },
 
     },
     methods: {
 
-        async retrieveUsers() {
+        async retrieveFeedbacks() {
             try {
-                this.users = await managerServiceService.countUser();
-                console.log(this.users)
+                this.feedbacks = await feedback.getAll();
+
             } catch (error) {
                 console.log(error);
             }
         },
         refreshList() {
-            this.retrieveUsers();
+            this.retrieveFeedbacks();
         },
 
     },

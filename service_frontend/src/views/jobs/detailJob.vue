@@ -63,6 +63,8 @@ export default {
                 // await FoodService.update(this.food._id, data);
                 await jobService.updateOnePostJob(this.job._id, data);
                 this.updateSuccessToast();
+                // this.$router.push({ name: 'jobs' });
+
             } catch (error) {
                 console.log(error);
             }

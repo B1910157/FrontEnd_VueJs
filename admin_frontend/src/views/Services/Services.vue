@@ -1,12 +1,15 @@
 <template>
     <div class="container">
         <div class="row ml-3 mb-3">
-            <h4 class="col-5 title-in-page">
+            <!-- <h4 class="col-5 title-in-page">
                 Danh sách nhà hàng
                 <i class="fa fa-book icon" aria-hidden="true"></i>
+            </h4> -->
+            <h4 class="col-5 text-secondary ">
+                Danh sách nhà hàng
             </h4>
             <div>
-                <button class="btn btn-primary" @click="this.isAdd = true">Thêm</button>
+                <button class="btn btn-primary" @click="this.isAdd = true"><i class="fa-solid fa-plus"></i> Thêm</button>
             </div>
         </div>
         <div class="container">

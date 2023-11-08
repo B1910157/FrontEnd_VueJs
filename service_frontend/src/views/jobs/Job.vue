@@ -14,7 +14,7 @@
     </div>
     <div class="container">
         <div class="container">
-            <JobList v-if="filleredjobcount > 0" :jobs="filteredjob" />
+            <JobList v-if="filleredjobcount > 0" :jobs="filteredjob" @hiddenPost="hiddenPost" @publishPost="publishPost" />
             <p v-else>Bạn chưa có bài tuyển dụng nào.</p>
         </div>
 
@@ -23,7 +23,7 @@
 <script>
 import JobList from "@/components/jobs/JobList.vue";
 import jobService from "../../services/job.service";
-
+import { toast } from 'vue3-toastify';
 
 export default {
     components: {
@@ -56,6 +56,31 @@ export default {
 
     },
     methods: {
+        hiddenSuccessToast() {
+            toast.success('Ẩn thành công', { autoClose: 1000 });
+        },
+        publishSuccessToast() {
+            toast.success('Đăng bài thành công', { autoClose: 1000 });
+        },
+        async hiddenPost(job) {
+            const data = {
+                jobId: job,
+                status: 1
+            }
+            await jobService.updateStatus(data);
+            this.refreshList();
+            this.hiddenSuccessToast()
+        },
+        async publishPost(job) {
+
+            const data = {
+                jobId: job,
+                status: 0
+            }
+            await jobService.updateStatus(data);
+            this.refreshList();
+            this.publishSuccessToast();
+        },
         addPost() {
             this.$router.push({ name: "addJob" });
         },
