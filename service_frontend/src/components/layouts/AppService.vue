@@ -96,6 +96,14 @@
                 </router-link>
 
             </li>
+            <li class="nav-item " :class="{ 'active': $route.path.match(/^\/chats/) }">
+                <router-link to="/chats" class="nav-link">
+                    <i class="fa-solid fa-envelope me-3"></i>
+                    Tin nhắn <b v-if="this.newMessage > 0" class="text-danger">{{ this.newMessage
+                    }}</b>
+                </router-link>
+
+            </li>
         </ul>
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item ">
@@ -116,11 +124,14 @@ import userService from "@/services/user.service";
 import infoService from '../../services/info.service';
 import changeImage from '../../services/changeImage.service';
 import { VImg } from "vuetify/lib/components/index.mjs";
+import serviceChatService from "../../services/serviceChat.service";
+
 
 import { object } from "yup";
 import * as yup from "yup";
 
 export default {
+
     components: {
         Form,
         Field,
@@ -132,6 +143,21 @@ export default {
     },
 
     methods: {
+        startUpdateInterval() {
+            this.updateInterval = setInterval(() => {
+                this.getNewMessage();
+            }, 1000); // Lấy tin nhắn mới mỗi 1 phút (thay đổi theo yêu cầu của bạn)
+        },
+        async getNewMessage() {
+            try {
+                const rs = await serviceChatService.getQuantityNewChat();
+                if (rs) {
+                    this.newMessage = rs.quantity;
+                }
+            } catch (error) {
+
+            }
+        },
         showImageUploadForm() {
             this.isChange = true;
         },
@@ -192,11 +218,23 @@ export default {
             temporaryImage: null,
             isChange: false,
             changeImageFormSchema,
+            newMessage: 0,
+            updateInterval: null,
         };
     },
     created() {
         this.retrieveInfo();
-    }
+        if (this.Auth) {
+            this.getNewMessage();
+            this.startUpdateInterval();
+        }
+
+
+    },
+    destroyed() {
+        // Đảm bảo clear interval khi component bị hủy
+        clearInterval(this.updateInterval);
+    },
 }
 
 </script>

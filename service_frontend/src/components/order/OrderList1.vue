@@ -20,13 +20,27 @@ export default {
         formattedOrders() {
             return this.orders.map((order) => {
                 const actions = [];
+                const messWithUser = [];
                 const details = {
                     text: 'Chi tiết',
                     action: () => this.showDetails(order._id),
                 };
+                let mess = null;
+                if (order.user_id != null) {
+                    mess = {
+                        text: 'Nhắn tin',
+                        action: () => this.mess(order.user_id)
+                    }
+                }
 
                 // Thêm các hành động dựa trên trạng thái
-                if (order.status === 0) {
+                if (!this.isCurrentDateGreaterThanEventDate(order) && order.status == 0) {
+                    actions.push({
+                        text: 'Đơn quá hạn',
+
+                    });
+                }
+                else if (order.status === 0) {
                     actions.push({
                         text: 'Duyệt',
 
@@ -55,10 +69,19 @@ export default {
                         text: 'Khách hàng đã hủy đơn',
                     });
                 }
+                if (mess) {
+                    messWithUser.push(mess);
+                } else {
+                    // Nếu user_id là null, thêm hành động "Khách vãng lai"
+                    messWithUser.push({
+                        text: 'Khách vãng lai',
+                    });
+                }
 
                 return {
                     ...order,
                     actions,
+                    messWithUser,
                     details,
                     createAt: this.formatDate(order.createAt),
                 };
@@ -78,18 +101,26 @@ export default {
             },
             // { title: 'Email', align: 'end', key: 'email', },
             { title: 'Số điện thoại', align: 'end', key: 'phone', },
-            { title: 'Địa chỉ tiệc', align: 'end', key: 'address', },
+            // { title: 'Địa chỉ tiệc', align: 'end', key: 'address', },
             { title: 'Ngày diễn ra', align: 'end', key: 'event_date', },
-            {
-                title: 'Ngày thực hiện',
-                align: 'end',
-                key: 'createAt',
+            // {
+            //     title: 'Ngày thực hiện',
+            //     align: 'end',
+            //     key: 'createAt',
 
-            },
+            // },
+
             {
                 title: 'Thao tác',
                 align: 'end',
                 key: 'actions',
+
+            },
+
+            {
+                title: 'Nhắn tin',
+                align: 'end',
+                key: 'messWithUser',
 
             },
 
@@ -108,6 +139,37 @@ export default {
 
     }),
     methods: {
+        isCurrentDateGreaterThanEventDate(order) {
+            // Lấy ngày hiện tại
+            if (order && order.event_date) {
+                const eventDate = order.event_date;
+
+                const currentDate = new Date();
+
+                // Chuyển định dạng ngày từ YYYY-MM-DD sang MM/DD/YYYY
+                const eventDateParts = eventDate.split("-");
+                const formattedEventDate = `${eventDateParts[1]}/${eventDateParts[2]}/${eventDateParts[0]}`;
+
+                // Tạo một đối tượng ngày từ eventDate
+                const eventDateObj = new Date(formattedEventDate);
+
+                // Tính toán ngày trong tương lai (ngày eventDate + 2 ngày)
+                const futureDate = new Date(eventDateObj);
+                futureDate.setDate(futureDate.getDate() - 2);
+                // console.log("1234 check time", currentDate + "aloooo " + futureDate)
+                // So sánh ngày hiện tại với ngày trong tương lai
+                // if (currentDate < futureDate) {
+                //     console.log("TRUE");
+                // }
+                return currentDate < futureDate;
+            }
+
+        },
+        mess(user_id) {
+            // Handle the selection of a chat, if needed
+            // console.log('Selected chat:', this.chats[index]);
+            this.$router.push({ name: 'ChatDetail', params: { userId: user_id } });
+        },
 
         toggleMenu(index) {
             this.orders[index].showMenu = !this.orders[index].showMenu;
@@ -183,14 +245,18 @@ export default {
 <template>
     <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="formattedOrders" class="elevation-1"
         item-key="_id">
+
         <template v-slot:item.actions="{ item }">
             <div v-for="(action, index) in item.selectable.actions" :key="index" @click="action.action" class="m-2">
+
                 <span :class="{
                     'badge badge-success': action.text === 'Duyệt', 'badge badge-danger':
                         action.text === 'Hủy',
                 }" class="" style="width: 50px;" v-if="action.text == 'Duyệt' || action.text == 'Hủy'">{{
     action.text
 }}</span>
+                <p class="badge badge-danger " v-else-if="action.text == 'Đơn quá hạn'">{{
+                    action.text }}</p>
                 <p class="badge badge-success " v-else-if="action.text == 'Đơn đã duyệt'">{{
                     action.text }}</p>
                 <p class="badge badge-danger" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
@@ -198,6 +264,19 @@ export default {
 
             </div>
         </template>
+        <template v-slot:item.messWithUser="{ item }">
+            <div v-for="(action, index) in item.selectable.messWithUser" :key="index" @click="action.action" class="m-2">
+
+
+                <p class="badge badge-secondary " v-if="action.text == 'Khách vãng lai'">{{
+                    action.text }}</p>
+                <p class="badge badge-primary" v-else-if="action.text == 'Nhắn tin'">{{ action.text }} <i
+                        class="fa-solid fa-paper-plane"></i></p>
+
+
+            </div>
+        </template>
+
         <template v-slot:item.details="{ item }">
             <v-btn @click="item.selectable.details.action">
                 {{ item.selectable.details.text }}

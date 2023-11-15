@@ -74,6 +74,18 @@ const routes = [
         component: () => import("@/views/FeedBack.vue"),
       },
       {
+        path: "/chats/",
+        name: "chats",
+        component: () => import("@/views/chat/Chat.vue"),
+      },
+      {
+        path: "/ChatDetail/:serviceId",
+        name: "ChatDetail",
+        component: () => import("@/views/chat/ChatDetail.vue"),
+        props: true,
+      },
+
+      {
         path: "/info/",
         name: "info",
         component: () => import("@/views/Info.vue"),
@@ -87,6 +99,11 @@ const routes = [
         path: "/updateInfo/",
         name: "updateInfo",
         component: () => import("@/views/InfoEdit.vue"),
+      },
+      {
+        path: "/testne/",
+        name: "testne",
+        component: () => import("@/views/chat/test.vue"),
       },
     ],
   },
@@ -106,6 +123,7 @@ router.beforeEach((to, from, next) => {
     "serviceDetail",
     "order",
     "payment",
+    "employments",
     "payment-success",
     "notification",
   ];

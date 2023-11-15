@@ -22,26 +22,55 @@
                 </v-card-text>
                 <v-card-actions>
                     <!-- TODO -->
+
                     <div v-if="this.Auth">
-                        <div v-if="(!cart.service_id || cart.service_id == null)" class="bg-light">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div v-if="(!cart.service_id || cart.service_id == null)" class="bg-light">
+                                    <v-btn variant="tonal" @click="chooseService(this.service._id)" class="btn-success">Chọn
+                                        dịch
+                                        vụ</v-btn>
+                                </div>
+                                <div v-else-if="cart.service_id == service._id" class="bg-light">
+                                    <v-btn @click="unChooseService()" variant="tonal" class="btn btn-danger">Hủy
+                                        chọn</v-btn>
+                                </div>
+                                <div v-else-if="cart.service_id != service._id" class=" bg-light">
+                                    <!-- <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)">Chọn dịch vụ
+(!)</button> -->
 
-                            <v-btn variant="tonal" @click="chooseService(this.service._id)" class="btn-success">Chọn dịch
-                                vụ</v-btn>
+                                    <v-btn @click="chooseWithOtherService(this.service._id)" variant="tonal"
+                                        class="btn btn-success">Chọn dịch vụ (!)</v-btn>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <!-- <div>
+                                    <v-btn variant="tonal" class="btn btn-primary">Nhắn tin</v-btn>
+                                </div> -->
+                                <v-dialog v-model="dialog" max-width="600">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn @click="this.dialog = true" variant="tonal" class="btn btn-primary">Nhắn
+                                            tin</v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-card-title>Nhập tin nhắn</v-card-title>
+                                        <v-card-text>
+                                            <!-- Form nhập tin nhắn -->
+                                            <v-textarea v-model="message" label="Tin nhắn"></v-textarea>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                            <v-btn @click="sendMessage" color="primary">Gửi tin nhắn</v-btn>
+                                            <v-btn @click="cancelMessage" color="secondary">Hủy</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
+
+                            </div>
+
                         </div>
-                        <div v-else-if="cart.service_id == service._id" class="bg-light">
-                            <v-btn @click="unChooseService()" variant="tonal" class="btn btn-danger">Hủy chọn</v-btn>
-                        </div>
-                        <div v-else-if="cart.service_id != service._id" class=" bg-light">
-                            <!-- <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)">Chọn dịch vụ
-                                (!)</button> -->
-
-                            <v-btn @click="chooseWithOtherService(this.service._id)" variant="tonal"
-                                class="btn btn-success">Chọn dịch vụ (!)</v-btn>
-
-                        </div>
-
-
                     </div>
+
 
                     <div v-else-if="!this.Auth">
                         <div v-if="(this.localCart.service_id == null)" class="bg-light">
@@ -261,10 +290,11 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import AddDrinkToCart from '@/components/AddDrinkToCart.vue';
-import { VBtn, VCard, VImg, VSelect, VCardTitle, VCardSubtitle, VCardActions, VCardText } from "vuetify/lib/components/index.mjs";
+import { VBtn, VCard, VDialog, VTextarea, VImg, VSelect, VCardTitle, VCardSubtitle, VCardActions, VCardText } from "vuetify/lib/components/index.mjs";
 import InputSearch from './InputSearch.vue';
 import { useToast } from 'vue-toast-notification';
 import foodCategory from "../services/food_category.service";
+import userChat from "../services/userChat.service";
 import { toast } from 'vue3-toastify';
 import { number } from 'yup';
 export default {
@@ -278,7 +308,9 @@ export default {
         VCardActions,
         VCardText,
         InputSearch,
-        VSelect
+        VSelect,
+        VDialog,
+        VTextarea
     },
     props: {
         service: { type: Object, required: true },
@@ -320,7 +352,10 @@ export default {
             drinkCurrentPage: 1,
             drinkPageSize: 12,
             selectedCategory: null,
-            categories: []
+            categories: [],
+
+            dialog: false,
+            message: '',
 
         };
     },
@@ -394,6 +429,29 @@ export default {
 
     },
     methods: {
+        async sendMessage() {
+            // Thực hiện xử lý gửi tin nhắn
+            console.log('Gửi tin nhắn:', this.message, this.service._id);
+            const data = {
+                service_id: this.service._id,
+                chat: this.message
+            }
+            const rs = await userChat.userChat(data);
+            // Đóng dialog và làm sạch tin nhắn
+            this.dialog = false;
+            this.message = '';
+            this.sendSuccessToast()
+
+        },
+        // Hàm xử lý khi người dùng ấn nút "Hủy"
+        cancelMessage() {
+            // Đóng dialog và làm sạch tin nhắn
+            this.dialog = false;
+            this.message = '';
+        },
+
+
+
         setMenuPage(page) {
             this.menuCurrentPage = page;
         },
@@ -415,6 +473,9 @@ export default {
         },
         addSuccessToast() {
             toast.success('Thêm thành công', { autoClose: 1000 });
+        },
+        sendSuccessToast() {
+            toast.success('Gửi tin nhắn thành công', { autoClose: 1000 });
         },
 
         // addSuccessToast() {

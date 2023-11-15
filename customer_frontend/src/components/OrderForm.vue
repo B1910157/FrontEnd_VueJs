@@ -2,11 +2,10 @@
 <template>
     <div class="row container text-center">
         <div class="col-md-6 col-12">
-
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <h2>Menu</h2>
-                    <table class="table table-bordered text-center">
+            <div class=" card shadow-lg">
+                <div class="scrollable-list card-body">
+                    <h2>Thực đơn của bạn</h2>
+                    <table class=" table table-bordered text-center">
                         <thead>
                             <th width="20%">Hình ảnh</th>
                             <th>Tên món</th>
@@ -79,13 +78,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
-
-        <div class="col-md-6 col-12">
+        <div class="   col-md-6 col-12">
             <div class="card shadow-lg">
-                <div class="card-body" style="font-size: 14px;">
+                <div class="scrollable-list card-body" style="font-size: 14px;">
                     <h2>Đồ uống</h2>
                     <div>
                         <table class="table table-bordered text-center">
@@ -167,7 +163,7 @@
         <div class="mt-2 col-md-12"
             v-if="(!this.Auth && localCart.items[2].other.length != 0) || (this.Auth && this.cartData.items[2].other.length > 0)">
             <div>
-                <div class="card">
+                <div class="scrollable-list card">
                     <div class="card-body">
                         <h2>Khác</h2>
                         <table class="table table-bordered text-center">
@@ -222,7 +218,7 @@
         <br>
         <hr>
 
-        <div class="container text-start">
+        <div class="col-md-12 text-start">
             <h2 class=" text-center">Thông tin</h2>
             <Form @submit="submitOrder" :validation-schema="orderFormSchema">
                 <div class="row">
@@ -761,5 +757,11 @@ export default {
     width: 55px;
     text-align: center;
     border: solid 1px black;
+}
+
+.scrollable-list {
+    max-height: 450px;
+    /* Điều chỉnh chiều cao tối đa ở đây */
+    overflow-y: auto;
 }
 </style>

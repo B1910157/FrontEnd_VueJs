@@ -7,6 +7,7 @@
             <FeedBack :feedback="{}" @submit:feedback="addfeedback" />
             <p class="text-success">{{ message }}</p>
 
+
         </div>
 
     </div>
@@ -32,7 +33,7 @@ export default {
             try {
                 await feedbackService.create(data);
                 // this.message = "Góp ý thành công.";
-                alert('Góp ý thành công.');
+                // alert('Góp ý thành công.');
 
             } catch (error) {
                 console.log(error);
@@ -46,9 +47,4 @@ export default {
 
 };
 </script>
-<style scoped>
-.page {
-    text-align: left;
-    max-width: 750px;
-}
-</style>
+<style scoped></style>

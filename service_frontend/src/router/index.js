@@ -120,7 +120,28 @@ const routes = [
     name: "info",
     component: () => import("@/views/Info.vue"),
   },
- 
+  {
+    path: "/chats/",
+    name: "chats",
+    component: () => import("@/views/chat/Chat.vue"),
+  },
+  {
+    path: "/ChatDetail/:userId",
+    name: "ChatDetail",
+    component: () => import("@/views/chat/ChatDetail.vue"),
+    props: true,
+  },
+  {
+    path: "/bill/:orderId",
+    name: "bill",
+    component: () => import("@/views/bill/Bill.vue"),
+    props: true,
+  },
+  {
+    path: "/testne/",
+    name: "testne",
+    component: () => import("@/views/chat/test.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

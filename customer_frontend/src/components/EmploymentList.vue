@@ -80,30 +80,7 @@ export default {
 </script>
 <template>
     <div class="row">
-        <div class="col-md-9">
-            <div class="row" v-for="employ of employments" :key="employ.id">
-                <div class="p-2 col-md-4">
-                    <v-img :src="getImage(employ)" cover class="rounded" height="269px"></v-img>
-                    <div><i>Nhà hàng:</i> {{ employ.service_name }}</div>
-                    <div><i>Số điện thoại:</i> {{ employ.phone }}</div>
-                    <div><i>Email:</i> {{ employ.email }}</div>
-                </div>
-                <div class="p-2 col-md-8">
-                    <div class="employment-card">
-                        <h4>{{ employ.title }}</h4>
-                        <b>Mô tả:</b>
-                        <div v-html="employ.description" class="text-justify"></div>
-                        <b>Yêu cầu:</b>
-                        <div v-html="employ.requirement" class="text-justify"></div>
-                        <div><b>Lương:</b> {{ employ.wage }}</div>
-                        <div><b>Số lượng:</b> {{ employ.slot }}</div>
-                        <div><b>Địa điểm:</b> {{ employ.area }}</div>
-                        <div><b>Hạn tuyển dụng:</b> {{ employ.deadline }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 border">
+        <!-- <div class="col-md-3 border d-none d-md-block">
             <img style="max-width: 100%; height: auto;"
                 src="https://45cm.s3.ap-southeast-1.amazonaws.com/images-ch/cong-viec/viec-lam/15/109537296/600/bace3ff89e97d645a34d82ddb8fd7667-2841022943753837794.jpg"
                 alt="">
@@ -113,7 +90,37 @@ export default {
             <hr>
             <img src="https://t4.ftcdn.net/jpg/05/62/78/85/360_F_562788544_gBBydDZ7jt9eYjTmsXhsXVzPjL2yQfsg.jpg" alt=""
                 style="max-width: 100%; height: auto;">
+        </div> -->
+        <div class="col-md-12">
+            <div class="row " v-for="employ of employments" :key="employ.id">
+                <div class="p-2  col-md-8">
+                    <div class="employment-card">
+                        <h2>{{ employ.title }}</h2>
+                        <b>Mô tả:</b>
+                        <div v-html="employ.description" class="text-justify"></div>
+                        <b>Yêu cầu:</b>
+                        <div v-html="employ.requirement" class="text-justify"></div>
+                        <div><b>Lương:</b> {{ employ.wage }}</div>
+                        <div><b>Số lượng:</b> {{ employ.slot }}</div>
+                        <div><b>Địa điểm:</b> {{ employ.area }}</div>
+                        <div><b>Hạn tuyển dụng:</b> {{ employ.deadline }}</div>
+                    </div>
+
+                </div>
+
+                <div class="p-2 col-md-4">
+                    <v-img :src="getImage(employ)" cover class="rounded" height="269px"></v-img>
+                    <div><i>Nhà hàng:</i> {{ employ.service_name }}</div>
+                    <div><i>Số điện thoại:</i> {{ employ.phone }}</div>
+                    <div><i>Email:</i> {{ employ.email }}</div>
+                    <hr>
+                </div>
+
+            </div>
+
         </div>
+
+
     </div>
 </template>
   

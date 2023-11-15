@@ -149,10 +149,9 @@ export default {
 
 
 
-          <div class="col-md-12">
+          <div class="col-md-12 col-12">
             <div class="row">
-
-              <div class="custom-column col-6">
+              <div class="custom-column col-md-6 col-12">
                 <div class="info-row">
                   <span class="label"><i class="fa-solid fa-user"></i> Họ tên: &nbsp;</span>
                   <span class="value">{{ order.fullname }}</span>
@@ -193,7 +192,7 @@ export default {
                 </div>
               </div>
 
-              <div class="custom-column col-6">
+              <div class="custom-column  col-md-6 col-12">
                 <div class="info-row">
                   <span class="label"><i class="fa-regular fa-calendar-days"></i> Ngày thực hiện: &nbsp;</span>
                   <span class="value">{{ formatDate(order.createAt) }}</span>
@@ -237,23 +236,16 @@ export default {
 
                 </div>
               </div>
+            </div>
 
-
-            </div>
-            <div v-if="order.statusPayment == 0 && isFutureEvent(order.event_date) && order.status == 1">
-              <button class="btn btn-success ml-3" @click="payment(order._id)"><i class="fa-solid fa-dollar-sign"></i>
-                Thanh toán</button>
-            </div>
-            <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status !== 1">
-              Đơn hàng chưa duyệt hoặc quá hạn
-            </div>
           </div>
-
-
-
-
-
-
+          <div v-if="order.statusPayment == 0 && isFutureEvent(order.event_date) && order.status == 1">
+            <button class="btn btn-success ml-3" @click="payment(order._id)"><i class="fa-solid fa-dollar-sign"></i>
+              Thanh toán</button>
+          </div>
+          <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status !== 1">
+            <p class="text-danger pl-5">Đơn hàng quá hạn</p>
+          </div>
           <!-- <div class="col-md-12">
             <div style="display: flex; justify-content: space-between;">
               <div style="flex: 1;">
@@ -438,7 +430,9 @@ export default {
   border: 1px solid #ccc;
   background-color: #f5f5f5;
   margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
+
+  /* height: 370px; */
 }
 
 .info-row {

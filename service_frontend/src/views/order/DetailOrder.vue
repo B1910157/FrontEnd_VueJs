@@ -10,6 +10,8 @@ import ReasonCancelForm from '../../components/order/ReasonCancelForm.vue';
 import EditInfoParty from '../../components/order/EditInfoParty.vue';
 import Surcharges from '../../components/order/Surcharges.vue';
 import { toast } from 'vue3-toastify';
+import html2pdf from 'html2pdf.js';
+
 export default {
     components: {
         OrderFormToEdit,
@@ -38,6 +40,12 @@ export default {
             isOpenDrinks: false,
             isAddSurcharges: false,
             isOpenDialogReasonCancel: false,
+            hoaDon: {
+                // Dữ liệu hóa đơn cần in
+                thongTin: 'Thông tin hóa đơn...',
+                // Thêm các dữ liệu cần in khác tương ứng
+            },
+            openBill: false,
 
         };
     },
@@ -75,6 +83,7 @@ export default {
         this.findOne(this.$route.params.orderId);
     },
     methods: {
+
         addSurcharges() {
             console.log("addd");
             this.isAddSurcharges = true;
@@ -379,6 +388,27 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        bill() {
+            this.$router.push({ name: 'bill' });
+        },
+
+        async exportPDF() {
+            console.log("EXPORT PDF");
+            const content = this.$refs.hoaDonContent;
+            const options = {
+                margin: 10,
+                filename: 'hoadon.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            };
+            // Sử dụng html2pdf để tạo và tải file PDF
+            const pdf = await html2pdf().from(content).set(options).save();
+
+
+            // Tải file PDF
+            // pdf.save();
         }
 
     }
@@ -387,8 +417,35 @@ export default {
 </script>
 
 <template>
+    <v-dialog v-model="openBill" max-width="800px">
+        <v-btn color="danger" @click="openBill = false" icon="fa fa-close" class="ml-auto mb-3">
+            <i class="fa fa-close"></i>
+        </v-btn>
+
+        <div class="bg-white rounded-lg scrollable-bill" ref="hoaDonContent">
+            <!-- Nội dung hóa đơn sẽ được hiển thị ở đây -->
+            <p>{{ hoaDon.thongTin }}</p>
+            <h4>Thực đơn</h4>
+            <p>{{ this.order.cart[0].menu }}</p>
+
+            <!-- Thêm các dữ liệu cần in khác tương ứng -->
+        </div>
+
+        <v-btn @click="exportPDF" color="primary">Xuất hóa đơn</v-btn>
+    </v-dialog>
     <div class="row container ml-4">
-        <div class="col-12 mb-3 mt-3">
+        <div v-if="order.status == 1" class="col-12 text-right mr-3">
+            <button @click="bill" class="btn btn-primary">Xuất hóa đơn <i class="fa-solid fa-file-pdf"></i></button>
+
+        </div>
+        <div v-if="!isCurrentDateGreaterThanEventDate() && order.status == 0" class="col-12 mb-3 mt-3">
+            <div class="text-danger">
+                Đơn quá thời hạn
+            </div>
+        </div>
+
+        <div v-else class="col-12 mb-3 mt-3">
+
             <div class="" v-if="order.status == 0">
                 <button class="badge badge-success" @click="showConfirm(order._id)">Duyệt</button>
                 <button class="badge badge-danger  ml-2" @click="showConfirmCancel(order._id)">Hủy</button>
@@ -474,7 +531,10 @@ export default {
                             <tr v-if="order.status == 1">
                                 <th>Trạng thái thanh toán &nbsp;</th>
                                 <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
-                                    <div class="badge badge-success">Đã thanh toán</div>
+                                    <div class="badge badge-success">Đã thanh toán qua VN PAY</div>
+                                </td>
+                                <td v-if="order.statusPayment == 1 && order.paymentMethod == 'stripe'">
+                                    <div class="badge badge-success">Đã thanh toán qua Stripe</div>
                                 </td>
                                 <td v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
                                     <div class="badge badge-success">Thanh toán trực tiếp</div>
@@ -485,8 +545,9 @@ export default {
                             </tr>
 
                             <tr>
-                                <th v-if="order.paymentMethod == 'vnpay'">Số tiền đã thanh toán: &nbsp;</th>
-                                <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
+                                <th v-if="order.paymentMethod == 'vnpay' || order.paymentMethod == 'stripe'">Số tiền đã
+                                    thanh toán: &nbsp;</th>
+                                <td v-if="order.statusPayment == 1">
                                     {{ formatCurrency(order.deposit) }}
                                 </td>
                             </tr>
@@ -590,6 +651,12 @@ export default {
     /* Thiết lập chiều cao cố định */
     overflow-y: auto;
     /* Cho phép thanh cuộn nếu nội dung vượt quá chiều cao */
+}
+
+.scrollable-bill {
+    height: 430px;
+    max-height: 430px;
+    overflow-y: auto;
 }
 
 .custom-height-table tbody tr th,

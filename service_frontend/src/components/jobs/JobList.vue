@@ -59,7 +59,7 @@ export default {
             },
             // { title: 'Email', align: 'end', key: 'email', },
             { title: 'Lương', align: 'end', key: 'wage', },
-            { title: 'Nơi làm việc', align: 'end', key: 'area', },
+            // { title: 'Nơi làm việc', align: 'end', key: 'area', },
             { title: 'Số lượng', align: 'end', key: 'slot', },
             // {
             //     title: 'Mô tả',

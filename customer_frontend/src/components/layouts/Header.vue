@@ -1,17 +1,36 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
+            <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" href="#">Features</a>
+                        <a class="nav-item nav-link" href="#">Pricing</a>
+                        <a class="nav-item nav-link disabled" href="#">Disabled</a>
+                    </div>
+                </div>
+            </nav> -->
             <div class="navbar-logo">
                 <router-link :to="{ name: 'home' }" class="navbar-brand">
                     <img :src="`http://localhost:3000/img2.jpg`" class="logo" />
 
                 </router-link>
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <router-link :to="{ name: 'home' }" class="nav-link">Trang chủ <i
@@ -23,20 +42,7 @@
                         <router-link :to="{ name: 'employments' }" class="nav-link">Tuyển dụng <i class="fa fa-bullhorn"
                                 aria-hidden="true"></i></router-link>
                     </li>
-                    <!-- <li class="nav-item dropdown">
-                        <router-link class="nav-link" :to="{ name: 'info' }" role="button" aria-haspopup="true"
-                            aria-expanded="false">
-                            Info
-                            <i class="fas fa-caret-down"></i>
-                        </router-link>
-                        <ul class="dropdown-menu dropdown-menu-custom">
-                            <li>
-                                <router-link class="dropdown-item" :to="{}">
-                                    alo
-                                </router-link>
-                            </li>
-                        </ul>
-                    </li> -->
+
                     <div v-if="!Auth" class="d-flex">
                         <li class="nav-item">
                             <router-link :to="{ name: 'login' }" class="nav-link btn btn-link">
@@ -52,9 +58,6 @@
                         </li>
                     </div>
 
-                    <!-- <li class="nav-item">
-                        <router-link :to="{ name: 'login' }" class="nav-link">Đăng Nhập</router-link>
-                    </li> -->
                     <div class="navbar-nav" v-else-if="Auth">
                         <li class="nav-item">
                             <router-link :to="{ name: 'order' }" class="nav-link">
@@ -71,7 +74,19 @@
                         <li class="nav-item">
                             <router-link :to="{ name: 'feedback' }" class="nav-link">
                                 Góp ý
-                                <i class="fa fa-envelope"></i>
+                                <i class="fa-regular fa-paper-plane"></i>
+
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'chats' }" class="nav-link">
+                                Tin nhắn
+                                <div class="envelope-icon">
+                                    <i class="fa fa-envelope"></i>
+                                    <b v-if="newMessage > 0" class="message-count">{{ newMessage }}</b>
+                                </div>
+                                <!-- <i class="fa fa-envelope"> <b v-if="this.newMessage > 0" class="text-danger">{{
+                                    this.newMessage }}</b></i> -->
                             </router-link>
                         </li>
                         <li class="nav-item">
@@ -94,15 +109,36 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import userService from "@/services/user.service";
-
+import userChatService from '../../services/userChat.service';
 
 export default {
-
+    data() {
+        return {
+            newMessage: 0,
+            updateInterval: null,
+        };
+    },
     computed: {
         ...mapState(['Auth']),
 
     },
     methods: {
+        startUpdateInterval() {
+            this.updateInterval = setInterval(() => {
+                this.getQuantityNewMessage();
+            }, 1000); // Lấy tin nhắn mới mỗi 1 phút (thay đổi theo yêu cầu của bạn)
+        },
+        async getQuantityNewMessage() {
+            try {
+                const rs = await userChatService.getQuantityNewChatForUser();
+                if (rs) {
+                    this.newMessage = rs.quantity;
+                    console.log("number", this.newMessage)
+                }
+            } catch (error) {
+
+            }
+        },
         // navigateHome() {
         //     this.$router.push({ name: "home" }); // Điều hướng đến trang "home"
         // },
@@ -123,12 +159,44 @@ export default {
                 console.log(error);
             }
         }
-    }
+    },
+    created() {
+        if (this.Auth) {
+            this.getQuantityNewMessage();
+            this.startUpdateInterval();
+        }
+
+    },
+    destroyed() {
+        // Đảm bảo clear interval khi component bị hủy
+        clearInterval(this.updateInterval);
+    },
 }
 
 </script>
 
 <style scoped>
+.envelope-icon {
+    position: relative;
+    display: inline-block;
+
+
+}
+
+.message-count {
+    position: absolute;
+    top: -14px;
+    /* Adjust the vertical position as needed */
+    right: -8px;
+    /* Adjust the horizontal position as needed */
+    background-color: red;
+    color: white;
+    border-radius: 100%;
+    padding: 2px 4px;
+    font-size: 12px;
+
+}
+
 .navbar {
     border-bottom: 1px solid #ccc;
     position: sticky;

@@ -4,6 +4,7 @@ import CartService from "./services/cart.service";
 import MenuService from "./services/menu.service";
 import homeService from "@/services/home.service";
 import DrinkService from "@/services/drink.service";
+import userChatService from "./services/userChat.service";
 
 function calculateTotal(localCart) {
   let totalMenu = 0;
@@ -30,6 +31,7 @@ function calculateDrinkTotal(localCart) {
 const store = createStore({
   state() {
     return {
+      // newMessage: 0,
       Auth: false,
       cartData: {
         service_id: null,
@@ -78,6 +80,9 @@ const store = createStore({
     setAuth(state, Auth) {
       state.Auth = Auth;
     },
+    // setNewMessage(state, newMessage) {
+    //   state.newMessage = newMessage;
+    // },
     setCartFood(state, cartFood) {
       state.cartFood = cartFood;
     },

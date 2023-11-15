@@ -29,12 +29,14 @@
 import { mapState, mapMutations } from 'vuex';
 import userService from "@/services/user.service";
 import infoService from "../../services/info.service";
+
 import { object } from "yup";
 
 export default {
   data() {
     return {
       info: object,
+      // newMessage: 0,
     };
   },
   computed: {
@@ -52,6 +54,7 @@ export default {
 
 
   methods: {
+  
     async retrieveInfo() {
       try {
         this.info = await infoService.info();
@@ -95,6 +98,7 @@ export default {
   },
   created() {
     this.retrieveInfo();
+
   }
 }
 
