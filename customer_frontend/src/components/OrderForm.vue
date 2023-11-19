@@ -181,7 +181,8 @@
                                     <td>{{ formatCurrency(item.price) }}</td>
                                     <td>{{ item.description }}</td>
                                     <td>
-                                        <button class="btn btn-danger" @click="removeOtherInLocalCart(item._id)"> <i
+                                        <button class="btn btn-danger"
+                                            @click="removeOtherInCartReal(item.service_id, item._id)"> <i
                                                 class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -384,7 +385,7 @@ import infoService from "../services/info.service";
 import { object } from "yup";
 import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
 import { useToast } from 'vue-toast-notification';
-import { toast } from 'vue3-toastify';
+
 import type_partyService from "../services/type_party.service";
 
 import moment from 'moment';
@@ -674,12 +675,18 @@ export default {
 
         },
         async removeFoodInCartReal(service_id, foodId) {
-            await this.removeFoodInCart({ service_id, foodId });
-            this.removeSuccessToast();
+            if (window.confirm('Bạn có chắc chắn muốn món ăn này khỏi thực đơn?')) {
+                await this.removeFoodInCart({ service_id, foodId });
+                this.removeSuccessToast();
+            }
+
         },
         async removeOtherInCartReal(service_id, otherId) {
-            await this.removeOtherInCart({ service_id, otherId });
-            this.removeSuccessToast();
+            if (window.confirm('Bạn có chắc chắn muốn xóa dịch vụ khác này?')) {
+                await this.removeOtherInCart({ service_id, otherId });
+                this.removeSuccessToast();
+            }
+
         },
         calculateTotal(localCart) {
             let totalMenu = 0;
@@ -744,6 +751,7 @@ export default {
         removeSuccessToast() {
             toast.success('Xóa thành công', { autoClose: 1000 });
         },
+
 
     },
 

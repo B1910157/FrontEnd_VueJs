@@ -149,10 +149,19 @@ import ListChat from "../../components/chat/listChat.vue";
 import userChat from "../../services/userChat.service";
 import io from "socket.io-client";
 import serviceProvider from "../../services/service.service";
+import * as yup from "yup";
 
+import { mapState } from "vuex";
+
+import infoService from "../../services/info.service";
 export default {
     components: {
         ListChat,
+    },
+    computed: {
+        ...mapState(["Auth"]),
+
+
     },
     data() {
         return {
@@ -160,11 +169,25 @@ export default {
             message: "",
             messages: [],
             socket: null,
-            service: {}
+            service: {},
+            info: {}
         };
     },
 
     methods: {
+        async retrieveInfo() {
+            try {
+                if (this.Auth) {
+                    this.info = await infoService.info();
+
+                } else {
+                    this.info = null;
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        },
         async getService() {
             try {
 
@@ -192,28 +215,41 @@ export default {
         },
 
         async sendMessage() {
-
-            if (this.message.trim() !== "") {
+            if (this.message.trim() !== "" && this.info && this.info._id) {
+                const room2 = this.$route.params.serviceId + "_" + this.info._id;
+                // const room2 = this.$route.params.serviceId;
                 // Gửi tin nhắn tới server qua socket của namespace3001
-                this.socket.emit("chat message", { chat: this.message, sender: "user" });
+
+                this.socket.emit("chat message", { chat: this.message, sender: "user", roomId: room2 });
+
+                // Thêm tin nhắn vào danh sách
+                // this.messages.push({ chat: this.message, sender: "user", roomId: room2 });
+                // Xóa nội dung tin nhắn từ input
+
+
                 const data = {
                     service_id: this.$route.params.serviceId,
                     content: this.message
                 }
-                this.message = "";
-
                 const rs = await userChat.userChatSocket(data);
-                // this.getOneChat()
-                // Thêm tin nhắn vào danh sách
-                // this.chats.push({
-                //     content: this.message,
-                //     sender: "User1", // Thay đổi thành thông tin người gửi thực tế
-                // });
-                // Xóa nội dung tin nhắn từ input
+                this.message = "";
                 this.$nextTick(() => {
                     this.scrollToEnd();
                 });
             }
+
+            // if (this.message.trim() !== "") {
+            //     this.socket.emit("chat message", { chat: this.message, sender: "user" });
+            //     const data = {
+            //         service_id: this.$route.params.serviceId,
+            //         content: this.message
+            //     }
+            //     this.message = "";
+            //     const rs = await userChat.userChatSocket(data);
+            //     this.$nextTick(() => {
+            //         this.scrollToEnd();
+            //     });
+            // }
         },
         scrollToEnd() {
             const container = this.$refs.chatContainer;
@@ -221,23 +257,41 @@ export default {
         },
 
         initializeSocket() {
-            // Kết nối đến server Socket.IO qua namespace3001
-            this.socket = io("http://localhost:3009/namespace"); // Thay đổi URL theo địa chỉ của server và namespace
 
-            // Ở phía user
-            // this.socket.emit("chat message", { chat: this.message, sender: "user" });
+            // this.socket = io("http://localhost:3009/namespace"); // Thay đổi URL theo địa chỉ của server và namespace
+            // this.socket.on("chat message", (msg) => {
+            //     this.messages.push(msg);
+            // });
 
-            // Xử lý sự kiện nhận tin nhắn từ server
-            this.socket.on("chat message", (msg) => {
-                this.messages.push(msg);
-            });
+
+            // Kết nối đến server Socket.IO
+            this.socket = io("http://localhost:3009"); // Thay đổi URL theo địa chỉ của server
+            // Gửi sự kiện join với roomId khi component được tạo
+            if (1) {
+                const room1 = this.$route.params.serviceId + "_" + this.info._id;
+                // const room1 = this.$route.params.serviceId;
+                this.socket.emit("join", room1);
+
+                // Xử lý sự kiện nhận tin nhắn từ server
+                this.socket.on("chat message", (msg) => {
+                    this.messages.push(msg);
+                    this.$nextTick(() => {
+                        this.scrollToEnd();
+                    });
+                });
+            }
+
         },
     },
 
-    created() {
+    async created() {
+        await this.retrieveInfo();
         this.getOneChat();
         this.getService();
-        this.initializeSocket(); // Khởi tạo kết nối Socket.IO khi component được tạo
+        if (this.Auth) {
+            this.initializeSocket(); // Khởi tạo kết nối Socket.IO khi component được tạo
+        }
+
     },
 };
 </script>

@@ -43,7 +43,7 @@
                     </tr>
                 </table>
 
-                <table class="table col-md-6 table-bordered" v-if="this.order && this.order.cart[1].drink">
+                <table class="table col-md-6 table-bordered" v-if="this.order && this.order.cart[1].drink.length > 0">
                     <thead>
                         <tr class="text-center">
                             <th colspan="3">ĐỒ UỐNG</th>
@@ -71,8 +71,8 @@
                     </tr>
                 </table>
             </div>
-            <div class="row pl-3">
-                <table class="table table-bordered col-md-12" v-if="this.order && this.order.cart[2]">
+            <div v-if="this.order && this.order.cart[2].other.length > 0" class="row pl-3">
+                <table class="table table-bordered col-md-12">
                     <thead>
                         <tr>
                             <th class="text-center" colspan="2">KHÁC</th>
@@ -96,10 +96,20 @@
                     </tr>
                 </table>
 
+
             </div>
             <div class="col-md-12 row">
                 <p class="font-weight-bold col-md-3"><u>TỔNG CỘNG</u>:</p>
                 <p class="col-md-9">{{ formatCurrency(this.order.total) }}</p>
+            </div>
+            <div class="p-3" v-if="this.order && this.order.surcharges && this.order.surcharges.length > 0">
+                <b>PHỤ THU</b>
+                <ul class="p-3">
+                    <li v-for="(surcharge, index) in this.order.surcharges" :key="index">
+                        {{ surcharge.key }}: {{ surcharge.value }}
+                    </li>
+                </ul>
+
             </div>
 
         </div>

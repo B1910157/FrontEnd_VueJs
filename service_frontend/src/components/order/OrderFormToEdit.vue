@@ -379,10 +379,10 @@ export default {
 <style>
 input {
     border: solid 1px black;
-    width: 60px;
+    /* width: 60px; */
     margin-right: 10px;
     padding-left: 10px;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .full-background {

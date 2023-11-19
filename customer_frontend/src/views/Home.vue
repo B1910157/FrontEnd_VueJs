@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="border">
         <ServicesList v-if="filteredFoodCount > 0" :foods="filteredFood" v-model:activeIndex="activeIndex" />
         <p class="text-center" v-else>Không có dịch vụ hỗ trợ nào.</p>
     </div>

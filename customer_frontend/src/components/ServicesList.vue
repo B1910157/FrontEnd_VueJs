@@ -94,7 +94,7 @@ export default {
     <h1>Hỗ trợ đặt tiệc lưu động</h1>
     <p>Party Planner</p>
   </div>
-  <div class="container row">
+  <div class="container_main row">
     <div class="col-1">
     </div>
     <div class="col-10">
@@ -103,7 +103,7 @@ export default {
     <div class="col-1">
     </div>
   </div>
-  <div class="container">
+  <div class="container_main">
     <div v-for="(food, index) in filteredService" :key="food._id" :class="{ active: index === activeIndex }"
       @click="updateActiveIndex(index)">
 
@@ -207,7 +207,7 @@ body {
   font-style: italic;
 }
 
-.container {
+.container_main {
   width: 100vw;
   display: flex;
   justify-content: space-around;
