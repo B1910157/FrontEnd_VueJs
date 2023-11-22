@@ -58,7 +58,8 @@
                 <div class="col-md-6 form-group">
                     <label for="tray_quantity" class="text-left"><i class="fa-solid fa-tablet"></i> Số lượng bàn</label>
                     <Field name="tray_quantity" type="number" class="form-control" v-model="orderLocal.tray_quantity" />
-                    <ErrorMessage name="tray_quantity" class="error-feedback" />
+                    <!-- <ErrorMessage name="tray_quantity" class="error-feedback" /> -->
+                    <p class="text-left text-danger">{{ this.minTrayQuantityMessage }}</p>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -253,7 +254,7 @@
                                 tiệc</label>
                             <select name="type_party" class="form-control" v-model="orderLocal.type_party"
                                 @change="selectType">
-                                <option value="" disabled>Chọn loại tiệc</option>
+                                <option value="" disabled>--Chọn--</option>
                                 <option v-for="type_party in type_parties" :value="type_party.type_party">{{
                                     type_party.type_party }}</option>
                                 <option value="other">Khác</option>
@@ -284,10 +285,7 @@
                                 </i>
                             </div>
                             <hr>
-
                         </div>
-
-
                     </div>
                     <div class="col-6">
                         <div class="form-group">
@@ -297,6 +295,8 @@
                                 <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
                                 <option v-for="province in provinces" :value="province">{{ province.name }}</option>
                             </select>
+                            <!-- <ErrorMessage name="province" class="error-feedback" /> -->
+                            <p class="text-danger text-left">{{ this.checkProvinceName }}</p>
                         </div>
 
                         <div class="form-group">
@@ -440,6 +440,8 @@ export default {
                 .typeError("Vui lòng  chọn giờ diễn ra")
                 .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Giờ diễn ra không hợp lệ")
                 .required("Vui lòng chọn giờ diễn ra"),
+
+
             // province: yup.string()
             // .typeError("Vui lòng chọn tỉnh thành")
             // .required("Vui lòng chọn tỉnh thành"),
@@ -487,7 +489,8 @@ export default {
             },
 
             orderFormSchema,
-            otherType: ''
+            otherType: '',
+
 
         };
     },
@@ -532,12 +535,23 @@ export default {
             handler: 'getWardName',
             deep: true,
         },
+        'orderLocal.tray_quantity': 'checkMinTrayQuantity',
+
+
     },
     mounted() {
         this.getProvince();
     },
 
     methods: {
+
+        checkMinTrayQuantity() {
+            if (this.orderLocal.tray_quantity < 5) {
+                this.minTrayQuantityMessage = 'Số lượng bàn ít nhất là 5';
+            } else {
+                this.minTrayQuantityMessage = '';
+            }
+        },
         selectType() {
             if (this.orderLocal.type_party === 'other') {
                 this.otherType = '';

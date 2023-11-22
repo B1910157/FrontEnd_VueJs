@@ -265,21 +265,17 @@ export default {
 
 
             // Kết nối đến server Socket.IO
-            this.socket = io("http://localhost:3009"); // Thay đổi URL theo địa chỉ của server
-            // Gửi sự kiện join với roomId khi component được tạo
-            if (1) {
-                const room1 = this.$route.params.serviceId + "_" + this.info._id;
-                // const room1 = this.$route.params.serviceId;
-                this.socket.emit("join", room1);
+            this.socket = io("http://localhost:3009");
+            const room1 = this.$route.params.serviceId + "_" + this.info._id;
+            // const room1 = this.$route.params.serviceId;
+            this.socket.emit("join", room1);
 
-                // Xử lý sự kiện nhận tin nhắn từ server
-                this.socket.on("chat message", (msg) => {
-                    this.messages.push(msg);
-                    this.$nextTick(() => {
-                        this.scrollToEnd();
-                    });
+            this.socket.on("chat message", (msg) => {
+                this.messages.push(msg);
+                this.$nextTick(() => {
+                    this.scrollToEnd();
                 });
-            }
+            });
 
         },
     },
