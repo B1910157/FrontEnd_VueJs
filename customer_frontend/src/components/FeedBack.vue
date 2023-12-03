@@ -42,7 +42,7 @@ export default {
         });
 
         return {
-            // Khởi tạo data cho nội dung góp ý
+          
             feedbackLocal: {
                 content: "",
             },

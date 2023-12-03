@@ -2,7 +2,41 @@
     <div class="container">
         <v-combobox v-model="this.year" label="Năm" :items="yearOptions"></v-combobox>
         <canvas id="combinedLineChart" width="300" height="100"></canvas>
+        <v-row class="pt-3">
+            <v-col cols="3">
+                <v-card style="height: 100px;" color="primary" dark>
+                    <v-card-title class="text-h5">
+                        Tổng đơn <i class="fa-regular fa-star"></i> <br> {{ this.orders.length }} đơn
+                    </v-card-title>
 
+                </v-card>
+            </v-col>
+
+            <v-col cols="3">
+                <v-card style="height: 100px;" color="success" dark>
+                    <v-card-title class="text-h5">
+                        Thành công <i class="fa-solid fa-check"></i> <br> {{ this.successOrder.length }} đơn
+                    </v-card-title>
+                </v-card>
+            </v-col>
+
+            <v-col cols="3">
+                <v-card style="height: 100px;" color="warning" dark>
+                    <v-card-title class="text-h5">
+                        Chờ xử lý <i class="fa-regular fa-clock"></i> <br> {{ this.waitOrder.length }} đơn
+                    </v-card-title>
+
+                </v-card>
+            </v-col>
+            <v-col cols="3">
+                <v-card style="height: 100px;" color="error" dark>
+                    <v-card-title class="text-h6">
+                        Không thành công <i class="fa-solid fa-exclamation"></i> <br>{{ this.failOrder.length }} đơn
+                    </v-card-title>
+
+                </v-card>
+            </v-col>
+        </v-row>
     </div>
 </template>
 <script>
@@ -34,7 +68,11 @@ export default {
             dataOrder: [],
             dataOrderSuccess: [],
             year: 2023,
-            chart: null
+            chart: null,
+            orders: [],
+            successOrder: [],
+            waitOrder: [],
+            failOrder: []
         };
     },
     computed: {
@@ -60,7 +98,17 @@ export default {
         },
     },
     methods: {
+        async retrieveOrders() {
+            try {
 
+                this.orders = await orderService.findAll();
+                this.successOrder = this.orders.filter(order => order.status === 1);
+                this.waitOrder = this.orders.filter(order => order.status === 0);
+                this.failOrder = this.orders.filter(order => order.status != 0 && order.status != 1);
+            } catch (error) {
+                console.log(error);
+            }
+        },
         async getOrdersByMonth() {
             try {
 
@@ -140,6 +188,7 @@ export default {
         },
     },
     created() {
+        this.retrieveOrders();
         this.start();
     },
 

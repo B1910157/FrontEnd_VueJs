@@ -136,8 +136,8 @@ export default {
         <div class="row">
           <div class="col-md-12 mb-3">
             <p class="ms-2"><b>Trạng thái:</b> &nbsp;
-              <span class="text-warning" v-if="order.status == 0">Chưa duyệt <button class="btn btn-danger"
-                  @click="showConfirmCancel(order._id)">Hủy</button></span>
+              <span class="text-warning" v-if="order.status == 0 && isFutureEvent(order.event_date)">Chưa duyệt <button
+                  class="btn btn-danger" @click="showConfirmCancel(order._id)">Hủy</button></span>
               <span class="text-success" v-if="order.status == 1">Đã duyệt <i class="fa fa-check"
                   aria-hidden="true"></i></span>
               <span class="text-danger" v-if="order.status == 2">Đã bị hủy <i class="fa fa-times"
@@ -239,11 +239,12 @@ export default {
             </div>
 
           </div>
-          <div v-if="order.statusPayment == 0 && isFutureEvent(order.event_date) && order.status == 1">
+          <!-- <div v-if="order.statusPayment == 0 && isFutureEvent(order.event_date) && order.status == 1"></div> -->
+          <div v-if="order.statusPayment == 0 && order.status == 1">
             <button class="btn btn-success ml-3" @click="payment(order._id)"><i class="fa-solid fa-dollar-sign"></i>
               Thanh toán</button>
           </div>
-          <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status !== 1">
+          <div v-if="order.statusPayment == 0 && !isFutureEvent(order.event_date) && order.status != 1">
             <p class="text-danger pl-5">Đơn hàng quá hạn</p>
           </div>
           <!-- <div class="col-md-12">

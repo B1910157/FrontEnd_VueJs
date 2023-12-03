@@ -7,15 +7,14 @@
                     <div><span><i class="fas fa-envelope"></i> Liên Hệ</span></div>
                     <div><span><i class="fas fa-shipping-fast"></i> Thông Tin Vận Chuyển</span></div>
                     <div><span><i class="fas fa-user-secret"></i> Chính Sách Riêng Tư</span></div>
-                    <div><span><i class="fas fa-gavel"></i> Điều Khoản</span></div>
-                    <div><span><i class="fas fa-envelope"></i> Liên Hệ</span></div>
-                    <div><span><i class="fas fa-undo"></i> Hoàn Trả</span></div>
+
                 </div>
 
                 <div class="col-md-4">
                     <h3>Thông Tin Bổ Sung</h3>
                     <div><span><i class="fas fa-map-marked-alt"></i> Bản Đồ</span></div>
                     <div><span><i class="fas fa-user-circle"></i> Tài Khoản</span></div>
+
                 </div>
 
                 <div class="col-md-4">

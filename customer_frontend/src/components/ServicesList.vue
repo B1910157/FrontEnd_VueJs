@@ -174,7 +174,7 @@ export default {
 
 .selected-star {
   color: gold;
-  /* hoặc màu vàng khác tùy ý bạn chọn */
+
 }
 
 

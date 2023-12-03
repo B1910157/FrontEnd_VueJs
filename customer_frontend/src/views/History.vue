@@ -43,36 +43,20 @@ export default {
         };
     },
     watch: {
-        // Giám sát các thay đổi của biến searchText.
-        // Bỏ chọn phần tử đang được chọn trong danh sách.
         searchText() {
             this.activeIndex = -1;
         },
     },
     computed: {
-        // Chuyển các đối tượng foood thành chuỗi để tiện cho tìm kiếm.
-        // orderString() {
-        //     return this.orders.map((order) => {
-
-        //         const { order_date, event_order, address_book } = order;
-        //         return [order_date, event_order, address_book].join("");
-        //     });
-        // },
-        // Trả về các foood có chứa thông tin cần tìm kiếm.
-
-
-        // filteredorder() {
-        //     return this.orders;
-
-        // },
+        
         filteredorder() {
             if (this.filterDate) {
                 return this.orders.filter((order) => {
-                    // Filter orders based on the selected date
-                    return order.event_date === this.filterDate; // Modify this as per your data structure
+                   
+                    return order.event_date === this.filterDate; 
                 });
             } else {
-                return this.orders; // If no date is selected, show all orders
+                return this.orders; 
             }
         },
 

@@ -4,6 +4,7 @@ import orderService from '../../services/order.service';
 import { VDataTable } from "vuetify/labs/VDataTable";
 import { VBtn, VIcon, VDialog } from "vuetify/lib/components/index.mjs";
 import ReasonCancelForm from './ReasonCancelForm.vue';
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         VDataTable,
@@ -56,17 +57,20 @@ export default {
                     actions.push({
                         text: 'Đơn đã duyệt',
 
+
                     });
 
                 }
                 else if (order.status === 2) {
                     actions.push({
                         text: 'Bạn đã hủy đơn',
+
                     });
                 }
                 else if (order.status === 3) {
                     actions.push({
                         text: 'Khách hàng đã hủy đơn',
+
                     });
                 }
                 if (mess) {
@@ -91,6 +95,7 @@ export default {
     },
 
     data: () => ({
+
         headers: [
             {
                 title: 'Khách hàng',
@@ -114,6 +119,7 @@ export default {
                 title: 'Thao tác',
                 align: 'end',
                 key: 'actions',
+
 
             },
 
@@ -139,6 +145,12 @@ export default {
 
     }),
     methods: {
+        cancelToast() {
+            toast.success('Hủy thành công', { autoClose: 3000 });
+        },
+        acceptToast() {
+            toast.success('Xác nhận thành công', { autoClose: 3000 });
+        },
         isCurrentDateGreaterThanEventDate(order) {
             // Lấy ngày hiện tại
             if (order && order.event_date) {
@@ -178,7 +190,8 @@ export default {
             try {
                 const rs = await orderService.accept(orderId);
                 if (rs) {
-                    this.$emit('accept', this.orders)
+                    this.$emit('accept', this.orders);
+                    this.acceptToast();
 
                 }
             } catch (error) {
@@ -192,7 +205,8 @@ export default {
             try {
                 const rs = await orderService.cancel(orderId, reasonReal);
                 if (rs) {
-                    this.$emit('cancel', this.orders)
+                    this.$emit('cancel', this.orders);
+                    this.cancelToast();
                 }
             } catch (error) {
                 console.log(error);
@@ -212,8 +226,7 @@ export default {
             if (confirm("Bạn có chắc chắn muốn hủy đơn này?")) {
                 this.isOpenDialogReasonCancel = true;
                 this.isOrderId = orderId;
-                // console.log("orderId", this.isOrderId)
-                // this.cancel(orderId);
+
             }
         },
         showDetails(orderId) {
@@ -271,7 +284,7 @@ export default {
                 <p class="badge badge-secondary " v-if="action.text == 'Khách vãng lai'">{{
                     action.text }}</p>
                 <p class="badge badge-primary" v-else-if="action.text == 'Nhắn tin'">{{ action.text }} <i
-                        class="fa-solid fa-paper-plane"></i></p>
+                        class="fa-solid fa-envelope"></i></p>
 
 
             </div>

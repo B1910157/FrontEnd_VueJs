@@ -102,6 +102,7 @@ export default {
             // console.log("show", rs);
         },
         async addService(data) {
+      
             const rs = await adminService.adminCreateService(data);
             if (rs.status == 400) {
                 this.message = rs.message;

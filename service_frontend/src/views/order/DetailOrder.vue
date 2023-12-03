@@ -85,7 +85,7 @@ export default {
     methods: {
 
         addSurcharges() {
-            console.log("addd");
+            // console.log("addd");
             this.isAddSurcharges = true;
         },
         cancelSuccessToast() {

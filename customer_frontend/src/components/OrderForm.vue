@@ -54,10 +54,10 @@
                 </div>
             </div>
             <div class="row">
-
                 <div class="col-md-6 form-group">
                     <label for="tray_quantity" class="text-left"><i class="fa-solid fa-tablet"></i> Số lượng bàn</label>
-                    <Field name="tray_quantity" type="number" class="form-control" v-model="orderLocal.tray_quantity" />
+                    <Field name="tray_quantity" type="number" class="form-control" min="5"
+                        v-model="orderLocal.tray_quantity" />
                     <!-- <ErrorMessage name="tray_quantity" class="error-feedback" /> -->
                     <p class="text-left text-danger">{{ this.minTrayQuantityMessage }}</p>
                 </div>
@@ -228,22 +228,25 @@
                         <Field name="cart" type="hidden" class="form-control" v-model="orderLocal.cart" />
 
                         <div class="form-group">
-                            <label for="fullname"><i class="fa-solid fa-user"></i> Họ tên</label>
+                            <label for="fullname"><i class="fa-solid fa-user"></i> Họ tên <b class="text-danger">*</b>
+                            </label>
                             <Field name="fullname" type="text" class="form-control" v-model="orderLocal.fullname" />
                             <ErrorMessage name="fullname" class="error-feedback" />
                         </div>
                         <div class="form-group">
-                            <label for="phone"><i class="fa-solid fa-phone"></i> Số điện thoại</label>
+                            <label for="phone"><i class="fa-solid fa-phone"></i> Số điện thoại <b
+                                    class="text-danger">*</b></label>
                             <Field name="phone" type="text" class="form-control" v-model="orderLocal.phone" />
                             <ErrorMessage name="phone" class="error-feedback" />
                         </div>
                         <div class="form-group">
-                            <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+                            <label for="email"><i class="fa-solid fa-envelope"></i> Email <b
+                                    class="text-danger">*</b></label>
                             <Field name="email" type="text" class="form-control" v-model="orderLocal.email" />
                             <ErrorMessage name="email" class="error-feedback" />
                         </div>
                         <div class="form-group" hidden>
-                            <label for="tray_quantity"><i class="fa-solid fa-tablet"></i> Số lượng bàn</label>
+                            <label for="tray_quantity"><i class="fa-solid fa-tablet"></i> Số lượng bàn </label>
                             <Field name="tray_quantity" type="number" class="form-control"
                                 v-model="orderLocal.tray_quantity" />
                             <ErrorMessage name="tray_quantity" class="error-feedback" />
@@ -251,25 +254,28 @@
 
                         <div class="form-group">
                             <label for="type_party" class="font-weight-bold"><i class="fa-solid fa-bars"></i> Loại
-                                tiệc</label>
-                            <select name="type_party" class="form-control" v-model="orderLocal.type_party"
+                                tiệc <b class="text-danger">*</b></label>
+                            <Field as="select" name="type_party" class="form-control" v-model="orderLocal.type_party"
                                 @change="selectType">
                                 <option value="" disabled>--Chọn--</option>
                                 <option v-for="type_party in type_parties" :value="type_party.type_party">{{
                                     type_party.type_party }}</option>
                                 <option value="other">Khác</option>
-                            </select>
+                            </Field>
                             <input v-if="orderLocal.type_party === 'other'" type="text" class="form-control"
                                 v-model="otherType" placeholder="Nhập loại tiệc">
+                            <ErrorMessage name="type_party" class="error-feedback" />
                         </div>
 
                         <div class="form-group">
-                            <label for="event_date"><i class="fa-solid fa-calendar-check"></i> Ngày diễn ra</label>
+                            <label for="event_date"><i class="fa-solid fa-calendar-check"></i> Ngày diễn ra <b
+                                    class="text-danger">*</b></label>
                             <Field name="event_date" type="date" class="form-control" v-model="orderLocal.event_date" />
                             <ErrorMessage name="event_date" class="error-feedback" />
                         </div>
                         <div class="form-group">
-                            <label for="event_time"><i class="fa-solid fa-clock"></i> Giờ diễn ra</label>
+                            <label for="event_time"><i class="fa-solid fa-clock"></i> Giờ diễn ra <b
+                                    class="text-danger">*</b></label>
                             <Field name="event_time" type="time" class="form-control" v-model="orderLocal.event_time" />
                             <ErrorMessage name="event_time" class="error-feedback" />
                         </div>
@@ -287,39 +293,43 @@
                             <hr>
                         </div>
                     </div>
+
                     <div class="col-6">
                         <div class="form-group">
                             <label for="province" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i>
-                                Tỉnh/Thành phố</label>
-                            <select name="province" class="form-control" v-model="areaLocal.province">
+                                Tỉnh/Thành phố <b class="text-danger">*</b></label>
+                            <Field as="select" name="province" class="form-control" v-model="areaLocal.province">
                                 <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
-                                <option v-for="province in provinces" :value="province">{{ province.name }}</option>
-                            </select>
-                            <!-- <ErrorMessage name="province" class="error-feedback" /> -->
-                            <p class="text-danger text-left">{{ this.checkProvinceName }}</p>
+
+                                <option v-for="province in provinces" :value="province.code">{{ province.name }}</option>
+                            </Field>
+                            <ErrorMessage name="province" class="error-feedback" />
+                            <!-- <p class="text-danger text-left">{{ this.checkProvinceName }}</p> -->
                         </div>
 
                         <div class="form-group">
                             <label for="district" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i>
-                                Quận/Huyện</label>
-                            <select name="district" class="form-control" v-model="areaLocal.district">
+                                Quận/Huyện <b class="text-danger">*</b></label>
+                            <Field as="select" name="district" class="form-control" v-model="areaLocal.district">
                                 <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
-                                <option v-for="district in districts" :value="district">{{ district.name }}</option>
-                            </select>
+                                <option v-for="district in districts" :value="district.code">{{ district.name }}</option>
+                            </Field>
+                            <ErrorMessage name="district" class="error-feedback" />
                         </div>
                         <div class="form-group">
                             <label for="ward" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i>
-                                Xã/Phường/Thị Trấn</label>
-                            <select name="ward" class="form-control" v-model="areaLocal.ward">
+                                Xã/Phường/Thị Trấn <b class="text-danger">*</b></label>
+                            <Field as="select" name="ward" class="form-control" v-model="areaLocal.ward">
                                 <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
-                                <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
-                            </select>
+                                <option v-for="ward in wards" :value="ward.name">{{ ward.name }}</option>
+                            </Field>
+                            <ErrorMessage name="ward" class="error-feedback" />
                         </div>
                         <div class="form-group">
                             <label for="address_book" class="font-weight-bold"><i class="fa-solid fa-location-dot"></i> Địa
-                                chỉ </label>
-                            <textarea name="address_book" class="form-control" placeholder="Địa chỉ..."
-                                v-model="orderLocal.address_book"></textarea>
+                                chỉ <b class="text-danger">*</b></label>
+                            <Field as="textarea" name="address_book" class="form-control" placeholder="Địa chỉ..."
+                                v-model="orderLocal.address_book"></Field>
                             <ErrorMessage name="address_book" class="error-feedback" />
                         </div>
                         <div class="form-group">
@@ -442,12 +452,21 @@ export default {
                 .required("Vui lòng chọn giờ diễn ra"),
 
 
-            // province: yup.string()
-            // .typeError("Vui lòng chọn tỉnh thành")
-            // .required("Vui lòng chọn tỉnh thành"),
-            // address_book: yup.string()
-            //     .typeError("Vui lòng cung cấp địa chỉ")
-            //     .required("Vui lòng cung cấp địa chỉ"),
+            province: yup.string()
+                .typeError("Vui lòng chọn tỉnh/thành phố")
+                .required("Vui lòng chọn tỉnh/thành phố"),
+            district: yup.string()
+                .typeError("Vui lòng chọn quận/huyện")
+                .required("Vui lòng chọn quận/huyện"),
+            ward: yup.string()
+                .typeError("Vui lòng chọn phường/xã/thị trấn")
+                .required("Vui lòng chọn phường/xã/thị trấn"),
+            address_book: yup.string()
+                .typeError("Vui lòng cung cấp địa chỉ")
+                .required("Vui lòng cung cấp địa chỉ"),
+            type_party: yup.string()
+                .typeError("Vui lòng chọn loại tiệc")
+                .required("Vui lòng chọn lọi tiệc"),
         });
         return {
             cartOrder: {},
@@ -584,9 +603,10 @@ export default {
                 this.areaLocal.district = "";
                 // this.districts = await ProvinceService.getDistricts(this.areaLocal.province.code, this.districtName);
 
-                const rs = await getProvincesOpenAPI.getProvince(this.areaLocal.province.code);
+                const rs = await getProvincesOpenAPI.getProvince(this.areaLocal.province);
+                // console.log("jjiij1231212", rs)
                 this.districts = rs.districts;
-                this.orderLocal.provinceName = await this.areaLocal.province.name;
+                this.orderLocal.provinceName = rs.name;
 
 
             } catch (error) {
@@ -597,9 +617,9 @@ export default {
             try {
                 this.areaLocal.ward = "";
                 // this.wards = await ProvinceService.getWards(this.areaLocal.district.code, this.wardName);
-                const rs = await getProvincesOpenAPI.getDistrict(this.areaLocal.district.code);
+                const rs = await getProvincesOpenAPI.getDistrict(this.areaLocal.district);
                 this.wards = rs.wards;
-                this.orderLocal.districtName = await this.areaLocal.district.name;
+                this.orderLocal.districtName = rs.name;
 
 
             } catch (error) {
@@ -608,7 +628,8 @@ export default {
         },
         async getWardName() {
             try {
-                this.orderLocal.wardName = await this.areaLocal.ward.name;
+                // console.log("sgsdf", this.areaLocal.ward)
+                this.orderLocal.wardName = await this.areaLocal.ward;
 
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);

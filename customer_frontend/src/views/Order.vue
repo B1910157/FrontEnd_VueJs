@@ -157,7 +157,7 @@ export default {
                     this.getLocalCart();
                     this.showSuccessToast();
                     setTimeout(() => {
-                        this.$router.push({ name: 'home' });// Thay đổi URL tới trang chủ của bạn
+                        this.$router.push({ name: 'home' });
                     }, 1000);
                     // this.$router.push({ name: 'home' });
                 } else if (this.Auth) {
@@ -166,7 +166,7 @@ export default {
                     this.getOtherInCart();
                     this.showSuccessToast();
                     setTimeout(() => {
-                        this.$router.push({ name: 'home' });// Thay đổi URL tới trang chủ của bạn
+                        this.$router.push({ name: 'home' });
                     }, 1000);
                     // 
                     // this.$router.push({ name: 'history' });
@@ -181,40 +181,8 @@ export default {
                 this.showFailedToast();
             }
         },
-        // handleVnPayCallback(req, res) {
-        //     console.log("query", req.query);
-        //     const paymentStatus = req.query.status; // Đây là ví dụ, bạn cần kiểm tra thông báo VNPay để xác định trạng thái thanh toán
-        //     if (paymentStatus === "success") {
-        //         // Đặt trạng thái tạm thời thành "thanh toán thành công"
-        //         this.setPaymentStatus = "success";
-        //         // Tiếp tục xử lý tạo đơn hàng
-        //         // this.createOrder(data);
-        //     } else {
-        //         // Xử lý trường hợp thanh toán không thành công
-        //         this.setPaymentStatus = "failed";
-        //     }
-        // },
-        // paymentSuccess_Ne() {
-        //     console.log("12345 nè");
-        //     this.showSuccessToast();
-        //     // await orderService.addOrder(this.dataOrder);
+        
 
-        // },
-
-
-        // async createOrder(data) {
-        //     try {
-        //         const response = await orderService.addOrder(data);
-        //         if (response.status === 200) {
-        //             // Đã tạo đơn hàng thành công
-        //             this.showSuccessToast();
-        //             // Tiếp theo, bạn có thể chuyển hướng người dùng đến trang xác nhận đơn hàng hoặc bất kỳ hành động nào bạn muốn thực hiện.
-        //         }
-        //     } catch (error) {
-        //         console.error(error);
-        //         // Xử lý trường hợp tạo đơn hàng không thành công
-        //     }
-        // }
 
     },
     mounted() {

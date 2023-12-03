@@ -121,8 +121,8 @@ export default {
                 ],
             };
             localStorage.setItem("localCart", JSON.stringify(newLocalCart));
-            console.log("set lại");
-            console.log(newLocalCart)
+            // console.log("set lại");
+            // console.log(newLocalCart)
         },
         ...mapMutations(["setAuth"]),
         handleOrder() {

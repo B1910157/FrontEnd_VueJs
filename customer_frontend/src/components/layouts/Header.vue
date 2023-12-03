@@ -186,9 +186,9 @@ export default {
 .message-count {
     position: absolute;
     top: -14px;
-    /* Adjust the vertical position as needed */
+  
     right: -8px;
-    /* Adjust the horizontal position as needed */
+
     background-color: red;
     color: white;
     border-radius: 100%;

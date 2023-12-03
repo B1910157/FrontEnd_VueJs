@@ -69,7 +69,7 @@ export default {
                 ),
         });
         return {
-            // Chúng ta sẽ không muốn hiệu chỉnh props, nên tạo biến cục bộ
+           
             // info để liên kết với các input trên form
             // userLocal: this.info,
             userFormSchema,

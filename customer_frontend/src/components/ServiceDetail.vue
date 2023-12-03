@@ -132,7 +132,8 @@
                     <option v-for="category in categories" :value="category._id">{{ category.food_category }}</option>
                 </select>
             </div>
-            <div v-if="paginatedFoods.length > 0" v-for="(food, index) in  paginatedFoods" :key="index" class="col-2 my-2">
+            <div v-if="foodOfService && paginatedFoods.length > 0" v-for="(food, index) in  paginatedFoods" :key="index"
+                class="col-2 my-2">
                 <v-card class="mx-auto">
                     <v-img :src="getImage(food)" cover height="100px"></v-img>
                     <v-card-title>
@@ -167,11 +168,12 @@
             </div>
         </div>
         <hr>
-        <div v-if="drinkOfService.length != 0">
+
+        <div v-if="drinkOfService && drinkOfService.length !== 0">
 
             <div class="row justify-content-start container">
                 <div class="col-12 text-center">ĐỒ UỐNG CỦA DỊCH VỤ</div>
-                <div v-for="(other, index) in paginatedDrink" :key="index" class="col-2 my-2">
+                <div v-for="(other, index) in paginatedDrink" :key="other._id" class="col-2 my-2">
                     <v-card class="mx-auto">
                         <v-img :src="getImage(other)" cover height="100px"></v-img>
                         <v-card-title>
@@ -182,6 +184,7 @@
                         </v-card-subtitle>
                         <v-card-actions>
                             <div v-if="checkChooseService()">
+
                                 <AddDrinkToCart :drink="other" :service="this.service" @drinkAdded="onDrinkAdded" />
                             </div>
                         </v-card-actions>
@@ -200,7 +203,7 @@
             </div>
         </div>
         <hr>
-        <div v-if="otherOfService.length > 0">
+        <div v-if="otherOfService && otherOfService.length > 0">
             <div class="row justify-content-start container">
                 <div class="col-12 text-center">KHÁC</div>
                 <div v-for="(other, index) in paginatedOther" :key="index" class="col-3 my-2">
@@ -235,14 +238,13 @@
         </div>
         <hr>
 
-        <div v-if="menuOfService.length > 0">
+        <div v-if="menuOfService && menuOfService.length > 0">
             <div class="row justify-content-start container">
                 <div class="col-12 text-center">MENU CỦA DỊCH VỤ</div>
                 <div v-for="(menu, index1) in paginatedMenu" :key="index1" class="col-4 mb-3">
                     <v-card class="mx-auto" style="height: 100%;">
                         <v-card-title>
                             {{ menu.menu_name }}
-
                         </v-card-title>
                         <v-card-text class="menu-list">
                             <table class=" table">
@@ -255,14 +257,11 @@
                                             food.food_name
                                         }}
                                     </td>
-
                                     <td>
                                         {{ formatCurrency(food.price) }}
                                     </td>
                                 </tr>
-
                             </table>
-
                         </v-card-text>
                         <v-card-actions class="action">
                             <v-btn variant="tonal" color="blue" v-if="checkChooseService()" @click="this.Auth ? addMenuToCartReal(service._id, menu._id)
@@ -371,7 +370,7 @@ export default {
                     return this.foodOfService.filter((food) => food.food_category === this.selectedCategory);
                 }
             } else {
-                // Lọc món ăn dựa trên searchText và selectedCategory (nếu có)
+                // Lọc món ăn dựa trên searchText và selectedCategory 
                 const filteredBySearch = this.foodOfService.filter((food) =>
                     food.food_name.toLowerCase().includes(this.searchText.toLowerCase())
                 );
@@ -443,7 +442,7 @@ export default {
             this.sendSuccessToast()
 
         },
-        // Hàm xử lý khi người dùng ấn nút "Hủy"
+        // Hàm xử lý khi người dùng ấn nút Hủy
         cancelMessage() {
             // Đóng dialog và làm sạch tin nhắn
             this.dialog = false;
@@ -594,9 +593,8 @@ export default {
 
 .current-page {
     background-color: #007bff;
-    /* Đặt màu nền cho trang hiện tại, ở đây là màu xanh dương */
     color: #fff;
-    /* Đặt màu chữ cho trang hiện tại, ở đây là màu trắng */
+
 }
 
 .action {
@@ -611,16 +609,16 @@ export default {
 
 .custom-select {
     border: 2px solid #333;
-    /* Độ đậm của border */
+
     padding: 5px;
-    /* Thêm padding để nội dung không bị che khuất bởi border */
+
     transition: border 0.3s ease;
-    /* Hiệu ứng hover */
+
 }
 
 .custom-select:hover {
     border: 2px solid #007bff;
-    /* Màu border khi hover */
+
 }
 
 
@@ -643,6 +641,6 @@ export default {
 
 .selected-star {
     color: gold;
-    /* hoặc màu vàng khác tùy ý bạn chọn */
+
 }
 </style>

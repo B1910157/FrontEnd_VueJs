@@ -120,7 +120,7 @@
     </div>
 
     <div class="cart-content" v-else-if="showCart && !Auth">
-      <h4>CART LOCALSTORAGE</h4>
+      <!-- <h4>CART LOCALSTORAGE</h4> -->
       <div class="row" v-if="this.localCart.service_id">
         <!-- <router-link :to="{ name: 'serviceDetail', params: { service_id: this.localCart.service_id } }">
           <span class="mt-2 badge badge-primary">Đến dịch vụ</span>
@@ -179,7 +179,7 @@
             </td>
 
           </tr>
-          Tổng tiền Menu: {{ formatCurrency(this.localCart.items[0].totalMenu) }}
+          Tổng tiền thực đơn: {{ formatCurrency(this.localCart.items[0].totalMenu) }}
 
         </table>
       </div>
@@ -188,7 +188,7 @@
       </div> -->
       <div v-if="this.localCart">
 
-        <h6>Đồ uống</h6>
+        <h6>ĐỒ UỐNG</h6>
         <table class="table table-bordered">
           <thead>
             <th>Tên</th>

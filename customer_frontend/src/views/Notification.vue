@@ -80,7 +80,6 @@ export default {
             const currentDate = new Date();
             const updatedAtDate = new Date(this.order.updateAt);
 
-            // Tính khoảng thời gian giữa ngày cập nhật và ngày hiện tại
             const timeDifference = currentDate - updatedAtDate;
             // Số mili giây trong 1 ngày
             const oneDayInMillis = 24 * 60 * 60 * 1000;

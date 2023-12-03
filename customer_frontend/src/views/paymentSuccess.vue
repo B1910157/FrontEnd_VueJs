@@ -35,18 +35,18 @@ export default {
             const VueToast = useToast();
             VueToast.open({
                 message: 'Đặt tiệc thành công!',
-                type: 'success', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
+                type: 'success', 
+                position: 'top-right',
+                duration: 5000, 
             });
         },
         showFailedToast() {
             const VueToast = useToast();
             VueToast.open({
                 message: 'Đặt tiệc không thành công!',
-                type: 'error', // Loại toast (có thể là 'success', 'error', 'info', hoặc 'warning')
-                position: 'top-right', // Vị trí hiển thị toast
-                duration: 5000, // Thời gian hiển thị (milliseconds)
+                type: 'error', 
+                position: 'top-right', 
+                duration: 5000, 
             });
         },
         async createOrder() {
@@ -112,19 +112,6 @@ export default {
     margin: 0 auto;
 }
 
-.success {
-    /* background-color: #4caf50; */
-    /* Màu xanh lá cây */
-    /* color: #fff; */
-    /* Màu chữ trắng */
-}
-
-.error {
-    /* background-color: #f44336; */
-    /* Màu đỏ */
-    /* color: #fff; */
-    /* Màu chữ trắng */
-}
 
 .success-icon {
     font-size: 100px;
@@ -153,7 +140,7 @@ router-link {
     margin-top: 20px;
     text-decoration: none;
     color: #007BFF;
-    /* Màu xanh dương */
+ 
 }
 
 router-link:hover {

@@ -3,72 +3,36 @@
     <div class="container">
         <div class="scrollable-list">
             <v-card-text>
-                <table class="table">
+                <table class="table ">
                     <template v-for="(foods, categoryId) in sortedFoodByCategory" :key="categoryId">
                         <tr v-if="foods.length > 0" :key="categoryId">
                             <th>{{ getCategoryName(categoryId) }}</th>
-                            <table class="table">
+                            <table class="table ">
                                 <tr v-for="food in foods" :key="food.foodId">
 
-                                    <td class="d-none d-md-block">
+                                    <td class="d-none d-md-block" style="width: 60px;">
                                         <v-img :src="getImage(food)" cover height="30px" width="30px"></v-img>
                                     </td>
-                                    <td>
+                                    <td style="width: 100px;">
                                         {{
                                             food.food_name
                                         }}
                                     </td>
 
-
-                                    <td>
+                                    <td style="width: 90px;">
                                         {{ formatCurrency(food.price) }}
                                     </td>
-                                    <td>
+                                    <td style="width: 30px;">
                                         <span v-if="this.isEditing == true" @click="removeFoodInMenu(food._id)"
                                             class="mt-2 badge badge-danger" style="font-size: 16px;">
                                             <i class="fas fa-trash"></i> </span>
                                     </td>
                                 </tr>
                             </table>
-
-
-                            <!-- <td v-for="food in foods" :key="food.foodId">
-                           
-                            {{ food.food_name }}
-                        </td> -->
                         </tr>
                     </template>
                 </table>
 
-                <!-- <table class="table">
-                    <tr v-for="(food, i) in this.menu.list" :key="food.foodId">
-
-                        <td class="d-none d-md-block">
-                            <v-img :src="getImage(food)" cover height="30px" width="30px"></v-img>
-                        </td>
-                        <td>
-                            {{
-                                food.food_name
-                            }}
-                        </td>
-
-
-                        <td>
-                            {{ formatCurrency(food.price) }}
-                        </td>
-                        <td>
-                            <span v-if="this.isEditing == true" @click="removeFoodInMenu(food._id)"
-                                class="mt-2 badge badge-danger" style="font-size: 16px;">
-                                <i class="fas fa-trash"></i> </span>
-                        </td>
-                    </tr>
-
-                </table> -->
-                <!-- <tr class="text-right">
-                        <td colspan="4">
-                            Tổng: {{ formatCurrency(this.menu.total) }}
-                        </td>
-                    </tr> -->
             </v-card-text>
         </div>
         <div class="action">
@@ -105,7 +69,7 @@
                         <i class="fas fa-close"></i> </span>
                 </div>
             </v-card-actions>
-            {{ console.log(sortedFoodByCategory) }}
+            <!-- {{ console.log(sortedFoodByCategory) }} -->
         </div>
     </div>
 </template>
@@ -133,12 +97,12 @@ export default {
         sortedFoodByCategory() {
             const sortedFoods = {};
             const sortedCategories = this.categories.slice().sort((a, b) => a.position - b.position);
-            // Tạo object rỗng cho mỗi danh mục thức ăn
+
             sortedCategories.forEach(category => {
                 sortedFoods[category._id] = [];
             });
 
-            // Phân loại các món ăn vào từng danh mục thức ăn
+
             this.menu.list.forEach(food => {
                 const categoryId = food.food_category;
 
@@ -289,7 +253,7 @@ export default {
 <style scoped>
 .scrollable-list {
     max-height: 370px;
-    /* Điều chỉnh chiều cao tối đa ở đây */
+
     overflow-y: auto;
 }
 

@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      info: object,
+      info: {},
       service: {},
       menuOfService: [],
       foodOfService: [],
@@ -97,20 +97,20 @@ export default {
       // checkEvaluate: false,
     };
   },
+
   watch: {
     '$route.params.service_id': {
       immediate: true,
-      handler() {
+      async handler() {
         let service_id_real = '';
         if (this.$route.params.service_id) {
           service_id_real = this.$route.params.service_id;
-          this.getService(service_id_real);
-          this.getMenuOfService(service_id_real);
-          this.getFoodOfService(service_id_real);
-          this.getDrinkOfService(service_id_real);
-          this.getOtherOfService(service_id_real);
+          await this.getService(service_id_real);
+          await this.getMenuOfService(service_id_real);
+          await this.getFoodOfService(service_id_real);
+          await this.getDrinkOfService(service_id_real);
+          await this.getOtherOfService(service_id_real);
         }
-
       }
     },
 
@@ -208,7 +208,7 @@ export default {
 
         };
         const rs = await CommentAndEvaluate.createEvaluate(data);
-        console.log("HIhi")
+
         this.evaluateSuccessToast();
         this.getService(this.service_id);
       } else if (!this.Auth) {
@@ -326,9 +326,10 @@ export default {
 
     async getService(service_id) {
       try {
+
         this.service = await Home.getService(service_id);
-        this.getCommentOfService();
-        this.getEvaluateOfService();
+        await this.getCommentOfService();
+        await this.getEvaluateOfService();
       } catch (error) {
         console.log(error);
         this.$router.push({
@@ -343,6 +344,7 @@ export default {
     },
     async getFoodOfService(service_id) {
       try {
+
         this.foodOfService = await Home.getAllFoodOfService(service_id);
       }
       catch (error) {
@@ -393,22 +395,39 @@ export default {
     },
     refreshInfo() {
       this.retrieveInfo();
+
     },
   },
-  created() {
-    this.getService(this.service_id);
-
+  async created() {
+    await this.getService(this.service_id);
     this.getMenuOfService(this.service_id);
     this.getFoodOfService(this.service_id);
     this.getDrinkOfService(this.service_id);
     this.getOtherOfService(this.service_id);
+    if (this.Auth) {
+      this.refreshInfo();
+    }
+
+
 
   },
-  mounted() {
+  // async mounted() {
+  //   await this.getService(this.service_id);
+  //   this.getMenuOfService(this.service_id);
+  //   this.getFoodOfService(this.service_id);
+  //   this.getDrinkOfService(this.service_id);
+  //   this.getOtherOfService(this.service_id);
+  //   if (this.Auth) {
+  //     this.refreshInfo();
+  //   }
 
-    this.refreshInfo();
 
-  },
+  // },
+  // created() {
+
+
+
+  // },
 };
 </script>
 <style scoped>
@@ -433,7 +452,7 @@ export default {
 
 .selected-star {
   color: gold;
-  /* hoặc màu vàng khác tùy ý bạn chọn */
+
 }
 
 .comment-section {

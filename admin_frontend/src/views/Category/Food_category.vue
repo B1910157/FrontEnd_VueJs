@@ -14,9 +14,10 @@
 
         </div>
 
-        <div class="container ">
-
-            <FoodCategory :categories="filterCategories" @delete:cate="deleteCate" @edit:cate="editCate" />
+        <div class="row">
+            <div class="offset-md-3 mt-3">
+                <FoodCategory :categories="filterCategories" @delete:cate="deleteCate" @edit:cate="editCate" />
+            </div>
 
         </div>
 

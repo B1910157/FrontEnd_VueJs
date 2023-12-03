@@ -40,19 +40,14 @@ export default {
         };
     },
     watch: {
-        // Giám sát các thay đổi của biến searchText.
-        // Bỏ chọn phần tử đang được chọn trong danh sách.
+      
 
     },
-    // props:{
-    //     info: this.info
-
-    // },
+   
     computed: {
         ...mapState(['Auth']),
 
 
-        // Trả về các food có chứa thông tin cần tìm kiếm.
         filteredinfo() {
             return this.info;
 

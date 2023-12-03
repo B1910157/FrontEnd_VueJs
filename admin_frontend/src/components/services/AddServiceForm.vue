@@ -1,69 +1,67 @@
 <template>
-    <!-- Form sử dụng thư viện VeeValidate để hiển thị validation error message và emit event khi submit -->
     <Form @submit="submitRegister" :validation-schema="RegisterFormSchema">
         <div class="form-columns">
             <div class="form-column">
                 <div class="form-group">
-                    <label for="service_name" class="font-weight-bold">Tên dịch vụ</label>
+                    <label for="service_name" class="font-weight-bold">Tên dịch vụ <b class="text-danger">*</b></label>
                     <Field name="service_name" type="text" class="form-control" v-model="RegisterLocal.service_name" />
-                    <!-- Hiển thị validation error message nếu có -->
+
                     <ErrorMessage name="service_name" class="error-feedback" />
                 </div>
-                <!-- Tạo ra input field cho tên -->
+
                 <div class="form-group">
-                    <label for="email" class="font-weight-bold">Email</label>
+                    <label for="email" class="font-weight-bold">Email <b class="text-danger">*</b></label>
                     <Field name="email" type="text" class="form-control" v-model="RegisterLocal.email" />
-                    <!-- Hiển thị validation error message nếu có -->
-                    <p class="text-danger ml-2">{{ this.message }}</p>
+
                     <ErrorMessage name="email" class="error-feedback" />
                 </div>
 
                 <div class="form-group">
-                    <label for="phone" class="font-weight-bold">Số điện thoại</label>
+                    <label for="phone" class="font-weight-bold">Số điện thoại <b class="text-danger">*</b></label>
                     <Field name="phone" type="text" class="form-control" v-model="RegisterLocal.phone" />
-                    <!-- Hiển thị validation error message nếu có -->
+
                     <ErrorMessage name="phone" class="error-feedback" />
                 </div>
             </div>
             <div class="form-column">
                 <div class="form-group">
-                    <label class="font-weight-bold" for="province">Tỉnh/Thành phố</label>
-                    <select name="province" class="form-control" v-model="areaLocal.province">
+                    <label class="font-weight-bold" for="province">Tỉnh/Thành phố <b class="text-danger">*</b></label>
+                    <Field as="select" name="province" class="form-control" v-model="areaLocal.province">
                         <!-- <option value="" disabled selected>Chọn tỉnh/thành phố</option> -->
-                        <option v-for="province in provinces" :value="province">{{ province.name }}</option>
-                    </select>
+                        <option v-for="province in provinces" :value="province.code">{{ province.name }}</option>
+                    </Field>
+                    <ErrorMessage name="province" class="error-feedback" />
                 </div>
 
                 <div class="form-group">
-                    <label class="font-weight-bold" for="district">Quận/Huyện</label>
-                    <select name="district" class="form-control" v-model="areaLocal.district">
+                    <label class="font-weight-bold" for="district">Quận/Huyện <b class="text-danger">*</b></label>
+                    <Field as="select" name="district" class="form-control" v-model="areaLocal.district">
                         <!-- <option value="" disabled selected>Chọn quận/huyện</option> -->
-                        <option v-for="district in districts" :value="district">{{ district.name }}</option>
-                    </select>
+                        <option v-for="district in districts" :value="district.code">{{ district.name }}</option>
+                    </Field>
+                    <ErrorMessage name="district" class="error-feedback" />
                 </div>
                 <div class="form-group">
-                    <label class="font-weight-bold" for="ward">Xã/Phường/Thị Trấn</label>
-                    <select name="ward" class="form-control" v-model="areaLocal.ward">
+                    <label class="font-weight-bold" for="ward">Xã/Phường/Thị Trấn <b class="text-danger">*</b></label>
+                    <Field as="select" name="ward" class="form-control" v-model="areaLocal.ward">
                         <!-- <option value="" disabled selected>Chọn Xã/Phường/Thị Trấn</option> -->
-                        <option v-for="ward in wards" :value="ward">{{ ward.name }}</option>
-                    </select>
+                        <option v-for="ward in wards" :value="ward.name">{{ ward.name }}</option>
+                    </Field>
+                    <ErrorMessage name="ward" class="error-feedback" />
                 </div>
                 <div class="form-group">
-                    <label for="address" class="font-weight-bold">Địa chỉ</label>
-                    <Field name="address" type="text" class="form-control" v-model="RegisterLocal.address_detail" />
-                    <!-- Hiển thị validation error message nếu có -->
+                    <label for="address" class="font-weight-bold">Địa chỉ <b class="text-danger">*</b></label>
+                    <Field as="textarea" name="address" class="form-control" v-model="RegisterLocal.address_detail" />
+
                     <ErrorMessage name="address" class="error-feedback" />
                 </div>
             </div>
         </div>
-        <!-- Tạo ra input field cho password -->
-
-        <!-- Tạo ra input field cho passwordConfirmation -->
-
-        <!-- Tạo ra nút submit form -->
+        <p><i class="text-danger">{{ this.message }}</i></p>
         <div class="form-group">
             <button class="btn btn-primary">Thêm</button>
         </div>
+
 
     </Form>
 </template>
@@ -93,9 +91,18 @@ export default {
             email: yup.string()
                 .email("Email không hợp lệ")
                 .required("Vui lòng nhập email"),
-            // address_book: yup.string()
-            //     .required("Vui lòng cung cấp địa chỉ")
-            // ,
+            address: yup.string()
+                .required("Vui lòng cung cấp địa chỉ")
+            ,
+            province: yup.string()
+                .required("Vui lòng chọn tỉnh/thành phố")
+            ,
+            district: yup.string()
+                .required("Vui lòng chọn quận/huyện")
+            ,
+            ward: yup.string()
+                .required("Vui lòng chọn phường/xã/thị trấn")
+            ,
             phone: yup.string()
                 .matches(/^\d{10}$/, "Số điện thoại không hợp lệ")
                 .required("Vui lòng nhập số điện thoại"),
@@ -169,9 +176,9 @@ export default {
                 this.areaLocal.district = "";
                 // this.districts = await ProvinceService.getDistricts(this.areaLocal.province.code, this.districtName);
 
-                const rs = await getProvincesOpenAPI.getProvince(this.areaLocal.province.code);
+                const rs = await getProvincesOpenAPI.getProvince(this.areaLocal.province);
                 this.districts = rs.districts;
-                this.RegisterLocal.provinceName = await this.areaLocal.province.name;
+                this.RegisterLocal.provinceName = rs.name;
 
 
             } catch (error) {
@@ -182,9 +189,9 @@ export default {
             try {
                 this.areaLocal.ward = "";
                 // this.wards = await ProvinceService.getWards(this.areaLocal.district.code, this.wardName);
-                const rs = await getProvincesOpenAPI.getDistrict(this.areaLocal.district.code);
+                const rs = await getProvincesOpenAPI.getDistrict(this.areaLocal.district);
                 this.wards = rs.wards;
-                this.RegisterLocal.districtName = await this.areaLocal.district.name;
+                this.RegisterLocal.districtName = rs.name;
 
 
             } catch (error) {
@@ -193,7 +200,7 @@ export default {
         },
         async getWardName() {
             try {
-                this.RegisterLocal.wardName = await this.areaLocal.ward.name;
+                this.RegisterLocal.wardName = await this.areaLocal.ward;
 
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);

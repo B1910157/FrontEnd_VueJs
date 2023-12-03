@@ -53,7 +53,6 @@ export default defineComponent({
 .sticky-bar {
     position: fixed;
     bottom: 100px;
-    /* Thay đổi giá trị này để cục lên cao hơn */
     right: 20px;
     width: 60px;
     height: 60px;

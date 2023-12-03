@@ -60,12 +60,12 @@ export default {
             return `http://localhost:3000/${item.service_image}`;
         },
         selectChat(index) {
-            // Handle the selection of a chat, if needed
+
             // console.log('Selected chat:', this.chats[index]);
             this.$router.push({ name: 'ChatDetail', params: { serviceId: this.chats[index].service_id } });
         },
         formatMessage(chat) {
-            // Format the message based on seen status
+
             // return chat.seen ? chat.chat : `<b>${chat.chat}</b>`;
 
             if (chat.sender == 'service' && chat.user_seen == false) {
@@ -79,7 +79,6 @@ export default {
 </script>
   
 <style scoped>
-/* Add any styling here if needed */
 /* .rounded-circle {
     border-radius: 50%;
 } */
