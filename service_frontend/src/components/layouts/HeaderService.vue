@@ -1,12 +1,12 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light" v-if="Auth">
-    <div class="container-fluid">
+    <div class="container-fluid bg-white">
       <button class="navbar-toggler" type="button" @click="toggleSidebar" aria-controls="navbarSupportedContent"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <button id="sidebarCollapse" type="button" class="btn btn-light" @click="toggleSidebar"><i
+      <button id="sidebarCollapse" type="button" class="btn btn-white" @click="toggleSidebar"><i
           class="fa fa-bars m-2"></i></button>
       <a class="navbar-brand" href="#">{{ this.info.service_name }}</a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -54,7 +54,7 @@ export default {
 
 
   methods: {
-  
+
     async retrieveInfo() {
       try {
         this.info = await infoService.info();

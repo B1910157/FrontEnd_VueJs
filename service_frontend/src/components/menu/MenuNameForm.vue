@@ -13,7 +13,7 @@
             <button v-if="this.isEditNameMenu == true" type="submit" class="ml-2 badge badge-success"><i
                     class="fas fa-save"></i></button>
             <span v-if="this.isEditNameMenu == false" @click="editNameMenu()" class="ml-2 badge badge-warning">
-                <i class="fas fa-edit"></i>
+                <i class="fa-solid fa-pen"></i>
             </span>
         </div>
         <ErrorMessage name="menu_name" class="error-feedback" />
@@ -28,7 +28,7 @@ export default {
         Form,
         Field,
         ErrorMessage,
-      
+
     },
     emits: ["submit:menuNameUpdate"],
     props: {

@@ -46,13 +46,13 @@
                     <div v-if="!Auth" class="d-flex">
                         <li class="nav-item">
                             <router-link :to="{ name: 'login' }" class="nav-link btn btn-link">
-                                Đăng nhập
+                                Đăng nhập <i class="fa-solid fa-user"></i>
 
                             </router-link>
                         </li>
                         <li class="nav-item">
                             <router-link :to="{ name: 'register' }" class="nav-link btn btn-link ">
-                                Đăng ký
+                                Đăng ký <i class="fa-solid fa-id-card"></i>
 
                             </router-link>
                         </li>
@@ -186,7 +186,7 @@ export default {
 .message-count {
     position: absolute;
     top: -14px;
-  
+
     right: -8px;
 
     background-color: red;

@@ -1,7 +1,7 @@
 
            
 <template>
-    <div class="container row" ref="billContent">
+    <div class="container bg-white row" ref="billContent">
         <div class="col-md-12 text-center">
             <h4 class="text-uppercase">NHÀ HÀNG: {{ this.info.service_name }}</h4>
             Địa chỉ: {{ this.info.address }} <br>
@@ -102,13 +102,21 @@
                 <p class="font-weight-bold col-md-3"><u>TỔNG CỘNG</u>:</p>
                 <p class="col-md-9">{{ formatCurrency(this.order.total) }}</p>
             </div>
-            <div class="p-3" v-if="this.order && this.order.surcharges && this.order.surcharges.length > 0">
+            <div class="p-3 " v-if="this.order && this.order.surcharges && this.order.surcharges.length > 0">
                 <b>PHỤ THU</b>
                 <ul class="p-3">
                     <li v-for="(surcharge, index) in this.order.surcharges" :key="index">
                         {{ surcharge.key }}: {{ surcharge.value }}
                     </li>
                 </ul>
+
+            </div>
+            <div class="p-3" v-if="this.order && this.order.deposit != 0">
+                <b>Đã thanh toán trước: </b> {{ formatCurrency(this.order.deposit) }}
+
+            </div>
+            <div class="p-3" v-if="this.order && this.order.deposit == 0">
+                <b> <u>Chưa thanh toán trước</u> </b>
 
             </div>
 

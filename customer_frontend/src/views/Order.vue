@@ -2,7 +2,7 @@
     <!-- <h2 class="text-center my-3 text-warning">
         ĐƠN ĐẶT TIỆC
     </h2> -->
-    <div class="row shadow bg">
+    <div class="row shadow " style="background-color: beige;">
 
         <div class="mt-3 col-md-12">
             <h2 class="text-center  text-warning">
@@ -181,7 +181,7 @@ export default {
                 this.showFailedToast();
             }
         },
-        
+
 
 
     },

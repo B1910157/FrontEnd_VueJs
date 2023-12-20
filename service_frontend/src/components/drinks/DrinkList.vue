@@ -51,7 +51,7 @@ export default {
             this.$emit("delete:drink", drinkId);
         },
         editDrink(drinkId) {
-           
+
             this.$emit("edit:drink", drinkId);
         },
         openForm() {
@@ -93,10 +93,10 @@ export default {
                         <span class="mt-2 badge badge-warning">
                             <i class="fas fa-edit"></i> </span>
                     </router-link> -->
-                    <span @click="editDrink(drink._id)" class=" mt-2 ml-2 badge badge-warning">
+                    <span @click="editDrink(drink._id)" class=" mt-2 ml-2 btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> </span>
 
-                    <span @click="deleteDrink(drink._id)" class="mt-2 ml-2 badge badge-danger">
+                    <span @click="deleteDrink(drink._id)" class="mt-2 ml-2 btn btn-danger btn-sm">
                         <i class="fas fa-trash"></i> </span>
 
                 </v-card-actions>

@@ -9,19 +9,19 @@
                 <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử
             </h3> -->
             <div class="row mb-3">
-                <div class="col-4">
+                <div class="col-5">
                     <label class="font-weight-bold" for="filterDate">Ngày diễn ra: &nbsp;</label>
                     <input class="border rounded-lg p-1" type="date" id="filterDate" v-model="filterDate" />
-
+                    
+                    <button class="btn btn-primary ml-4" @click="retrieveOrders()"> <i class="fa-solid fa-repeat"></i></button>
                 </div>
                 <div class="col-2 text-right">
-                    <button class="btn btn-primary" @click="retrieveOrders()">Tất cả <i
-                            class="fa-solid fa-list"></i></button>
+
                 </div>
 
             </div>
             <HistoryOrderList v-if="filleredordercount > 0" :orders="filteredorder" @cancel="cancelEvent" />
-            <p v-else>Bạn chưa có đơn nào.</p>
+            <p v-else>Không có đơn nào.</p>
         </div>
 
     </div>
@@ -48,15 +48,15 @@ export default {
         },
     },
     computed: {
-        
+
         filteredorder() {
             if (this.filterDate) {
                 return this.orders.filter((order) => {
-                   
-                    return order.event_date === this.filterDate; 
+
+                    return order.event_date === this.filterDate;
                 });
             } else {
-                return this.orders; 
+                return this.orders;
             }
         },
 

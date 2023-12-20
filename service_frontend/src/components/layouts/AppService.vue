@@ -1,9 +1,9 @@
 <template>
-    <div class="vertical-nav bg-white" id="sidebar" style="overflow-y: auto" v-if="Auth">
+    <div class="vertical-nav bg-white" id="sidebar" style="overflow-y: hidden; overflow-x: hidden" v-if="Auth">
 
         <div class="py-4 px-3 mb-4 bg-title">
             <div class="d-flex align-items-center">
-                <v-img :src="getImage(this.info)" cover style="width: 80px; height: 80px;"
+                <v-img :src="getImage(this.info)" cover style="width: 80px; height: 90px;"
                     class="me-3 rounded-circle shadow border"></v-img>
 
                 <!-- <div class="media-body">
@@ -32,9 +32,7 @@
                         <button class="ml-2 btn btn-danger" @click="cancelChange()">Hủy</button>
                     </div>
                 </Form>
-
             </div>
-
 
         </div>
 

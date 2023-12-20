@@ -2,7 +2,7 @@
     <div class="container">
 
         <v-combobox v-model="this.year" label="Năm" :items="yearOptions"></v-combobox>
-        <canvas id="combinedLineChart" width="200" height="50"></canvas>
+        <canvas class="bg-white" id="combinedLineChart" width="200" height="50"></canvas>
         <v-row class="pt-3">
             <v-col cols="4">
                 <v-card style="height: 100px;" color="primary" dark>

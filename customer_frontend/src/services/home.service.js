@@ -8,6 +8,9 @@ class HomeService {
   async home() {
     return (await this.api.get("/")).data;
   }
+  async createService(data) {
+    return (await this.api.post("/registerService", data)).data;
+  }
   async getAllEmployment() {
     return (await this.api.get("/employments")).data;
   }

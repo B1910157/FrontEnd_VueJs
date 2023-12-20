@@ -13,10 +13,10 @@
                     <label class="font-weight-bold" for="filterDate">Ngày diễn ra: &nbsp;</label>
                     <input class="border rounded-lg p-1" type="date" id="filterDate" v-model="filterDate"
                         @input="filterOrders" />
+
                 </div>
-                <div class="col-4">
-                    <button class="btn btn-primary" @click="retrieveOrders()">Tất cả <i
-                            class="fa-solid fa-list"></i></button>
+                <div class="col-2">
+                    <button class="btn btn-primary" @click="retrieveOrders()"> <i class="fa-solid fa-repeat"></i></button>
                 </div>
 
             </div>

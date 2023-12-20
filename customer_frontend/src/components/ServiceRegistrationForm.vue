@@ -15,6 +15,12 @@
 
                     <ErrorMessage name="email" class="error-feedback" />
                 </div>
+                <div class="form-group">
+                    <label for="password" class="font-weight-bold">Mật khẩu <b class="text-danger">*</b></label>
+                    <Field name="password" type="password" class="form-control" v-model="RegisterLocal.password" />
+
+                    <ErrorMessage name="password" class="error-feedback" />
+                </div>
 
                 <div class="form-group">
                     <label for="phone" class="font-weight-bold">Số điện thoại <b class="text-danger">*</b></label>
@@ -55,11 +61,12 @@
 
                     <ErrorMessage name="address" class="error-feedback" />
                 </div>
+
             </div>
         </div>
         <p><i class="text-danger">{{ this.message }}</i></p>
         <div class="form-group">
-            <button class="btn btn-primary">Thêm</button>
+            <button class="btn btn-primary">Đăng ký</button>
         </div>
 
 
@@ -69,8 +76,7 @@
 <script>
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import getProvincesOpenAPI from "../../services/getProvincesOpenAPI";
-import { toast } from 'vue3-toastify';
+import getProvincesOpenAPI from "../services/getProvincesOpenAPI";
 export default {
     components: {
         Form,
@@ -80,9 +86,8 @@ export default {
     props: {
         message: ''
     },
-    emits: ["submit:register"],
+    emits: ["submit:registerService"],
     data() {
-
         const RegisterFormSchema = yup.object().shape({
 
 
@@ -95,6 +100,9 @@ export default {
                 .required("Vui lòng nhập email"),
             address: yup.string()
                 .required("Vui lòng cung cấp địa chỉ")
+            ,
+            password: yup.string()
+                .required("Vui lòng nhập mật khẩu")
             ,
             province: yup.string()
                 .required("Vui lòng chọn tỉnh/thành phố")
@@ -163,9 +171,6 @@ export default {
     },
 
     methods: {
-        showSuccessToast() {
-            toast.success('Thêm thành công', { autoClose: 1000 });
-        },
         async getProvince() {
             try {
                 // this.provinces = await ProvinceService.getProvinces(this.provinceName);
@@ -212,8 +217,7 @@ export default {
             }
         },
         submitRegister() {
-            this.$emit("submit:register", this.RegisterLocal);
-            this.showSuccessToast();
+            this.$emit("submit:registerService", this.RegisterLocal);
         },
     },
 };
@@ -221,15 +225,5 @@ export default {
   
 <style scoped>
 @import "@/assets/form.css";
-
-.form-columns {
-    display: flex;
-}
-
-.form-column {
-    flex: 1;
-    margin-right: 20px;
-    /* Khoảng cách giữa 2 cột */
-}
 </style>
   

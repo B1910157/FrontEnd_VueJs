@@ -8,7 +8,7 @@
   <div class="container">
     <hr>
     <div class="text-center">
-      <h5 class="font-weight-bold">Đánh giá</h5>
+      <h5 class="font-weight-bold">Đánh giá </h5>
       <div class="ratings">
         <!-- Hình 5 sao - sử dụng Vue để xử lý sự kiện đánh giá -->
         <div class="rating">
@@ -223,7 +223,6 @@ export default {
       // console.log("COMT", this.comments)
     },
     handleUserRating(rating) {
-
       this.userRating = rating;
       // console.log("saoooo: ", this.userRating);
 
@@ -237,7 +236,7 @@ export default {
           // this.checkEvaluate = true;
           this.userRating = user.evaluate;
         } else {
-          this.userRating = "";
+          this.userRating = 0;
 
         }
       }
@@ -328,8 +327,8 @@ export default {
       try {
 
         this.service = await Home.getService(service_id);
-        await this.getCommentOfService();
-        await this.getEvaluateOfService();
+        this.getCommentOfService();
+        // this.getEvaluateOfService();
       } catch (error) {
         console.log(error);
         this.$router.push({
@@ -399,14 +398,16 @@ export default {
     },
   },
   async created() {
+    if (this.Auth) {
+      this.refreshInfo();
+    }
     await this.getService(this.service_id);
+    this.getEvaluateOfService();
     this.getMenuOfService(this.service_id);
     this.getFoodOfService(this.service_id);
     this.getDrinkOfService(this.service_id);
     this.getOtherOfService(this.service_id);
-    if (this.Auth) {
-      this.refreshInfo();
-    }
+
 
 
 

@@ -26,21 +26,20 @@
                     <div v-if="this.Auth">
                         <div class="row">
                             <div class="col-md-6 col-12">
-                                <div v-if="(!cart.service_id || cart.service_id == null)" class="bg-light">
+                                <div v-if="(!cart.service_id || cart.service_id == null)" class="">
                                     <v-btn variant="tonal" @click="chooseService(this.service._id)" class="btn-success">Chọn
-                                        dịch
-                                        vụ</v-btn>
+                                    </v-btn>
                                 </div>
-                                <div v-else-if="cart.service_id == service._id" class="bg-light">
+                                <div v-else-if="cart.service_id == service._id" class="">
                                     <v-btn @click="unChooseService()" variant="tonal" class="btn btn-danger">Hủy
                                         chọn</v-btn>
                                 </div>
-                                <div v-else-if="cart.service_id != service._id" class=" bg-light">
+                                <div v-else-if="cart.service_id != service._id" class=" ">
                                     <!-- <button class="btn btn-primary" @click="chooseWithOtherService(this.service._id)">Chọn dịch vụ
 (!)</button> -->
 
                                     <v-btn @click="chooseWithOtherService(this.service._id)" variant="tonal"
-                                        class="btn btn-success">Chọn dịch vụ (!)</v-btn>
+                                        class="btn btn-success">Chọn (!)</v-btn>
 
                                 </div>
                             </div>
@@ -87,7 +86,7 @@
                                 (!)</button> -->
 
                             <v-btn @click="chooseWithOtherService(this.service._id)" variant="tonal"
-                                class="btn btn-success">Chọn dịch vụ (!)</v-btn>
+                                class="btn btn-success">Chọn (!)</v-btn>
                         </div>
                     </div>
 
@@ -430,16 +429,20 @@ export default {
     methods: {
         async sendMessage() {
             // Thực hiện xử lý gửi tin nhắn
-            console.log('Gửi tin nhắn:', this.message, this.service._id);
-            const data = {
-                service_id: this.service._id,
-                chat: this.message
+            if (this.message != "") {
+                const data = {
+                    service_id: this.service._id,
+                    chat: this.message
+                }
+                const rs = await userChat.userChat(data);
+                // Đóng dialog và làm sạch tin nhắn
+                this.dialog = false;
+                this.message = '';
+                this.sendSuccessToast()
+            } else if (this.message == "") {
+                this.sendErrorToast();
             }
-            const rs = await userChat.userChat(data);
-            // Đóng dialog và làm sạch tin nhắn
-            this.dialog = false;
-            this.message = '';
-            this.sendSuccessToast()
+
 
         },
         // Hàm xử lý khi người dùng ấn nút Hủy
@@ -475,6 +478,9 @@ export default {
         },
         sendSuccessToast() {
             toast.success('Gửi tin nhắn thành công', { autoClose: 1000 });
+        },
+        sendErrorToast() {
+            toast.error('Vui lòng soạn tin nhắn', { autoClose: 1000 });
         },
 
         // addSuccessToast() {

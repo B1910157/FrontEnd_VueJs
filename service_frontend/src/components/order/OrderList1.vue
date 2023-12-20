@@ -73,6 +73,7 @@ export default {
 
                     });
                 }
+                messWithUser.push({ text: 'Chi tiết', action: () => this.showDetails(order._id), });
                 if (mess) {
                     messWithUser.push(mess);
                 } else {
@@ -100,14 +101,14 @@ export default {
             {
                 title: 'Khách hàng',
                 align: 'start',
-                sortable: false,
+                // sortable: false,
                 key: 'fullname',
 
             },
             // { title: 'Email', align: 'end', key: 'email', },
-            { title: 'Số điện thoại', align: 'end', key: 'phone', },
+            { title: 'Số điện thoại', align: 'center', key: 'phone', },
             // { title: 'Địa chỉ tiệc', align: 'end', key: 'address', },
-            { title: 'Ngày diễn ra', align: 'end', key: 'event_date', },
+            { title: 'Ngày diễn ra', align: 'center', key: 'event_date', },
             // {
             //     title: 'Ngày thực hiện',
             //     align: 'end',
@@ -116,26 +117,26 @@ export default {
             // },
 
             {
-                title: 'Thao tác',
-                align: 'end',
+                title: 'Trạng thái',
+                align: 'center',
                 key: 'actions',
 
 
             },
 
             {
-                title: 'Nhắn tin',
-                align: 'end',
+                title: 'Thao tác',
+                align: 'center',
                 key: 'messWithUser',
 
             },
 
-            {
-                title: 'Chi tiết',
-                align: 'end',
-                key: 'details',
+            // {
+            //     title: 'Chi tiết',
+            //     align: 'start',
+            //     key: 'details',
 
-            },
+            // },
 
 
         ],
@@ -262,39 +263,53 @@ export default {
         <template v-slot:item.actions="{ item }">
             <div v-for="(action, index) in item.selectable.actions" :key="index" @click="action.action" class="m-2">
 
-                <span :class="{
+                <!-- <span :class="{
                     'badge badge-success': action.text === 'Duyệt', 'badge badge-danger':
                         action.text === 'Hủy',
                 }" class="" style="width: 50px;" v-if="action.text == 'Duyệt' || action.text == 'Hủy'">{{
     action.text
-}}</span>
-                <p class="badge badge-danger " v-else-if="action.text == 'Đơn quá hạn'">{{
+}}</span> -->
+                <p class="badge badge-primary badge-pill " v-if="action.text == 'Duyêt' || action.text == 'Hủy'">Đơn mới
+                </p>
+                <p class="badge badge-danger badge-pill " v-else-if="action.text == 'Đơn quá hạn'">{{
                     action.text }}</p>
-                <p class="badge badge-success " v-else-if="action.text == 'Đơn đã duyệt'">{{
+                <p class="badge badge-success badge-pill" v-else-if="action.text == 'Đơn đã duyệt'">{{
                     action.text }}</p>
-                <p class="badge badge-danger" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
-                <p class="badge badge-danger" v-else-if="action.text == 'Khách hàng đã hủy đơn'">{{ action.text }}</p>
+                <p class="badge badge-danger badge-pill" v-else-if="action.text == 'Bạn đã hủy đơn'">{{ action.text }}</p>
+                <p class="badge badge-danger badge-pill" v-else-if="action.text == 'Khách hàng đã hủy đơn'">{{ action.text
+                }}</p>
 
             </div>
         </template>
         <template v-slot:item.messWithUser="{ item }">
-            <div v-for="(action, index) in item.selectable.messWithUser" :key="index" @click="action.action" class="m-2">
+            <div v-for="(action, index) in    item.selectable.messWithUser  " :key="index" @click="action.action"
+                class="m-2 row">
+
+                <div class="col-12  d-flex align-items-center">
 
 
-                <p class="badge badge-secondary " v-if="action.text == 'Khách vãng lai'">{{
-                    action.text }}</p>
-                <p class="badge badge-primary" v-else-if="action.text == 'Nhắn tin'">{{ action.text }} <i
-                        class="fa-solid fa-envelope"></i></p>
+                    <div class="badge badge-secondary " v-if="action.text == 'Khách vãng lai'">{{
+                        action.text }}</div>
+
+                    <!-- <div class="btn btn-sm btn-primary " v-if="action.text == 'Chi tiết'"> <i class=" fa-solid fa-eye"
+                            style="color: white;"></i></div> -->
+                    <div class="btn btn-sm btn-primary flex-grow-1" v-else-if="action.text == 'Nhắn tin'">{{ action.text }}
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="btn btn-sm btn-primary flex-grow-1" v-if="action.text == 'Chi tiết'"> {{ action.text }} <i
+                            class=" fa-solid fa-eye" style="color: white;"></i></div>
+
+                </div>
 
 
             </div>
         </template>
-
+        <!-- 
         <template v-slot:item.details="{ item }">
             <v-btn @click="item.selectable.details.action">
                 {{ item.selectable.details.text }}
             </v-btn>
-        </template>
+        </template> -->
 
     </v-data-table>
     <br><br>

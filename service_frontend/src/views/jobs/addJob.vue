@@ -3,7 +3,7 @@
         <h4 class="text-center title-in-page">Thêm Bài Tuyển Dụng</h4>
         <div class="row">
             <div class="col-2"></div>
-            <div class="col-8">
+            <div class="col-8 bg-white">
                 <JobForm :job="job" @submit:job="addJob" />
             </div>
             <div class="col-2"></div>

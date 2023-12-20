@@ -7,7 +7,7 @@
             </h4>
 
         </div>
-        <div>
+        <div class="bg-white">
 
             <Info :info="filteredinfo" />
 
@@ -23,15 +23,15 @@
                     <i class="fas fa-edit"></i> Đổi mật khẩu</span>
 
             </div> -->
-            <div class="mt-3 row ml-5 ">
+            <div class="row ml-5 ">
                 <router-link :to="{
                     name: 'updateInfo',
                     // query: { id_user: info._id }
                 }">
-                    <span class="mt-2 badge badge-warning">
-                        <i class="fas fa-edit"></i> Cập nhật thông tin</span>
+                    <span class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Cập nhật</span>
                 </router-link>
-                <span class="mt-2 ml-2 badge badge-warning" @click="this.changePass = true">
+                <span class="ml-2 btn btn-warning" @click="this.changePass = true">
                     <i class="fa fa-key" aria-hidden="true"></i> Đổi mật khẩu</span>
 
             </div>

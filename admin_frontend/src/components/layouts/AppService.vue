@@ -24,17 +24,17 @@
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/services/) }">
                 <router-link to="/services" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Nhà hàng
+                    <i class="fa-solid fa-house-user me-3"></i> Nhà hàng
                 </router-link>
             </li>
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/users/) }">
                 <router-link to="/users" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Khách hàng
+                    <i class="fa-solid fa-users me-3"></i> Khách hàng
                 </router-link>
             </li>
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/comments/) }">
                 <router-link to="/comments" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Bình luận
+                    <i class="fa-solid fa-comments me-3"></i> Bình luận
                 </router-link>
             </li>
 
@@ -45,7 +45,7 @@
             </li>
             <li class="nav-item " :class="{ 'active': $route.path.match(/^\/feedback/) }">
                 <router-link to="/feedback" class="nav-link">
-                    <i class="fa-solid fa-box me-3 "></i> Góp ý
+                    <i class="fa-solid fa-message me-3"></i> Góp ý
                 </router-link>
             </li>
 

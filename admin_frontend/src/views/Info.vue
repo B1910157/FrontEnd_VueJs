@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div>
+        <div class="bg-white p-3">
             <h4 class="text-secondary ml-4">
                 Thông tin cá nhân
             </h4>
@@ -12,8 +12,8 @@
                     name: 'updateInfo',
                     // query: { id_user: info._id }
                 }">
-                    <span class="mt-2 badge badge-warning">
-                        <i class="fas fa-edit"></i> Cập nhật thông tin</span>
+                    <span class="mt-2 btn btn-warning">
+                        <i class="fas fa-edit"></i> Cập nhật</span>
                 </router-link>
             </div>
 

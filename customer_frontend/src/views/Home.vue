@@ -1,9 +1,9 @@
 <template>
-    <div class="border">
+    <div class="border ">
         <ServicesList v-if="filteredFoodCount > 0" :foods="filteredFood" v-model:activeIndex="activeIndex" />
         <p class="text-center" v-else>Không có dịch vụ hỗ trợ nào.</p>
     </div>
-  
+
     <!-- <button class="btn btn-primary" @click="setLocalCart1()">Hell123o</button> -->
     <!-- <div>
         <button @click="showSuccessToast">Hiển thị Toast</button>
@@ -36,7 +36,7 @@ export default {
             menu: [],
             activeIndex: -1,
             searchText: "",
-            
+
         };
     },
     watch: {
@@ -89,7 +89,7 @@ export default {
         showSuccessToast() {
             toast.success('Đặt tiệc thành công', { autoClose: 1000 });
         },
-       
+
         // showSuccessToast() {
         //     const VueToast = useToast();
         //     VueToast.open({

@@ -1,6 +1,6 @@
 
 <template>
-    <div class="container">
+    <div class="container ">
         <div>
             <div class="row ml-3 mb-3">
                 <h4 v-if="this.messages[0]" class="col-5 title-in-page">
@@ -10,7 +10,7 @@
 
             </div>
 
-            <div class="chat-container" ref="chatContainer">
+            <div class="chat-container bg-white" ref="chatContainer">
                 <div v-for="(message, index) in messages" :key="index" class="message-container"
                     :style="{ justifyContent: message.sender === 'user' ? 'flex-start' : 'flex-end' }">
                     <span
@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="mt-3">
-                <div class="input-container">
-                    <textarea class="border" v-model="message" placeholder="Tin nhắn"></textarea>
+                <div class="input-container ">
+                    <textarea class="border bg-white" v-model="message" placeholder="Tin nhắn"></textarea>
                     <button class="mb-7 border btn btn-primary" @click="sendMessage"> <i
                             class="fa-solid fa-paper-plane"></i> Gửi</button>
                 </div>

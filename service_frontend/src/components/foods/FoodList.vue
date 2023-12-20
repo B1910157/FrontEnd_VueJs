@@ -97,10 +97,10 @@ export default {
                         <span class="mt-2 badge badge-warning">
                             <i class="fas fa-edit"></i> </span>
                     </router-link> -->
-                    <span @click="editFood(food._id)" class=" mt-2 ml-2 badge badge-warning">
+                    <span @click="editFood(food._id)" class=" mt-2 ml-2 btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> </span>
 
-                    <span @click="deleteFood(food._id)" class=" mt-2 ml-2 badge badge-danger">
+                    <span @click="deleteFood(food._id)" class=" mt-2 ml-2  btn btn-danger btn-sm">
                         <i class="fas fa-trash"></i> </span>
                 </v-card-actions>
             </v-card>

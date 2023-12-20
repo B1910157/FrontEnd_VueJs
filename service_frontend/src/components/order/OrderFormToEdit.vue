@@ -1,6 +1,6 @@
 <template>
-    <div v-if="this.order.cart[0].menu.length > 0">
-        <div class="row full-background">
+    <div class=" full-background p-2"  v-if="this.order.cart[0].menu.length > 0">
+        <div class="row ">
             <div class="col-md-2"></div>
             <div class="col-md-8 col-12 my-3">
                 <div class="card">
@@ -86,9 +86,13 @@
                                         <tr v-for="(item, index) in   this.order.cart[1].drink  " :key="index">
                                             <td>{{ item.drink_name }}</td>
                                             <td v-if="this.isEditing == true">
-                                                <input type="number" name="quantity" v-model="item.quantity" min="1"
-                                                    class="input-small">
-                                                /{{ item.unit }}
+                                                <div style="display: flex; align-items: center;">
+                                                    <input class="input-order" type="number" name="quantity"
+                                                        v-model="item.quantity" min="1"
+                                                        style="width: 80px; margin-right: 5px;">
+                                                    /{{ item.unit }}
+                                                </div>
+
                                             </td>
                                             <td v-if="this.isEditing == false">
 
@@ -183,27 +187,29 @@
 
         </div>
 
+        <div class="row">
+            <div class="offset-md-11">
+                <span
+                    v-if="this.order && (this.order.status != 2 && this.order.status != 3) && this.isEditing == false && isCurrentDateGreaterThanEventDate()"
+                    @click="editOrder()" class="mt-2 btn btn-warning">
+                    <i class="fas fa-edit"></i> </span>
+                <div v-else-if="this.isEditing == true">
+                    <span @click="saveOrder()" class="mt-2 btn btn-danger">
+                        <i class="fas fa-close"></i> </span>
+                </div>
+
+            </div>
+            <div class="col-12">
+                <div class="text-danger border" v-if="!isCurrentDateGreaterThanEventDate()">
+                    Hết thời gian chỉnh sửa (Chỉnh sửa trước ngày diễn ra 2 ngày )
+                </div>
+            </div>
+        </div>
     </div>
     <hr>
 
 
-    <div class="row">
-        <div class="offset-md-11">
-            <span v-if="this.isEditing == false && isCurrentDateGreaterThanEventDate()" @click="editOrder()"
-                class="mt-2 btn btn-warning">
-                <i class="fas fa-edit"></i> </span>
-            <div v-else-if="this.isEditing == true">
-                <span @click="saveOrder()" class="mt-2 btn btn-danger">
-                    <i class="fas fa-close"></i> </span>
-            </div>
 
-        </div>
-        <div class="col-12">
-            <div class="text-danger border" v-if="!isCurrentDateGreaterThanEventDate()">
-                Hết thời gian chỉnh sửa (Chỉnh sửa trước ngày diễn ra 2 ngày )
-            </div>
-        </div>
-    </div>
     <br> <br>
 </template>
 <script>
@@ -377,23 +383,20 @@ export default {
 
 </script>
 <style>
-input {
+.input-order {
     border: solid 1px black;
-    /* width: 60px; */
+
     margin-right: 10px;
     padding-left: 10px;
-    /* text-align: center; */
+
 }
 
 .full-background {
     background-image: url('https://m.media-amazon.com/images/I/91AOPv2q-NL.jpg');
-    /* background-size: cover; */
-    /* Làm hình ảnh nền lấp đầy toàn bộ kích thước của phần tử */
+
     background-position: center;
-    /* Căn giữa hình ảnh nền */
+
     background-repeat: repeat;
-    /* Ngăn lặp lại hình ảnh nền */
-    /* height: 100vh; */
-    /* Điều chỉnh chiều cao của phần tử để đảm bảo nó lấp đầy cửa sổ trình duyệt */
+
 }
 </style>

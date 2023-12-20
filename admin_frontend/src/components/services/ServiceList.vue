@@ -37,6 +37,7 @@ export default {
                     });
                 }
 
+
                 // Thêm các hành động dựa trên trạng thái
                 if (service.status === 0) {
                     actions.push({
@@ -50,6 +51,13 @@ export default {
                         text: 'Ẩn',
 
                         action: () => this.showConfirmCancel(service._id, service.status),
+                    });
+
+                }
+                else if (service.status === 3) {
+                    actions.push({
+                        text: 'Duyệt',
+                        action: () => this.acceptService(service._id, service.status),
                     });
 
                 }
@@ -89,12 +97,12 @@ export default {
             { title: 'Số điện thoại', align: 'end', key: 'phone', },
             // { title: 'Địa chỉ', align: 'end', key: 'address', },
             { title: 'Email', align: 'end', key: 'email', },
-            {
-                title: 'Ngày tạo',
-                align: 'end',
-                key: 'updateAt',
+            // {
+            //     title: 'Ngày tạo',
+            //     align: 'end',
+            //     key: 'updateAt',
 
-            },
+            // },
             {
                 title: 'Thao tác',
                 align: 'end',
@@ -109,7 +117,7 @@ export default {
 
             },
             {
-                title: 'Chi tiết',
+                title: 'Thống kê',
                 align: 'end',
                 key: 'details',
 
@@ -122,9 +130,16 @@ export default {
         isServiceId: '',
 
     }),
-    emits: ["hiddenService", "showService"],
+    emits: ["hiddenService", "showService", "acceptService"],
     methods: {
-
+        getStatusClass(status) {
+            // Set different classes based on status value
+            return status === 1 ? 'text-success' : status === 3 ? 'text-primary' : 'text-danger';
+        },
+        getStatusText(status) {
+            // Set different text content based on status value
+            return status === 1 ? 'Đang hoạt động' : status === 3 ? 'Mới' : 'Không hoạt động';
+        },
 
         async accept(serviceId, status) {
             try {
@@ -138,6 +153,22 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        async acceptService(serviceId, status) {
+            if (confirm("Bạn có chắc chắn muốn duyệt dịch vụ này?")) {
+                try {
+                    // const rs = await orderService.accept(orderId);
+
+                    this.$emit("acceptService", serviceId, status);
+                    // if (rs) {
+                    //     this.$emit('accept', this.services)
+
+                    // }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
         },
         async cancel(serviceId, status) {
 
@@ -194,18 +225,27 @@ export default {
     <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="formattedServices" class="elevation-1"
         item-key="_id">
         <template v-slot:item.actions="{ item }">
-            <v-btn :class="['badge', item.status === 1 ? 'btn-green' : 'btn-red']" @click="item.actions[0].action">
+
+            <v-btn :class="[
+                'badge',
+                item.status === 1 ? 'btn-success' : item.status === 3 ? 'btn-primary' : 'btn-danger'
+            ]" @click="item.actions[0].action">
                 {{ item.actions[0].text }}
             </v-btn>
+
         </template>
         <template v-slot:item.statusText="{ item }">
-            <span :class="item.status === 1 ? 'text-success' : 'text-danger'">
+
+            <!-- <span :class="item.status === 1 ? 'text-success' : 'text-danger'">
                 {{ item.statusText[0].text }}
+            </span> -->
+            <span :class="getStatusClass(item.status)">
+                {{ getStatusText(item.status) }}
             </span>
         </template>
         <template v-slot:item.details="{ item }">
             <v-btn @click="item.details.action">
-                {{ item.details.text }}
+                Thống kê
             </v-btn>
         </template>
 

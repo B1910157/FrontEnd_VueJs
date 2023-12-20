@@ -8,14 +8,19 @@
             <h4 class="col-5 text-secondary ">
                 Danh sách nhà hàng
             </h4>
-            <div>
-                <button class="btn btn-primary" @click="this.isAdd = true"><i class="fa-solid fa-plus"></i> Thêm</button>
+            <div class="col-7 row text-right">
+                <div class="col-12">
+                    <button class="btn btn btn-primary" @click="this.isAdd = true">
+                        <i class="fas fa-plus"></i> Thêm
+                    </button>
+                </div>
             </div>
+
         </div>
         <div class="container">
 
             <ServiceList v-if="filleredservicecount > 0" :services="filteredservice" @hiddenService="hiddenService"
-                @showService="showService" />
+                @showService="showService" @acceptService="acceptService" />
             <p v-else>Không có dịch vụ nào.</p>
         </div>
         <v-dialog v-model="this.isAdd" max-width="1000px">
@@ -83,6 +88,15 @@ export default {
 
     },
     methods: {
+        async acceptService(serviceId, status) {
+            const data = {
+                serviceId: serviceId,
+                status: status
+            };
+            console.log(data)
+            const rs = await serviceService.updateStatus(data);
+            this.refreshList();
+        },
         async hiddenService(serviceId, status) {
             const data = {
                 serviceId: serviceId,
@@ -102,7 +116,7 @@ export default {
             // console.log("show", rs);
         },
         async addService(data) {
-      
+
             const rs = await adminService.adminCreateService(data);
             if (rs.status == 400) {
                 this.message = rs.message;

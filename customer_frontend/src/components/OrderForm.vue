@@ -2,7 +2,7 @@
 <template>
     <div class="row container text-center">
         <div class="col-md-6 col-12">
-            <div class=" card shadow-lg">
+            <div class=" card shadow">
                 <div class="scrollable-list card-body">
                     <h2>Thực đơn của bạn</h2>
                     <table class=" table table-bordered text-center">
@@ -80,9 +80,9 @@
                 </div>
             </div>
         </div>
-        <div class="   col-md-6 col-12">
-            <div class="card shadow-lg">
-                <div class="scrollable-list card-body" style="font-size: 14px;">
+        <div class="col-md-6 col-12">
+            <div class="card shadow">
+                <div class="scrollable-list card-body">
                     <h2>Đồ uống</h2>
                     <div>
                         <table class="table table-bordered text-center">
@@ -228,19 +228,20 @@
                         <Field name="cart" type="hidden" class="form-control" v-model="orderLocal.cart" />
 
                         <div class="form-group">
-                            <label for="fullname"><i class="fa-solid fa-user"></i> Họ tên <b class="text-danger">*</b>
+                            <label for="fullname" class="font-weight-bold"> <i class="fa-solid fa-user"></i> Họ tên <b
+                                    class="text-danger">*</b>
                             </label>
                             <Field name="fullname" type="text" class="form-control" v-model="orderLocal.fullname" />
                             <ErrorMessage name="fullname" class="error-feedback" />
                         </div>
                         <div class="form-group">
-                            <label for="phone"><i class="fa-solid fa-phone"></i> Số điện thoại <b
+                            <label for="phone" class="font-weight-bold"><i class="fa-solid fa-phone"></i> Số điện thoại <b
                                     class="text-danger">*</b></label>
                             <Field name="phone" type="text" class="form-control" v-model="orderLocal.phone" />
                             <ErrorMessage name="phone" class="error-feedback" />
                         </div>
                         <div class="form-group">
-                            <label for="email"><i class="fa-solid fa-envelope"></i> Email <b
+                            <label for="email" class="font-weight-bold"><i class="fa-solid fa-envelope"></i> Email <b
                                     class="text-danger">*</b></label>
                             <Field name="email" type="text" class="form-control" v-model="orderLocal.email" />
                             <ErrorMessage name="email" class="error-feedback" />
@@ -395,7 +396,7 @@ import infoService from "../services/info.service";
 import { object } from "yup";
 import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
 import { useToast } from 'vue-toast-notification';
-
+import { toast } from 'vue3-toastify';
 import type_partyService from "../services/type_party.service";
 
 import moment from 'moment';
@@ -679,6 +680,7 @@ export default {
                 }
                 this.$emit("submit:order", this.orderLocal);
             } else {
+                console.log('123445')
                 this.checkMenuInOrderToast();
             }
 

@@ -1,6 +1,6 @@
 <template>
-    <Form @submit="submitUpdateInfoParty" :validation-schema="orderFormSchema">
-        <div class="row">
+    <Form class="p-2 border bg-white" @submit="submitUpdateInfoParty" :validation-schema="orderFormSchema">
+        <div class="row ">
             <div class=" col-6">
                 <div class="form-group">
                     <label for="fullname"><i class="fa-solid fa-user"></i> Họ tên</label>

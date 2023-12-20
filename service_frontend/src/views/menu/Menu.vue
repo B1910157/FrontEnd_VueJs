@@ -4,16 +4,20 @@
             Danh sách menu
             <i class="fa fa-book icon" aria-hidden="true"></i>
         </h4>
-        <div class="col-7 row text-left">
-            <!-- <div class="col-12">
-                <button class="btn btn-sm btn-primary" @click="addMenu">
-                    <i class="fas fa-plus"></i> Thêm mới
-                </button>
-            </div> -->
+        <!-- <div class="col-7 row text-left">
+
             <div class="ml-5 p-2 rounded-lg btn btn-success" @click="addMenu">
-                <i class="fas fa-plus "></i> Thêm mới
+                <i class="fas fa-plus "></i> Thêm
             </div>
 
+
+        </div> -->
+        <div class="col-7 row text-right ">
+            <div class="col-12">
+                <button class="btn btn-primary" @click="addMenu">
+                    <i class="fas fa-plus"></i> Thêm
+                </button>
+            </div>
         </div>
     </div>
     <div>

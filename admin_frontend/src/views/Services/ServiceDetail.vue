@@ -4,7 +4,7 @@
         <v-combobox v-model="this.year" label="Năm" :items="yearOptions"></v-combobox>
     </div>
 
-    <canvas id="combinedLineChart" width="300" height="100"></canvas>
+    <canvas class="bg-white" id="combinedLineChart" width="300" height="100"></canvas>
 </template>
 <script>
 import { VBtn, VCombobox, VCard, VList, VSlider, VListItem, VRow, VCol, VImg, VCardTitle, VCardSubtitle, VCardActions, VCardText, VCardItem, VIcon } from "vuetify/lib/components/index.mjs";

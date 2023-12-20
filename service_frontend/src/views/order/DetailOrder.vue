@@ -434,10 +434,26 @@ export default {
         <v-btn @click="exportPDF" color="primary">Xuất hóa đơn</v-btn>
     </v-dialog>
     <div class="row container ml-4">
-        <div v-if="order.status == 1" class="col-12 text-right mr-3">
-            <button @click="bill" class="btn btn-primary">Xuất hóa đơn <i class="fa-solid fa-file-pdf"></i></button>
+
+        <div class="col-12 text-right row ">
+            <div class="col-7 ">
+
+            </div>
+            <div class="col-3">
+                <div @click="reSendMail(order._id)" class="btn btn-success"
+                    v-if="order.status == 1 && order.statusUpdate == 1">
+                    Xác nhận lại <i class="fa-solid fa-repeat"></i>
+                </div>
+            </div>
+            <div class="col-2 ">
+                <button v-if="order.status == 1" @click="bill" class="btn btn-primary ">Hóa đơn <i
+                        class="fa-solid fa-file-pdf"></i></button>
+            </div>
+
 
         </div>
+
+
         <div v-if="!isCurrentDateGreaterThanEventDate() && order.status == 0" class="col-12 mb-3 mt-3">
             <div class="text-danger">
                 Đơn quá thời hạn
@@ -450,23 +466,23 @@ export default {
                 <button class="badge badge-success" @click="showConfirm(order._id)">Duyệt</button>
                 <button class="badge badge-danger  ml-2" @click="showConfirmCancel(order._id)">Hủy</button>
             </div>
-            <div class="badge badge-success" v-if="order.status == 1">
+            <div class="badge badge-success badge-pill" v-if="order.status == 1">
                 Đã duyệt <i class="fa-solid fa-check"></i>
             </div>
-            <div class="badge badge-danger" v-if="order.status == 2">
+            <div class="badge badge-danger badge-pill" v-if="order.status == 2">
                 Bạn đã hủy <i class="fa-solid fa-xmark"></i>
             </div>
-            <div class="badge badge-danger" v-if="order.status == 3">
+            <div class="badge badge-danger badge-pill" v-if="order.status == 3">
                 Khách hàng đã hủy <i class="fa-solid fa-xmark"></i>
             </div>
-            <div @click="reSendMail(order._id)" class="ml-2 badge badge-success"
+            <!-- <div @click="reSendMail(order._id)" class="ml-2 badge badge-success"
                 v-if="order.status == 1 && order.statusUpdate == 1">
                 Gửi xác nhận lại <i class="fa-solid fa-repeat"></i>
-            </div>
+            </div> -->
 
         </div>
-        <div class="col-md-12">
-            <div v-if="this.isEditInfo == false" style="display: flex; justify-content: space-between;">
+        <div class="col-md-12 ">
+            <div class=" bg-white" v-if="this.isEditInfo == false" style="display: flex; justify-content: space-between;">
                 <div style="flex: 1;">
                     <table class="table custom-height-table">
                         <tbody>
@@ -531,16 +547,16 @@ export default {
                             <tr v-if="order.status == 1">
                                 <th>Trạng thái thanh toán &nbsp;</th>
                                 <td v-if="order.statusPayment == 1 && order.paymentMethod == 'vnpay'">
-                                    <div class="badge badge-success">Đã thanh toán qua VN PAY</div>
+                                    <div class="badge badge-success badge-pill">Đã thanh toán qua VN PAY</div>
                                 </td>
                                 <td v-if="order.statusPayment == 1 && order.paymentMethod == 'stripe'">
-                                    <div class="badge badge-success">Đã thanh toán qua Stripe</div>
+                                    <div class="badge badge-success badge-pill">Đã thanh toán qua Stripe</div>
                                 </td>
                                 <td v-if="order.statusPayment == 1 && order.paymentMethod == 'paylater'">
-                                    <div class="badge badge-success">Thanh toán trực tiếp</div>
+                                    <div class="badge badge-success badge-pill">Thanh toán trực tiếp</div>
                                 </td>
                                 <td v-else-if="order.statusPayment == 0">
-                                    <div class="badge badge-danger"> Chưa thanh toán</div>
+                                    <div class="badge badge-danger badge-pill"> Chưa thanh toán</div>
                                 </td>
                             </tr>
 
@@ -557,6 +573,33 @@ export default {
                     <div>Cọc: {{ order.deposit }}</div>
                     <div>Hình thức: {{ order.paymentMethod }}</div> -->
                 </div>
+
+
+            </div>
+            <div class="row">
+                <!-- <div class="col-md-6 p-5">
+                    <span v-if="this.isAddSurcharges == false && isCurrentDateGreaterThanEventDate()"
+                        @click="addSurcharges()" class="mt-2 btn btn-primary">
+                        <i class="fas fa-edit"></i> Thêm phụ thu </span>
+                </div> -->
+                <div class="col-md-6"></div>
+                <div class="col-md-6 text-right p-5"
+                    v-if="this.isEditInfo == false && this.order && (this.order.status != 2 && this.order.status != 3) && isCurrentDateGreaterThanEventDate()">
+
+                    <!-- thay vì check trạng thái đơn thì Check ngày -->
+                    <span @click="editInfoParty()" class="mt-2 btn btn-warning">
+                        <i class="fas fa-edit"></i> </span>
+                    <!-- <div v-else-if="this.isEditInfo == true">
+                        <span @click="saveInfoParty()" class="mt-2 btn btn-primary">
+                            <i class="fas fa-save"></i> </span>
+                    </div> -->
+
+                </div>
+                <div v-if="!isCurrentDateGreaterThanEventDate()" class="col-12">
+                    <div class="text-danger">
+                        Hết thời gian chỉnh sửa (Chỉnh sửa trước ngày diễn ra 2 ngày )
+                    </div>
+                </div>
             </div>
 
             <div v-if="this.isEditInfo == true" class="text-left">
@@ -572,31 +615,7 @@ export default {
 
 
 
-            <div class="row">
-                <!-- <div class="col-md-6 p-5">
-                    <span v-if="this.isAddSurcharges == false && isCurrentDateGreaterThanEventDate()"
-                        @click="addSurcharges()" class="mt-2 btn btn-primary">
-                        <i class="fas fa-edit"></i> Thêm phụ thu </span>
-                </div> -->
-                <div class="col-md-6"></div>
-                <div class="col-md-6 text-right p-5">
 
-                    <!-- thay vì check trạng thái đơn thì Check ngày -->
-                    <span v-if="this.isEditInfo == false && isCurrentDateGreaterThanEventDate()" @click="editInfoParty()"
-                        class="mt-2 btn btn-warning">
-                        <i class="fas fa-edit"></i> </span>
-                    <!-- <div v-else-if="this.isEditInfo == true">
-                        <span @click="saveInfoParty()" class="mt-2 btn btn-primary">
-                            <i class="fas fa-save"></i> </span>
-                    </div> -->
-
-                </div>
-                <div class="col-12">
-                    <div class="text-danger" v-if="!isCurrentDateGreaterThanEventDate()">
-                        Hết thời gian chỉnh sửa (Chỉnh sửa trước ngày diễn ra 2 ngày )
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="col-md-12">

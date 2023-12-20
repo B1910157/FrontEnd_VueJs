@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="">
         <div class="row ml-3 mb-3">
             <h4 class="col-5 title-in-page">
                 Bài tuyển dụng
@@ -7,7 +7,7 @@
             </h4>
             <div class="col-7 row text-right">
                 <div class="col-12">
-                    <button class="btn btn-sm btn-primary" @click="addPost">
+                    <button class="btn btn-primary" @click="addPost">
                         <i class="fas fa-plus"></i> Thêm
                     </button>
                 </div>

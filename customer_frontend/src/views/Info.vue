@@ -6,13 +6,13 @@
             </h2>
             <Info :info="filteredinfo" />
 
-            <div class="mt-3 row justify-content-around align-items-center">
+            <div class="mt-3 mb-2 row justify-content-around align-items-center">
                 <router-link :to="{
                     name: 'updateInfo',
                     // query: { id_user: info._id }
                 }">
-                    <span class="mt-2 badge badge-warning">
-                        <i class="fas fa-edit"></i> Cập nhật thông tin</span>
+                    <span class="mt-2 btn btn-warning">
+                        <i class="fas fa-edit"></i> Cập nhật</span>
                 </router-link>
             </div>
 
@@ -40,10 +40,10 @@ export default {
         };
     },
     watch: {
-      
+
 
     },
-   
+
     computed: {
         ...mapState(['Auth']),
 

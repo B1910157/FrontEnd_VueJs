@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page pt-2">
     <h4 class="text-center text-primary font-weight-bold">Đăng nhập</h4>
     <LoginForm @submit:login="submitLogin" />
     <p>{{ message }}</p>

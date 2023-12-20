@@ -24,7 +24,7 @@
             </v-list-group>
             <v-list-item v-else>
                 <v-list-item>
-                    <v-list-item-subtitle>No chats available</v-list-item-subtitle>
+                    <v-list-item-subtitle> Không có tin nhắn nào</v-list-item-subtitle>
                 </v-list-item>
             </v-list-item>
         </v-list>

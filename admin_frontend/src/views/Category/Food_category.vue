@@ -6,7 +6,7 @@
             </h4>
             <div class="col-7 row text-right">
                 <div class="col-12">
-                    <button class="btn btn-sm btn-primary" @click="this.isAdd = true">
+                    <button class="btn btn btn-primary" @click="this.isAdd = true">
                         <i class="fas fa-plus"></i> Thêm
                     </button>
                 </div>
